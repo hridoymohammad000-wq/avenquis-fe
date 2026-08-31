@@ -1,5 +1,5 @@
 import React, { useEffect, useState, type ReactNode } from 'react';
-import { motion, useReducedMotion, type HTMLMotionProps } from 'motion/react';
+import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
 
 export const motionEase = [0.16, 1, 0.3, 1] as const;
 
@@ -10,10 +10,10 @@ export const Reveal: React.FC<{
 }> = ({ children, className, delay = 0 }) => (
   <motion.div
     className={className}
-    initial={{ opacity: 0, y: 14 }}
+    initial={{ opacity: 0, y: 16 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.12 }}
-    transition={{ duration: 0.38, delay, ease: motionEase }}
+    viewport={{ once: true, amount: 0.05 }}
+    transition={{ duration: 0.42, delay, ease: motionEase }}
   >
     {children}
   </motion.div>
