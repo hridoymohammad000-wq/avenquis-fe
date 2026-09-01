@@ -1,5 +1,5 @@
-import React, { useEffect, useState, type ReactNode } from 'react';
-import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
+import React, { useEffect, useState, type ReactNode } from "react";
+import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
 
 export const motionEase = [0.16, 1, 0.3, 1] as const;
 
@@ -10,16 +10,19 @@ export const Reveal: React.FC<{
 }> = ({ children, className, delay = 0 }) => (
   <motion.div
     className={className}
-    initial={{ opacity: 0, y: 16 }}
+    initial={{ opacity: 0, y: 14 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.05 }}
-    transition={{ duration: 0.42, delay, ease: motionEase }}
+    viewport={{ once: true, amount: 0.12 }}
+    transition={{ duration: 0.38, delay, ease: motionEase }}
   >
     {children}
   </motion.div>
 );
 
-export const ViewTransition: React.FC<{ children: ReactNode; viewKey: string }> = ({ children, viewKey }) => (
+export const ViewTransition: React.FC<{
+  children: ReactNode;
+  viewKey: string;
+}> = ({ children, viewKey }) => (
   <motion.div
     key={viewKey}
     initial={{ opacity: 0, y: 8 }}
@@ -30,7 +33,11 @@ export const ViewTransition: React.FC<{ children: ReactNode; viewKey: string }> 
   </motion.div>
 );
 
-export const MotionSurface: React.FC<HTMLMotionProps<'div'>> = ({ children, className, ...props }) => (
+export const MotionSurface: React.FC<HTMLMotionProps<"div">> = ({
+  children,
+  className,
+  ...props
+}) => (
   <motion.div
     className={className}
     initial={{ opacity: 0, y: 8, scale: 0.985 }}
@@ -42,9 +49,14 @@ export const MotionSurface: React.FC<HTMLMotionProps<'div'>> = ({ children, clas
   </motion.div>
 );
 
-export const AnimatedNumber: React.FC<{ value: number; decimals?: number }> = ({ value, decimals = 0 }) => {
+export const AnimatedNumber: React.FC<{ value: number; decimals?: number }> = ({
+  value,
+  decimals = 0,
+}) => {
   const reduceMotion = useReducedMotion();
-  const [displayedValue, setDisplayedValue] = useState(reduceMotion ? value : 0);
+  const [displayedValue, setDisplayedValue] = useState(
+    reduceMotion ? value : 0,
+  );
 
   useEffect(() => {
     if (reduceMotion) {
@@ -71,10 +83,13 @@ export const AnimatedNumber: React.FC<{ value: number; decimals?: number }> = ({
   return <>{displayedValue.toFixed(decimals)}</>;
 };
 
-export const MotionProgressBar: React.FC<{ value: number; className?: string }> = ({ value, className }) => (
+export const MotionProgressBar: React.FC<{
+  value: number;
+  className?: string;
+}> = ({ value, className }) => (
   <motion.div
     className={className}
-    initial={{ width: '0%' }}
+    initial={{ width: "0%" }}
     animate={{ width: `${Math.max(0, Math.min(value, 100))}%` }}
     transition={{ duration: 0.34, ease: motionEase }}
   />

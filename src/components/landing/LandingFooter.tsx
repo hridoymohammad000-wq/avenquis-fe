@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShieldCheck, ArrowUpRight, Lock, Building2 } from 'lucide-react';
+import React from "react";
+import { ShieldCheck, ArrowUpRight, Lock, Building2 } from "lucide-react";
 
 interface LandingFooterProps {
   onOpenModal: (modalId: string) => void;
@@ -13,7 +13,6 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
   return (
     <footer className="relative bg-[#1C1F1E] text-[#A6B2AC] pt-16 sm:pt-20 pb-12 border-t border-[#2F3633] text-left">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Top Row: Brand Statement & Quick Workspace Launch */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 pb-12 border-b border-[#2F3633]">
           <div className="max-w-xl">
@@ -22,11 +21,16 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
                 A
               </div>
               <span className="text-xl font-serif font-black tracking-[0.16em] text-white uppercase">
-                AVEN<span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">—</span>QUIS
+                AVEN
+                <span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">
+                  —
+                </span>
+                QUIS
               </span>
             </div>
             <p className="text-xs text-[#8A9691] leading-relaxed">
-              The unified, security-first Operating System for modern chartered accountancy, audit, tax, and professional advisory firms.
+              The unified, security-first Operating System for modern chartered
+              accountancy, audit, tax, and professional advisory firms.
             </p>
           </div>
 
@@ -51,32 +55,50 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Firm OS &amp; People
                 </a>
               </li>
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Client CRM &amp; Engagements
                 </a>
               </li>
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Tasks &amp; Weekly Timesheets
                 </a>
               </li>
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Audit Working Papers (ISA 220)
                 </a>
               </li>
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Office Finance &amp; 15% VAT
                 </a>
               </li>
               <li>
-                <a href="#modules" className="hover:text-white transition-colors">
+                <a
+                  href="#modules"
+                  className="hover:text-white transition-colors"
+                >
                   Permission-Safe AI Copilot
                 </a>
               </li>
@@ -90,27 +112,42 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
             </h4>
             <ul className="space-y-2.5">
               <li>
-                <a href="#architecture" className="hover:text-white transition-colors">
+                <a
+                  href="#architecture"
+                  className="hover:text-white transition-colors"
+                >
                   PostgreSQL Row-Level Security
                 </a>
               </li>
               <li>
-                <a href="#architecture" className="hover:text-white transition-colors">
+                <a
+                  href="#architecture"
+                  className="hover:text-white transition-colors"
+                >
                   SHA-256 Digital Signatures
                 </a>
               </li>
               <li>
-                <a href="#architecture" className="hover:text-white transition-colors">
+                <a
+                  href="#architecture"
+                  className="hover:text-white transition-colors"
+                >
                   Zero-Trust Session Isolation
                 </a>
               </li>
               <li>
-                <a href="#architecture" className="hover:text-white transition-colors">
+                <a
+                  href="#architecture"
+                  className="hover:text-white transition-colors"
+                >
                   Append-Only Audit Trails
                 </a>
               </li>
               <li>
-                <a href="#architecture" className="hover:text-white transition-colors">
+                <a
+                  href="#architecture"
+                  className="hover:text-white transition-colors"
+                >
                   Controlled AI Boundaries
                 </a>
               </li>
@@ -126,7 +163,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('icab')}
+                  onClick={() => onOpenModal("icab")}
                   className="hover:text-white transition-colors text-left"
                 >
                   ICAB Quality Management
@@ -135,7 +172,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('isa220')}
+                  onClick={() => onOpenModal("isa220")}
                   className="hover:text-white transition-colors text-left"
                 >
                   ISA 220 &amp; ISA 230 Standards
@@ -144,7 +181,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('vat')}
+                  onClick={() => onOpenModal("vat")}
                   className="hover:text-white transition-colors text-left"
                 >
                   NBR 15% VAT &amp; TDS Rules
@@ -153,7 +190,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('soc2')}
+                  onClick={() => onOpenModal("soc2")}
                   className="hover:text-white transition-colors text-left"
                 >
                   SOC 2 Type II &amp; ISO 27001
@@ -171,7 +208,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('privacy')}
+                  onClick={() => onOpenModal("privacy")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Privacy Policy
@@ -180,7 +217,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('terms')}
+                  onClick={() => onOpenModal("terms")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Terms of Service
@@ -189,7 +226,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('dpa')}
+                  onClick={() => onOpenModal("dpa")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Data Processing Agreement (DPA)
@@ -198,7 +235,7 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button
                   type="button"
-                  onClick={() => onOpenModal('support')}
+                  onClick={() => onOpenModal("support")}
                   className="hover:text-white transition-colors text-left"
                 >
                   Practice Concierge Desk
@@ -211,7 +248,10 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
         {/* Bottom Line */}
         <div className="pt-8 border-t border-[#2F3633] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#6E7B75]">
           <div>
-            <span>© 2026 AVENQUIS. All rights reserved. Professional Firm Operating System.</span>
+            <span>
+              © 2026 AVENQUIS. All rights reserved. Professional Firm Operating
+              System.
+            </span>
           </div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1 text-[#C58A3E]">
@@ -220,7 +260,6 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
             </span>
           </div>
         </div>
-
       </div>
     </footer>
   );

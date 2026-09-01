@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   X,
   Mail,
@@ -12,13 +12,18 @@ import {
   UserCheck,
   ShieldCheck,
   Building2,
-} from 'lucide-react';
-import { AuthMode, AuthFormData } from '../../types';
+} from "lucide-react";
+import { AuthMode, AuthFormData } from "../../types";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (userData: { email: string; name?: string; role?: string; mode: AuthMode }) => void;
+  onSuccess: (userData: {
+    email: string;
+    name?: string;
+    role?: string;
+    mode: AuthMode;
+  }) => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -26,30 +31,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const [mode, setMode] = useState<AuthMode>('signin');
+  const [mode, setMode] = useState<AuthMode>("signin");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState<AuthFormData>({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     rememberMe: true,
-    role: 'Managing Partner',
+    role: "Managing Partner",
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof AuthFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof AuthFormData, string>>
+  >({});
 
   if (!isOpen) return null;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
     if (errors[name as keyof AuthFormData]) {
@@ -60,42 +69,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleQuickRoleFill = (roleKey: 'partner' | 'manager' | 'senior' | 'student') => {
+  const handleQuickRoleFill = (
+    roleKey: "partner" | "manager" | "senior" | "student",
+  ) => {
     switch (roleKey) {
-      case 'partner':
+      case "partner":
         setFormData({
-          name: 'Masud Rahman, FCA',
-          email: 'masud.rahman@rahman-ca.com',
-          password: '••••••••••••',
+          name: "Masud Rahman, FCA",
+          email: "masud.rahman@rahman-ca.com",
+          password: "••••••••••••",
           rememberMe: true,
-          role: 'Managing Partner',
+          role: "Managing Partner",
         });
         break;
-      case 'manager':
+      case "manager":
         setFormData({
-          name: 'Nabila Karim, ACA',
-          email: 'nabila.karim@rahman-ca.com',
-          password: '••••••••••••',
+          name: "Nabila Karim, ACA",
+          email: "nabila.karim@rahman-ca.com",
+          password: "••••••••••••",
           rememberMe: true,
-          role: 'Audit Manager',
+          role: "Audit Manager",
         });
         break;
-      case 'senior':
+      case "senior":
         setFormData({
-          name: 'Tariq Hasan',
-          email: 'tariq.hasan@rahman-ca.com',
-          password: '••••••••••••',
+          name: "Tariq Hasan",
+          email: "tariq.hasan@rahman-ca.com",
+          password: "••••••••••••",
           rememberMe: true,
-          role: 'Senior Auditor',
+          role: "Senior Auditor",
         });
         break;
-      case 'student':
+      case "student":
         setFormData({
-          name: 'Tanvir Ahmed',
-          email: 'tanvir.ahmed@fames-ca.com',
-          password: '••••••••••••',
+          name: "Tanvir Ahmed",
+          email: "tanvir.ahmed@fames-ca.com",
+          password: "••••••••••••",
           rememberMe: true,
-          role: 'CA Article Student',
+          role: "CA Article Student",
         });
         break;
     }
@@ -107,17 +118,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     const newErrors: Partial<Record<keyof AuthFormData, string>> = {};
 
     if (!formData.email) {
-      newErrors.email = 'Please enter your practice email.';
+      newErrors.email = "Please enter your practice email.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Please enter your password.';
+      newErrors.password = "Please enter your password.";
     }
 
-    if (mode === 'signup' && !formData.name) {
-      newErrors.name = 'Please provide your full name.';
+    if (mode === "signup" && !formData.name) {
+      newErrors.name = "Please provide your full name.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -138,24 +149,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }, 700);
   };
 
-  const handleInstantDemoLogin = (role: 'partner' | 'student') => {
+  const handleInstantDemoLogin = (role: "partner" | "student") => {
     handleQuickRoleFill(role);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      if (role === 'partner') {
+      if (role === "partner") {
         onSuccess({
-          email: 'masud.rahman@rahman-ca.com',
-          name: 'Masud Rahman, FCA',
-          role: 'Managing Partner',
-          mode: 'signin',
+          email: "masud.rahman@rahman-ca.com",
+          name: "Masud Rahman, FCA",
+          role: "Managing Partner",
+          mode: "signin",
         });
       } else {
         onSuccess({
-          email: 'tanvir.ahmed@fames-ca.com',
-          name: 'Tanvir Ahmed',
-          role: 'CA Article Student',
-          mode: 'signin',
+          email: "tanvir.ahmed@fames-ca.com",
+          name: "Tanvir Ahmed",
+          role: "CA Article Student",
+          mode: "signin",
         });
       }
       onClose();
@@ -179,7 +190,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.28, delay: 0.03, ease: [0.16, 1, 0.3, 1] }}
       >
-        
         {/* Close Button */}
         <button
           type="button"
@@ -198,7 +208,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <div>
             <div className="flex items-center">
               <span className="text-base font-serif font-black tracking-[0.16em] text-[#113227] uppercase">
-                AVEN<span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">—</span>QUIS
+                AVEN
+                <span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">
+                  —
+                </span>
+                QUIS
               </span>
             </div>
             <span className="text-[8px] uppercase tracking-widest font-bold text-[#8A5A18]">
@@ -215,12 +229,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           transition={{ duration: 0.24, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <h2 className="text-2xl font-serif font-bold text-[#1C1F1E]">
-            {mode === 'signin' ? 'Sign In to Firm Workspace' : 'Request Practice Workspace Access'}
+            {mode === "signin"
+              ? "Sign In to Firm Workspace"
+              : "Request Practice Workspace Access"}
           </h2>
           <p className="text-xs text-[#66706B] mt-1">
-            {mode === 'signin'
-              ? 'Access engagement working papers, timesheets, and financial billing ledgers.'
-              : 'Submit a request to provision a new isolated practice workspace.'}
+            {mode === "signin"
+              ? "Access engagement working papers, timesheets, and financial billing ledgers."
+              : "Submit a request to provision a new isolated practice workspace."}
           </p>
         </motion.div>
 
@@ -233,35 +249,36 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A5A18] flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#C58A3E]" /> 1-Click Role Logins
+              <Sparkles className="w-3 h-3 text-[#C58A3E]" /> 1-Click Role
+              Logins
             </span>
             <span className="text-[10px] text-stone-400">Select persona:</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
             <button
               type="button"
-              onClick={() => handleQuickRoleFill('partner')}
+              onClick={() => handleQuickRoleFill("partner")}
               className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#E1F3EE] text-[#1F5946] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
             >
               Partner
             </button>
             <button
               type="button"
-              onClick={() => handleQuickRoleFill('manager')}
+              onClick={() => handleQuickRoleFill("manager")}
               className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#FAF0DE] text-[#8A5A18] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
             >
               Manager
             </button>
             <button
               type="button"
-              onClick={() => handleQuickRoleFill('senior')}
+              onClick={() => handleQuickRoleFill("senior")}
               className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#E2F1F8] text-[#1D526D] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
             >
               Senior
             </button>
             <button
               type="button"
-              onClick={() => handleQuickRoleFill('student')}
+              onClick={() => handleQuickRoleFill("student")}
               className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#EDE9FE] text-[#5B21B6] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
             >
               CA Student
@@ -277,7 +294,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.26, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
         >
-          {mode === 'signup' && (
+          {mode === "signup" && (
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-stone-500 mb-1">
                 Full Name &amp; Designation
@@ -292,10 +309,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="e.g. Masud Rahman, FCA"
-                  className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.name ? 'border-red-400' : 'border-[#E0D8CA]'}`}
+                  className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.name ? "border-red-400" : "border-[#E0D8CA]"}`}
                 />
               </div>
-              <AnimatePresence initial={false}>{errors.name && <motion.p initial={{ opacity: 0, y: -3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -3 }} transition={{ duration: 0.16 }} className="text-xs text-red-600 mt-1">{errors.name}</motion.p>}</AnimatePresence>
+              <AnimatePresence initial={false}>
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -3 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -3 }}
+                    transition={{ duration: 0.16 }}
+                    className="text-xs text-red-600 mt-1"
+                  >
+                    {errors.name}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
           )}
 
@@ -313,10 +342,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="name@rahman-ca.com"
-                className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.email ? 'border-red-400' : 'border-[#E0D8CA]'}`}
+                className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.email ? "border-red-400" : "border-[#E0D8CA]"}`}
               />
             </div>
-            <AnimatePresence initial={false}>{errors.email && <motion.p initial={{ opacity: 0, y: -3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -3 }} transition={{ duration: 0.16 }} className="text-xs text-red-600 mt-1">{errors.email}</motion.p>}</AnimatePresence>
+            <AnimatePresence initial={false}>
+              {errors.email && (
+                <motion.p
+                  initial={{ opacity: 0, y: -3 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -3 }}
+                  transition={{ duration: 0.16 }}
+                  className="text-xs text-red-600 mt-1"
+                >
+                  {errors.email}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           <div>
@@ -330,27 +371,49 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <Lock className="w-4 h-4" />
               </div>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••••••"
-                className={`w-full pl-10 pr-10 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.password ? 'border-red-400' : 'border-[#E0D8CA]'}`}
+                className={`w-full pl-10 pr-10 py-2.5 bg-[#FAF7F2] border rounded-xl text-sm focus:outline-none focus:border-[#113227] ${errors.password ? "border-red-400" : "border-[#E0D8CA]"}`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-700 cursor-pointer"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <AnimatePresence mode="wait" initial={false}>
-                  <motion.span key={showPassword ? 'hidden' : 'visible'} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.14 }}>
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  <motion.span
+                    key={showPassword ? "hidden" : "visible"}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.14 }}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </motion.span>
                 </AnimatePresence>
               </button>
             </div>
-            <AnimatePresence initial={false}>{errors.password && <motion.p initial={{ opacity: 0, y: -3 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -3 }} transition={{ duration: 0.16 }} className="text-xs text-red-600 mt-1">{errors.password}</motion.p>}</AnimatePresence>
+            <AnimatePresence initial={false}>
+              {errors.password && (
+                <motion.p
+                  initial={{ opacity: 0, y: -3 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -3 }}
+                  transition={{ duration: 0.16 }}
+                  className="text-xs text-red-600 mt-1"
+                >
+                  {errors.password}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           <button
@@ -365,7 +428,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             ) : (
               <>
-                <span className="whitespace-nowrap">{mode === 'signin' ? 'Sign In to Workspace' : 'Request Access'}</span>
+                <span className="whitespace-nowrap">
+                  {mode === "signin"
+                    ? "Sign In to Workspace"
+                    : "Request Access"}
+                </span>
                 <ArrowRight className="w-4 h-4 text-[#C58A3E]" />
               </>
             )}
@@ -374,12 +441,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Toggle Mode */}
         <div className="text-center mt-5 text-xs text-[#66706B]">
-          {mode === 'signin' ? (
+          {mode === "signin" ? (
             <>
               <span>New practice onboarding? </span>
               <button
                 type="button"
-                onClick={() => setMode('signup')}
+                onClick={() => setMode("signup")}
                 className="font-bold text-[#113227] hover:underline cursor-pointer"
               >
                 Request Access
@@ -390,7 +457,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span>Already registered? </span>
               <button
                 type="button"
-                onClick={() => setMode('signin')}
+                onClick={() => setMode("signin")}
                 className="font-bold text-[#113227] hover:underline cursor-pointer"
               >
                 Sign In
@@ -398,7 +465,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </>
           )}
         </div>
-
       </motion.div>
     </motion.div>
   );

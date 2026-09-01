@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Sun, Moon, Menu, X } from 'lucide-react';
-import { NAV_LINKS } from '../data/content';
+import React, { useState } from "react";
+import { Sun, Moon, Menu, X } from "lucide-react";
+import { NAV_LINKS } from "../data/content";
 
 interface NavbarProps {
   onSignInClick: () => void;
@@ -23,32 +23,42 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FAF7F2]/90 border-b border-[#EBE6DD]/60 transition-colors">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 py-5 sm:py-6 flex items-center justify-between">
-        
         {/* Left: Brand Monogram & Editorial Wordmark matching Design Theme */}
         <button
           id="brand-logo-btn"
-          onClick={() => onOpenSection('home')}
+          onClick={() => onOpenSection("home")}
           className="flex items-center space-x-3 group text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#113227] rounded-lg p-0.5"
         >
           {/* Editorial Wordmark */}
           <div className="flex items-center">
             <span className="text-xl sm:text-2xl font-serif font-black tracking-[0.16em] text-[#113227] select-none uppercase">
-              AVEN<span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">—</span>QUIS
+              AVEN
+              <span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">
+                —
+              </span>
+              QUIS
             </span>
           </div>
 
           {/* Vertical Divider */}
-          <div className="h-6 w-px bg-stone-300 hidden sm:block" aria-hidden="true" />
+          <div
+            className="h-6 w-px bg-stone-300 hidden sm:block"
+            aria-hidden="true"
+          />
 
           {/* Sub-label */}
           <div className="hidden sm:block text-[9px] uppercase tracking-[0.22em] leading-tight font-bold text-stone-500 select-none">
-            FIRM<br />
+            FIRM
+            <br />
             OS
           </div>
         </button>
 
         {/* Center: Nav links (Desktop) */}
-        <nav className="hidden md:flex items-center space-x-10 text-sm font-medium text-stone-600" aria-label="Main Navigation">
+        <nav
+          className="hidden md:flex items-center space-x-10 text-sm font-medium text-stone-600"
+          aria-label="Main Navigation"
+        >
           {NAV_LINKS.map((link) => {
             const isActive = activeSection === link.id;
             return (
@@ -57,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 id={`nav-link-${link.id}`}
                 onClick={() => onOpenSection(link.id)}
                 className={`transition-colors cursor-pointer hover:text-stone-900 ${
-                  isActive ? 'text-[#113227] font-semibold' : 'text-stone-600'
+                  isActive ? "text-[#113227] font-semibold" : "text-stone-600"
                 }`}
               >
                 {link.label}
@@ -72,7 +82,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             id="theme-toggle-btn"
             onClick={toggleTheme}
-            title={isDarkModeSim ? 'Switch to warm light theme' : 'Toggle ambient lighting'}
+            title={
+              isDarkModeSim
+                ? "Switch to warm light theme"
+                : "Toggle ambient lighting"
+            }
             aria-label="Toggle theme"
             className="p-2 text-stone-400 hover:text-stone-700 transition-colors focus:outline-none"
           >
@@ -99,7 +113,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Open mobile menu"
             className="md:hidden p-2 text-stone-600 hover:text-stone-900"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

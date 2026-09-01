@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Check, Sparkles, UserCheck } from 'lucide-react';
-import { AuthMode, AuthFormData } from '../types';
+import React, { useState } from "react";
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  Check,
+  Sparkles,
+  UserCheck,
+} from "lucide-react";
+import { AuthMode, AuthFormData } from "../types";
 
 interface AuthCardProps {
-  onSuccess?: (userData: { email: string; name?: string; mode: AuthMode }) => void;
+  onSuccess?: (userData: {
+    email: string;
+    name?: string;
+    mode: AuthMode;
+  }) => void;
   onForgotPasswordClick?: () => void;
 }
 
@@ -11,29 +24,33 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   onSuccess,
   onForgotPasswordClick,
 }) => {
-  const [mode, setMode] = useState<AuthMode>('signin');
+  const [mode, setMode] = useState<AuthMode>("signin");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [successState, setSuccessState] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<AuthFormData>({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
     rememberMe: true,
-    role: 'Workspace Administrator',
+    role: "Workspace Administrator",
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof AuthFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof AuthFormData, string>>
+  >({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
     // Clear error for this field
@@ -45,22 +62,22 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     }
   };
 
-  const handleQuickDemoFill = (type: 'admin' | 'staff') => {
-    if (type === 'admin') {
+  const handleQuickDemoFill = (type: "admin" | "staff") => {
+    if (type === "admin") {
       setFormData({
-        name: 'Eleanor Vance',
-        email: 'eleanor.vance@avenquis.com',
-        password: '••••••••••••',
+        name: "Eleanor Vance",
+        email: "eleanor.vance@avenquis.com",
+        password: "••••••••••••",
         rememberMe: true,
-        role: 'Operations Director',
+        role: "Operations Director",
       });
     } else {
       setFormData({
-        name: 'Julian Sterling',
-        email: 'julian.s@avenquis.com',
-        password: '••••••••••••',
+        name: "Julian Sterling",
+        email: "julian.s@avenquis.com",
+        password: "••••••••••••",
         rememberMe: true,
-        role: 'Senior Finance Lead',
+        role: "Senior Finance Lead",
       });
     }
     setErrors({});
@@ -71,19 +88,22 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     const newErrors: Partial<Record<keyof AuthFormData, string>> = {};
 
     if (!formData.email) {
-      newErrors.email = 'Please enter your email address.';
+      newErrors.email = "Please enter your email address.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Please enter your password.';
-    } else if (formData.password.length < 6 && formData.password !== '••••••••••••') {
-      newErrors.password = 'Password must be at least 6 characters.';
+      newErrors.password = "Please enter your password.";
+    } else if (
+      formData.password.length < 6 &&
+      formData.password !== "••••••••••••"
+    ) {
+      newErrors.password = "Password must be at least 6 characters.";
     }
 
-    if (mode === 'signup' && !formData.name) {
-      newErrors.name = 'Please provide your full name.';
+    if (mode === "signup" && !formData.name) {
+      newErrors.name = "Please provide your full name.";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -94,8 +114,12 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      const greetingName = formData.name || formData.email.split('@')[0];
-      setSuccessState(mode === 'signin' ? `Welcome back, ${greetingName}!` : `Account created for ${greetingName}!`);
+      const greetingName = formData.name || formData.email.split("@")[0];
+      setSuccessState(
+        mode === "signin"
+          ? `Welcome back, ${greetingName}!`
+          : `Account created for ${greetingName}!`,
+      );
       onSuccess?.({
         email: formData.email,
         name: formData.name,
@@ -108,11 +132,11 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setSuccessState('Signed in securely with Google');
+      setSuccessState("Signed in securely with Google");
       onSuccess?.({
-        email: 'alex.morgan@avenquis.com',
-        name: 'Alex Morgan',
-        mode: 'signin',
+        email: "alex.morgan@avenquis.com",
+        name: "Alex Morgan",
+        mode: "signin",
       });
     }, 900);
   };
@@ -127,14 +151,14 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         <div className="flex items-center gap-1.5">
           <button
             type="button"
-            onClick={() => handleQuickDemoFill('admin')}
+            onClick={() => handleQuickDemoFill("admin")}
             className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-[#FAF7F2] hover:bg-[#E1F3EE] text-[#1F5946] border border-[#E3DDD1] transition-colors cursor-pointer"
           >
             Director
           </button>
           <button
             type="button"
-            onClick={() => handleQuickDemoFill('staff')}
+            onClick={() => handleQuickDemoFill("staff")}
             className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-[#FAF7F2] hover:bg-[#FCEFD9] text-[#8A5A18] border border-[#E3DDD1] transition-colors cursor-pointer"
           >
             Finance Lead
@@ -144,16 +168,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({
 
       {/* Main Elevated Auth Card matching Natural Tones styling */}
       <div className="bg-white/95 w-full rounded-[2rem] p-8 sm:p-9 border border-[#EBE6DD] shadow-[0_20px_50px_rgba(28,31,30,0.08)] backdrop-blur-md text-left transition-all">
-        
         {/* Card Header */}
         <div className="mb-7">
           <h2 className="text-2xl sm:text-[26px] font-serif mb-1 text-[#1C1F1E] font-bold">
-            {mode === 'signin' ? 'Welcome Back' : 'Request Access'}
+            {mode === "signin" ? "Welcome Back" : "Request Access"}
           </h2>
           <p className="text-xs text-[#66706B] font-normal">
-            {mode === 'signin'
-              ? 'Sign in to continue to your workspace.'
-              : 'Request access for your practice or enterprise team.'}
+            {mode === "signin"
+              ? "Sign in to continue to your workspace."
+              : "Request access for your practice or enterprise team."}
           </p>
         </div>
 
@@ -164,9 +187,12 @@ export const AuthCard: React.FC<AuthCardProps> = ({
               <Check className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#1C1F1E] font-serif">{successState}</h3>
+              <h3 className="text-lg font-bold text-[#1C1F1E] font-serif">
+                {successState}
+              </h3>
               <p className="text-xs text-[#66706B] mt-1">
-                Authenticating credentials and loading your organization dashboard...
+                Authenticating credentials and loading your organization
+                dashboard...
               </p>
             </div>
             <button
@@ -174,12 +200,12 @@ export const AuthCard: React.FC<AuthCardProps> = ({
               onClick={() => {
                 setSuccessState(null);
                 setFormData({
-                  name: '',
-                  email: '',
-                  password: '',
-                  confirmPassword: '',
+                  name: "",
+                  email: "",
+                  password: "",
+                  confirmPassword: "",
                   rememberMe: true,
-                  role: 'Workspace Administrator',
+                  role: "Workspace Administrator",
                 });
               }}
               className="text-xs font-semibold text-[#113227] underline hover:text-[#174234] pt-2 cursor-pointer"
@@ -190,9 +216,8 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         ) : (
           /* Form Elements */
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            
             {/* Full Name field (for sign up mode) */}
-            {mode === 'signup' && (
+            {mode === "signup" && (
               <div>
                 <label
                   htmlFor="signup-name-input"
@@ -212,12 +237,16 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                     onChange={handleInputChange}
                     placeholder="Eleanor Vance"
                     className={`w-full pl-10 pr-4 py-3 bg-stone-50 border ${
-                      errors.name ? 'border-red-400 focus:border-red-500' : 'border-stone-100 focus:border-stone-300'
+                      errors.name
+                        ? "border-red-400 focus:border-red-500"
+                        : "border-stone-100 focus:border-stone-300"
                     } rounded-xl text-sm transition-colors placeholder:text-stone-300 text-[#1C1F1E] focus:outline-none`}
                   />
                 </div>
                 {errors.name && (
-                  <p className="text-xs text-red-600 font-medium mt-1">{errors.name}</p>
+                  <p className="text-xs text-red-600 font-medium mt-1">
+                    {errors.name}
+                  </p>
                 )}
               </div>
             )}
@@ -242,12 +271,16 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                   onChange={handleInputChange}
                   placeholder="name@avenquis.com"
                   className={`w-full pl-10 pr-4 py-3 bg-stone-50 border ${
-                    errors.email ? 'border-red-400 focus:border-red-500' : 'border-stone-100 focus:border-stone-300'
+                    errors.email
+                      ? "border-red-400 focus:border-red-500"
+                      : "border-stone-100 focus:border-stone-300"
                   } rounded-xl text-sm transition-colors placeholder:text-stone-300 text-[#1C1F1E] focus:outline-none`}
                 />
               </div>
               {errors.email && (
-                <p className="text-xs text-red-600 font-medium mt-1">{errors.email}</p>
+                <p className="text-xs text-red-600 font-medium mt-1">
+                  {errors.email}
+                </p>
               )}
             </div>
 
@@ -267,20 +300,22 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 </div>
                 <input
                   id="auth-password-input"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="••••••••••••"
                   className={`w-full pl-10 pr-11 py-3 bg-stone-50 border ${
-                    errors.password ? 'border-red-400 focus:border-red-500' : 'border-stone-100 focus:border-stone-300'
+                    errors.password
+                      ? "border-red-400 focus:border-red-500"
+                      : "border-stone-100 focus:border-stone-300"
                   } rounded-xl text-sm transition-colors placeholder:text-stone-300 text-[#1C1F1E] focus:outline-none`}
                 />
                 <button
                   type="button"
                   id="toggle-password-visibility-btn"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-700 focus:outline-none cursor-pointer"
                 >
                   {showPassword ? (
@@ -291,7 +326,9 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 </button>
               </div>
               {errors.password && (
-                <p className="text-xs text-red-600 font-medium mt-1">{errors.password}</p>
+                <p className="text-xs text-red-600 font-medium mt-1">
+                  {errors.password}
+                </p>
               )}
             </div>
 
@@ -309,13 +346,13 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 <span className="text-xs text-stone-500">Remember me</span>
               </label>
 
-              {mode === 'signin' && (
+              {mode === "signin" && (
                 <button
                   type="button"
                   id="forgot-password-link"
                   onClick={onForgotPasswordClick}
                   className="text-xs font-semibold hover:underline transition-colors focus:outline-none cursor-pointer"
-                  style={{ color: 'var(--gold)' }}
+                  style={{ color: "var(--gold)" }}
                 >
                   Forgot password?
                 </button>
@@ -336,7 +373,9 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                 </div>
               ) : (
                 <>
-                  <span className="whitespace-nowrap">{mode === 'signin' ? 'Sign In' : 'Request Access'}</span>
+                  <span className="whitespace-nowrap">
+                    {mode === "signin" ? "Sign In" : "Request Access"}
+                  </span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -361,7 +400,11 @@ export const AuthCard: React.FC<AuthCardProps> = ({
               className="w-full py-3 border border-stone-200 rounded-xl text-sm font-semibold text-[#3D4842] flex items-center justify-center space-x-3 bg-white hover:bg-stone-50 transition-colors shadow-2xs cursor-pointer"
             >
               {/* Google Brand Colored SVG Icon */}
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+              <svg
+                className="w-4 h-4 shrink-0"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   fill="#4285F4"
                   d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
@@ -384,15 +427,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({
 
             {/* Card Footer: Toggle between Sign In & Sign Up */}
             <div className="text-center mt-6 text-xs text-[#66706B]">
-              {mode === 'signin' ? (
+              {mode === "signin" ? (
                 <>
                   <span>Don't have an account? </span>
                   <button
                     type="button"
                     id="toggle-signup-mode-btn"
-                    onClick={() => setMode('signup')}
+                    onClick={() => setMode("signup")}
                     className="font-bold hover:underline transition-colors cursor-pointer"
-                    style={{ color: 'var(--gold)' }}
+                    style={{ color: "var(--gold)" }}
                   >
                     Request access
                   </button>
@@ -403,9 +446,9 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                   <button
                     type="button"
                     id="toggle-signin-mode-btn"
-                    onClick={() => setMode('signin')}
+                    onClick={() => setMode("signin")}
                     className="font-bold hover:underline transition-colors cursor-pointer"
-                    style={{ color: 'var(--gold)' }}
+                    style={{ color: "var(--gold)" }}
                   >
                     Sign In
                   </button>

@@ -1,21 +1,26 @@
-import React, { useState } from 'react';
-import { LandingNavbar } from './LandingNavbar';
-import { EditorialHero } from './EditorialHero';
-import { TrustMetricStrip } from './TrustMetricStrip';
-import { BentoModulesGrid } from './BentoModulesGrid';
-import { ArchitectureSection } from './ArchitectureSection';
-import { PricingRoadmap } from './PricingRoadmap';
-import { FaqSection } from './FaqSection';
-import { BottomCtaBanner } from './BottomCtaBanner';
-import { LandingFooter } from './LandingFooter';
-import { AuthModal } from './AuthModal';
-import { Modals } from '../Modals';
-import { BackgroundAccents } from '../BackgroundAccents';
-import { AuthMode, WorkspaceTab } from '../../types';
-import { Reveal } from '../motion/MotionPrimitives';
+import React, { useState } from "react";
+import { LandingNavbar } from "./LandingNavbar";
+import { EditorialHero } from "./EditorialHero";
+import { TrustMetricStrip } from "./TrustMetricStrip";
+import { BentoModulesGrid } from "./BentoModulesGrid";
+import { ArchitectureSection } from "./ArchitectureSection";
+import { PricingRoadmap } from "./PricingRoadmap";
+import { FaqSection } from "./FaqSection";
+import { BottomCtaBanner } from "./BottomCtaBanner";
+import { LandingFooter } from "./LandingFooter";
+import { AuthModal } from "./AuthModal";
+import { Modals } from "../Modals";
+import { BackgroundAccents } from "../BackgroundAccents";
+import { AuthMode, WorkspaceTab } from "../../types";
+import { Reveal } from "../motion/MotionPrimitives";
 
 interface LandingPageProps {
-  onSignInSuccess: (userData: { email: string; name?: string; role?: string; mode: AuthMode }) => void;
+  onSignInSuccess: (userData: {
+    email: string;
+    name?: string;
+    role?: string;
+    mode: AuthMode;
+  }) => void;
   onDirectLaunchWorkspace: (initialTab?: WorkspaceTab) => void;
 }
 
@@ -31,32 +36,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   const handleExploreArchitecture = () => {
-    const el = document.getElementById('architecture');
+    const el = document.getElementById("architecture");
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handleLaunchWorkspaceModule = (moduleId: string) => {
-    let tab: WorkspaceTab = 'dashboard';
+    let tab: WorkspaceTab = "dashboard";
     switch (moduleId) {
-      case 'firm-people':
-        tab = 'people';
+      case "firm-people":
+        tab = "people";
         break;
-      case 'client-crm':
-        tab = 'crm';
+      case "client-crm":
+        tab = "crm";
         break;
-      case 'tasks-timesheets':
-        tab = 'timesheets';
+      case "tasks-timesheets":
+        tab = "timesheets";
         break;
-      case 'audit-papers':
-        tab = 'audit-files';
+      case "audit-papers":
+        tab = "audit-files";
         break;
-      case 'finance-billing':
-        tab = 'finance';
+      case "finance-billing":
+        tab = "finance";
         break;
-      case 'ai-copilot':
-        tab = 'dashboard';
+      case "ai-copilot":
+        tab = "dashboard";
         break;
     }
     onDirectLaunchWorkspace(tab);
@@ -70,7 +75,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* 1. Navigation Header */}
       <LandingNavbar
         onSignInClick={() => setIsAuthModalOpen(true)}
-        onLaunchWorkspace={() => onDirectLaunchWorkspace('dashboard')}
+        onLaunchWorkspace={() => onDirectLaunchWorkspace("dashboard")}
       />
 
       {/* Main Content Sections */}
@@ -79,40 +84,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <EditorialHero
           onStartTesting={handleStartTesting}
           onExploreArchitecture={handleExploreArchitecture}
-          onLaunchWorkspace={() => onDirectLaunchWorkspace('audit-files')}
+          onLaunchWorkspace={() => onDirectLaunchWorkspace("audit-files")}
         />
 
         {/* 3. Trust & Firm Metric Strip (Social Proof) */}
-        <Reveal delay={0.04}><TrustMetricStrip /></Reveal>
+        <Reveal delay={0.04}>
+          <TrustMetricStrip />
+        </Reveal>
 
         {/* 4. Core V1 Modules Grid (Bento Box Layout) */}
-        <Reveal><BentoModulesGrid
-          onLaunchWorkspaceModule={handleLaunchWorkspaceModule}
-        /></Reveal>
+        <Reveal>
+          <BentoModulesGrid
+            onLaunchWorkspaceModule={handleLaunchWorkspaceModule}
+          />
+        </Reveal>
 
         {/* 5. Security & Architecture Invariants */}
-        <Reveal><ArchitectureSection /></Reveal>
+        <Reveal>
+          <ArchitectureSection />
+        </Reveal>
 
         {/* 6. Transparent Pricing / Rollout Roadmap */}
-        <Reveal><PricingRoadmap
-          onStartPrivateTesting={handleStartTesting}
-          onRequestEnterprise={() => setActiveInfoModal('support')}
-        /></Reveal>
+        <Reveal>
+          <PricingRoadmap
+            onStartPrivateTesting={handleStartTesting}
+            onRequestEnterprise={() => setActiveInfoModal("support")}
+          />
+        </Reveal>
 
         {/* 7. Practice Intelligence FAQ */}
-        <Reveal><FaqSection /></Reveal>
+        <Reveal>
+          <FaqSection />
+        </Reveal>
 
         {/* 8. Bottom CTA Banner */}
-        <Reveal><BottomCtaBanner
-          onAccessWorkspace={() => onDirectLaunchWorkspace('dashboard')}
-          onOpenSignIn={() => setIsAuthModalOpen(true)}
-        /></Reveal>
+        <Reveal>
+          <BottomCtaBanner
+            onAccessWorkspace={() => onDirectLaunchWorkspace("dashboard")}
+            onOpenSignIn={() => setIsAuthModalOpen(true)}
+          />
+        </Reveal>
       </main>
 
       {/* 9. Comprehensive 4-Column Footer */}
       <LandingFooter
         onOpenModal={(modalId) => setActiveInfoModal(modalId)}
-        onLaunchWorkspace={() => onDirectLaunchWorkspace('dashboard')}
+        onLaunchWorkspace={() => onDirectLaunchWorkspace("dashboard")}
       />
 
       {/* Auth & Login Modal */}

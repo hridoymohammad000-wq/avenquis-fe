@@ -1,6 +1,12 @@
-import React from 'react';
-import { Check, Sparkles, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react';
-import { PRICING_ROADMAP } from '../../data/landingData';
+import React from "react";
+import {
+  Check,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  HelpCircle,
+} from "lucide-react";
+import { PRICING_ROADMAP } from "../../data/landingData";
 
 interface PricingRoadmapProps {
   onStartPrivateTesting: () => void;
@@ -14,7 +20,6 @@ export const PricingRoadmap: React.FC<PricingRoadmapProps> = ({
   return (
     <section id="pricing" className="py-20 sm:py-28 relative">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0DE] border border-[#E8D7B8] text-[#8A5A18] text-xs font-bold uppercase tracking-widest mb-4">
@@ -25,7 +30,9 @@ export const PricingRoadmap: React.FC<PricingRoadmapProps> = ({
             Transparent Rollout for Professional Practices
           </h2>
           <p className="text-base sm:text-lg text-[#55615B] mt-4 leading-relaxed">
-            AVENQUIS is currently in high-fidelity private testing with chartered accountancy firms before general multi-office public availability.
+            AVENQUIS is currently in high-fidelity private testing with
+            chartered accountancy firms before general multi-office public
+            availability.
           </p>
         </div>
 
@@ -36,8 +43,8 @@ export const PricingRoadmap: React.FC<PricingRoadmapProps> = ({
               key={tier.id}
               className={`rounded-3xl p-8 sm:p-10 border transition-all flex flex-col justify-between text-left relative ${
                 tier.featured
-                  ? 'bg-white border-[#113227] shadow-xl ring-2 ring-[#113227]/10'
-                  : 'bg-[#FAF7F2] border-[#EBE6DD] shadow-xs'
+                  ? "bg-white border-[#113227] shadow-xl ring-2 ring-[#113227]/10"
+                  : "bg-[#FAF7F2] border-[#EBE6DD] shadow-xs"
               }`}
             >
               {/* Featured Badge */}
@@ -94,11 +101,13 @@ export const PricingRoadmap: React.FC<PricingRoadmapProps> = ({
               <div>
                 <button
                   type="button"
-                  onClick={tier.featured ? onStartPrivateTesting : onRequestEnterprise}
+                  onClick={
+                    tier.featured ? onStartPrivateTesting : onRequestEnterprise
+                  }
                   className={`w-full py-4 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer ${
                     tier.featured
-                      ? 'bg-[#113227] hover:bg-[#1A4537] text-white shadow-md shadow-emerald-950/10'
-                      : 'bg-white hover:bg-stone-50 text-[#1C1F1E] border border-[#DCD5C7]'
+                      ? "bg-[#113227] hover:bg-[#1A4537] text-white shadow-md shadow-emerald-950/10"
+                      : "bg-white hover:bg-stone-50 text-[#1C1F1E] border border-[#DCD5C7]"
                   }`}
                 >
                   <span>{tier.ctaText}</span>
@@ -111,7 +120,6 @@ export const PricingRoadmap: React.FC<PricingRoadmapProps> = ({
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

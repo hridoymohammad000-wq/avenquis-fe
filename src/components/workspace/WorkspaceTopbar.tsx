@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Search,
   Command,
@@ -14,8 +14,8 @@ import {
   Clock,
   AlertTriangle,
   FileCheck,
-} from 'lucide-react';
-import { UserSession, WorkspaceTab } from '../../types';
+} from "lucide-react";
+import { UserSession, WorkspaceTab } from "../../types";
 
 interface WorkspaceTopbarProps {
   currentUser: UserSession;
@@ -43,34 +43,49 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
   // Group and Label Mapping for Editorial Breadcrumbs
   const getTabDetails = (tab: WorkspaceTab) => {
     switch (tab) {
-      case 'dashboard':
-        return { group: 'FIRM', title: 'Executive Overview & Dashboard' };
-      case 'people':
-        return { group: 'FIRM', title: 'People & Staff Directory' };
-      case 'students':
-        return { group: 'FIRM', title: 'Students & Articleship Management' };
-      case 'crm':
-        return { group: 'CLIENTS & JOBS', title: 'Client Relationship Management (CRM)' };
-      case 'engagements':
-        return { group: 'CLIENTS & JOBS', title: 'Engagements & Multi-Disciplinary Teams' };
-      case 'tasks':
-        return { group: 'OPERATIONS', title: 'Tasks & Deadlines' };
-      case 'timesheets':
-        return { group: 'OPERATIONS', title: 'Timesheets & Billable Hours' };
-      case 'documents':
-        return { group: 'AUDIT & DOCS', title: 'Document Vault & Storage' };
-      case 'audit-files':
-        return { group: 'AUDIT & DOCS', title: 'Working Papers & ISA Compliance' };
-      case 'reviews':
-        return { group: 'AUDIT & DOCS', title: 'Review & Sign-offs Queue' };
-      case 'client-requests':
-        return { group: 'PRACTICE MGMT', title: 'Client Requests (PBC Portal)' };
-      case 'finance':
-        return { group: 'PRACTICE MGMT', title: 'Office Finance & Billing' };
-      case 'settings':
-        return { group: 'PRACTICE MGMT', title: 'Firm Settings & Quality Controls' };
+      case "dashboard":
+        return { group: "FIRM", title: "Executive Overview & Dashboard" };
+      case "people":
+        return { group: "FIRM", title: "People & Staff Directory" };
+      case "students":
+        return { group: "FIRM", title: "Students & Articleship Management" };
+      case "crm":
+        return {
+          group: "CLIENTS & JOBS",
+          title: "Client Relationship Management (CRM)",
+        };
+      case "engagements":
+        return {
+          group: "CLIENTS & JOBS",
+          title: "Engagements & Multi-Disciplinary Teams",
+        };
+      case "tasks":
+        return { group: "OPERATIONS", title: "Tasks & Deadlines" };
+      case "timesheets":
+        return { group: "OPERATIONS", title: "Timesheets & Billable Hours" };
+      case "documents":
+        return { group: "AUDIT & DOCS", title: "Document Vault & Storage" };
+      case "audit-files":
+        return {
+          group: "AUDIT & DOCS",
+          title: "Working Papers & ISA Compliance",
+        };
+      case "reviews":
+        return { group: "AUDIT & DOCS", title: "Review & Sign-offs Queue" };
+      case "client-requests":
+        return {
+          group: "PRACTICE MGMT",
+          title: "Client Requests (PBC Portal)",
+        };
+      case "finance":
+        return { group: "PRACTICE MGMT", title: "Office Finance & Billing" };
+      case "settings":
+        return {
+          group: "PRACTICE MGMT",
+          title: "Firm Settings & Quality Controls",
+        };
       default:
-        return { group: 'FIRM OS', title: 'Workspace' };
+        return { group: "FIRM OS", title: "Workspace" };
     }
   };
 
@@ -78,10 +93,8 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
 
   return (
     <header className="sticky top-0 z-30 h-16 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#EBE6DD] px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-colors">
-      
       {/* Left: Collapse Button (Mobile/Desktop) & Editorial Breadcrumbs */}
       <div className="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0">
-        
         {/* Mobile Menu Trigger */}
         <button
           id="topbar-mobile-menu-btn"
@@ -96,7 +109,11 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
         {onToggleSidebarCollapse && (
           <button
             onClick={onToggleSidebarCollapse}
-            title={isSidebarCollapsed ? 'Expand sidebar (260px)' : 'Collapse sidebar (72px)'}
+            title={
+              isSidebarCollapsed
+                ? "Expand sidebar (260px)"
+                : "Collapse sidebar (72px)"
+            }
             className="hidden lg:flex p-2 rounded-xl bg-white hover:bg-[#F5EFE6] border border-[#E5DDD0] text-[#66706B] hover:text-[#113227] transition-colors cursor-pointer"
           >
             {isSidebarCollapsed ? (
@@ -133,7 +150,6 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
 
       {/* Right: Search Shortcut, AI Copilot, Audit Status, Notifications, User Badge */}
       <div className="flex items-center space-x-2 sm:space-x-3">
-        
         {/* Global Search / Command Bar Trigger (Cmd + K) */}
         <button
           id="global-command-palette-btn"
@@ -141,7 +157,9 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
           className="flex items-center space-x-2 px-2.5 sm:px-3 py-1.5 bg-white hover:bg-[#FDFBF7] border border-[#E5DDD0] rounded-xl text-xs text-[#78857F] hover:text-[#1C1F1E] shadow-2xs transition-all cursor-pointer group"
         >
           <Search className="w-3.5 h-3.5 text-[#8A9691] group-hover:text-[#113227]" />
-          <span className="hidden md:inline font-medium text-[11.5px]">Search papers, clients, tasks...</span>
+          <span className="hidden md:inline font-medium text-[11.5px]">
+            Search papers, clients, tasks...
+          </span>
           <span className="md:hidden font-medium text-[11.5px]">Search...</span>
           <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-mono font-semibold text-[#66706B] bg-[#F2ECE1] border border-[#DDD5C7] rounded">
             <Command className="w-2.5 h-2.5" /> K
@@ -183,9 +201,12 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
             <div className="motion-popover absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-[#E5DDD0] p-4 z-50 animate-fadeIn text-left">
               <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
                 <div>
-                  <h4 className="text-xs font-bold text-[#1C1F1E]">Practice &amp; Audit Alerts</h4>
+                  <h4 className="text-xs font-bold text-[#1C1F1E]">
+                    Practice &amp; Audit Alerts
+                  </h4>
                   <p className="text-[10px] text-[#78857F]">
-                    {unreadNotificationsCount} actionable items require your sign-off
+                    {unreadNotificationsCount} actionable items require your
+                    sign-off
                   </p>
                 </div>
                 <span className="text-[10px] font-semibold text-[#113227] bg-[#E1F3EE] px-2 py-0.5 rounded-full">
@@ -197,12 +218,14 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
                 <div className="p-2.5 rounded-xl bg-[#FDF8F0] border border-[#F2E5D0]">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-[#8A5A18] flex items-center gap-1">
-                      <FileCheck className="w-3 h-3" /> Working Paper B-200 Submitted
+                      <FileCheck className="w-3 h-3" /> Working Paper B-200
+                      Submitted
                     </span>
                     <span className="text-[9px] text-[#A3ADA8]">10m ago</span>
                   </div>
                   <p className="text-xs text-[#3D4742] mt-1 leading-relaxed">
-                    Sabbir Ahmed uploaded Bank Reconciliation working paper for Apex Footwear.
+                    Sabbir Ahmed uploaded Bank Reconciliation working paper for
+                    Apex Footwear.
                   </p>
                 </div>
 
@@ -214,7 +237,8 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
                     <span className="text-[9px] text-[#A3ADA8]">1h ago</span>
                   </div>
                   <p className="text-xs text-[#3D4742] mt-1 leading-relaxed">
-                    Fixed Asset Register from Orbit Textiles is past target due date.
+                    Fixed Asset Register from Orbit Textiles is past target due
+                    date.
                   </p>
                 </div>
 
@@ -226,7 +250,8 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
                     <span className="text-[9px] text-[#A3ADA8]">3h ago</span>
                   </div>
                   <p className="text-xs text-[#3D4742] mt-1 leading-relaxed">
-                    42.5 billable hours verified and synced with practice accounting.
+                    42.5 billable hours verified and synced with practice
+                    accounting.
                   </p>
                 </div>
               </div>
@@ -238,7 +263,9 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
                 >
                   <CheckCheck className="w-3.5 h-3.5" /> Mark all as read
                 </button>
-                <span className="text-[#8A9691] text-[10px]">AVENQUIS Notification Hub</span>
+                <span className="text-[#8A9691] text-[10px]">
+                  AVENQUIS Notification Hub
+                </span>
               </div>
             </div>
           )}
@@ -253,7 +280,6 @@ export const WorkspaceTopbar: React.FC<WorkspaceTopbarProps> = ({
             {currentUser.initials}
           </div>
         </div>
-
       </div>
     </header>
   );

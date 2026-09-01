@@ -1,5 +1,11 @@
-import React from 'react';
-import { ArrowRight, ShieldCheck, Sparkles, Building2, Lock } from 'lucide-react';
+import React from "react";
+import {
+  ArrowRight,
+  ShieldCheck,
+  Sparkles,
+  Building2,
+  Lock,
+} from "lucide-react";
 
 interface BottomCtaBannerProps {
   onAccessWorkspace: () => void;
@@ -13,10 +19,8 @@ export const BottomCtaBanner: React.FC<BottomCtaBannerProps> = ({
   return (
     <section className="py-16 sm:py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Luxury Forest Green Card */}
         <div className="relative rounded-[2.5rem] bg-[#113227] text-white p-8 sm:p-16 lg:p-20 overflow-hidden shadow-2xl border border-[#235846] text-center">
-          
           {/* Ambient Glows */}
           <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-radial from-[#C58A3E]/20 to-transparent blur-3xl pointer-events-none -mr-20 -mt-20" />
           <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-radial from-[#1F5946]/40 to-transparent blur-3xl pointer-events-none -ml-20 -mb-20" />
@@ -29,7 +33,7 @@ export const BottomCtaBanner: React.FC<BottomCtaBannerProps> = ({
 
           {/* Headline with Gold Typography */}
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight max-w-4xl mx-auto leading-[1.12] mb-6">
-            Ready to elevate your firm's{' '}
+            Ready to elevate your firm's{" "}
             <span className="italic font-normal text-[#C58A3E]">
               operating standard?
             </span>
@@ -37,7 +41,9 @@ export const BottomCtaBanner: React.FC<BottomCtaBannerProps> = ({
 
           {/* Subheading */}
           <p className="text-base sm:text-lg text-[#C7D7D0] max-w-2xl mx-auto leading-relaxed mb-10 font-normal">
-            Join forward-thinking chartered accountants and audit leaders standardizing engagement governance, working papers, timesheets, and VAT billing on AVENQUIS.
+            Join forward-thinking chartered accountants and audit leaders
+            standardizing engagement governance, working papers, timesheets, and
+            VAT billing on AVENQUIS.
           </p>
 
           {/* Actions */}
@@ -78,9 +84,7 @@ export const BottomCtaBanner: React.FC<BottomCtaBannerProps> = ({
               <span>AES-256 Encrypted Practice Data</span>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );

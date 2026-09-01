@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Command,
@@ -10,8 +10,8 @@ import {
   Sparkles,
   ArrowRight,
   X,
-} from 'lucide-react';
-import { WorkspaceTab } from '../../types';
+} from "lucide-react";
+import { WorkspaceTab } from "../../types";
 
 interface CommandPaletteModalProps {
   isOpen: boolean;
@@ -26,39 +26,85 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
   onSelectTab,
   onOpenAi,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         // Toggle or open handled by parent
       }
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   const quickNavItems = [
-    { label: 'Dashboard & Practice Cockpit', tab: 'dashboard' as WorkspaceTab, icon: Briefcase, category: 'Overview' },
-    { label: 'Active Audit Engagements (Apex, Novartis, Green Delta)', tab: 'engagements' as WorkspaceTab, icon: Briefcase, category: 'Audit' },
-    { label: 'Audit Working Papers & Hashes (ISA 220)', tab: 'audit-files' as WorkspaceTab, icon: FileCheck, category: 'Quality' },
-    { label: 'Pending Manager & Partner Sign-offs', tab: 'reviews' as WorkspaceTab, icon: FileCheck, category: 'Review' },
-    { label: 'Staff & Qualified Personnel Directory', tab: 'people' as WorkspaceTab, icon: Users, category: 'People' },
-    { label: 'CA Articleship Trainees & ICAB Registration', tab: 'students' as WorkspaceTab, icon: Users, category: 'Students' },
-    { label: 'Live Audit Timer & Timesheets', tab: 'timesheets' as WorkspaceTab, icon: CheckSquare, category: 'Operations' },
-    { label: 'Invoices, VAT Challans & Office Billing', tab: 'finance' as WorkspaceTab, icon: CreditCard, category: 'Finance' },
-    { label: 'Client PBC Requests & Portal Tracking', tab: 'client-requests' as WorkspaceTab, icon: CheckSquare, category: 'Client' },
+    {
+      label: "Dashboard & Practice Cockpit",
+      tab: "dashboard" as WorkspaceTab,
+      icon: Briefcase,
+      category: "Overview",
+    },
+    {
+      label: "Active Audit Engagements (Apex, Novartis, Green Delta)",
+      tab: "engagements" as WorkspaceTab,
+      icon: Briefcase,
+      category: "Audit",
+    },
+    {
+      label: "Audit Working Papers & Hashes (ISA 220)",
+      tab: "audit-files" as WorkspaceTab,
+      icon: FileCheck,
+      category: "Quality",
+    },
+    {
+      label: "Pending Manager & Partner Sign-offs",
+      tab: "reviews" as WorkspaceTab,
+      icon: FileCheck,
+      category: "Review",
+    },
+    {
+      label: "Staff & Qualified Personnel Directory",
+      tab: "people" as WorkspaceTab,
+      icon: Users,
+      category: "People",
+    },
+    {
+      label: "CA Articleship Trainees & ICAB Registration",
+      tab: "students" as WorkspaceTab,
+      icon: Users,
+      category: "Students",
+    },
+    {
+      label: "Live Audit Timer & Timesheets",
+      tab: "timesheets" as WorkspaceTab,
+      icon: CheckSquare,
+      category: "Operations",
+    },
+    {
+      label: "Invoices, VAT Challans & Office Billing",
+      tab: "finance" as WorkspaceTab,
+      icon: CreditCard,
+      category: "Finance",
+    },
+    {
+      label: "Client PBC Requests & Portal Tracking",
+      tab: "client-requests" as WorkspaceTab,
+      icon: CheckSquare,
+      category: "Client",
+    },
   ];
 
-  const filteredItems = quickNavItems.filter((i) =>
-    i.label.toLowerCase().includes(query.toLowerCase()) ||
-    i.category.toLowerCase().includes(query.toLowerCase())
+  const filteredItems = quickNavItems.filter(
+    (i) =>
+      i.label.toLowerCase().includes(query.toLowerCase()) ||
+      i.category.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -89,7 +135,9 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
         <div className="p-2 bg-[#FAF0DE] border-b border-[#EADBBF] flex items-center justify-between px-4">
           <div className="flex items-center space-x-2 text-xs text-[#8A5A18]">
             <Sparkles className="w-3.5 h-3.5 text-[#C58A3E]" />
-            <span className="font-semibold">Ask ISA / IFRS AI Research Assistant</span>
+            <span className="font-semibold">
+              Ask ISA / IFRS AI Research Assistant
+            </span>
           </div>
           <button
             onClick={() => {
@@ -140,7 +188,9 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({
 
         {/* Footer info */}
         <div className="p-2.5 bg-[#FAF8F5] border-t border-[#EBE6DD] text-center text-[10px] text-stone-400">
-          Navigation Shortcut: Use <kbd className="font-mono">↑</kbd> <kbd className="font-mono">↓</kbd> to navigate, <kbd className="font-mono">ENTER</kbd> to select.
+          Navigation Shortcut: Use <kbd className="font-mono">↑</kbd>{" "}
+          <kbd className="font-mono">↓</kbd> to navigate,{" "}
+          <kbd className="font-mono">ENTER</kbd> to select.
         </div>
       </div>
     </div>

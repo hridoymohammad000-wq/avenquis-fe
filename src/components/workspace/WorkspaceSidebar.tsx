@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Building2,
   ChevronDown,
@@ -26,9 +26,9 @@ import {
   Building,
   UserCheck,
   ShieldAlert,
-} from 'lucide-react';
-import { WorkspaceTab, UserSession } from '../../types';
-import { AVAILABLE_TENANTS as DEFAULT_TENANTS } from '../../data/workspaceData';
+} from "lucide-react";
+import { WorkspaceTab, UserSession } from "../../types";
+import { AVAILABLE_TENANTS as DEFAULT_TENANTS } from "../../data/workspaceData";
 
 export interface TenantItem {
   id: string;
@@ -73,59 +73,87 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
   const [tenantDropdownOpen, setTenantDropdownOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isAddFirmModalOpen, setIsAddFirmModalOpen] = useState(false);
-  const [newFirmName, setNewFirmName] = useState('');
-  const [newFirmLocation, setNewFirmLocation] = useState('');
+  const [newFirmName, setNewFirmName] = useState("");
+  const [newFirmLocation, setNewFirmLocation] = useState("");
 
   // Exact Requested Navigation Groupings
   const navSections = [
     {
-      group: 'FIRM',
+      group: "FIRM",
       items: [
-        { id: 'dashboard' as WorkspaceTab, label: 'Dashboard', icon: LayoutDashboard },
-        { id: 'people' as WorkspaceTab, label: 'People & Staff', icon: Users },
-        { id: 'students' as WorkspaceTab, label: 'Students/Articleship', icon: GraduationCap },
-      ],
-    },
-    {
-      group: 'CLIENTS & JOBS',
-      items: [
-        { id: 'crm' as WorkspaceTab, label: 'Client CRM', icon: Briefcase },
-        { id: 'engagements' as WorkspaceTab, label: 'Engagements & Teams', icon: FolderGit2 },
-      ],
-    },
-    {
-      group: 'OPERATIONS',
-      items: [
-        { id: 'tasks' as WorkspaceTab, label: 'Tasks & Deadlines', icon: CheckSquare },
-        { id: 'timesheets' as WorkspaceTab, label: 'Timesheets', icon: Clock },
-      ],
-    },
-    {
-      group: 'AUDIT & DOCS',
-      items: [
-        { id: 'documents' as WorkspaceTab, label: 'Document Vault', icon: FileBox },
-        { id: 'audit-files' as WorkspaceTab, label: 'Working Papers', icon: FileCheck },
         {
-          id: 'reviews' as WorkspaceTab,
-          label: 'Review & Sign-offs',
+          id: "dashboard" as WorkspaceTab,
+          label: "Dashboard",
+          icon: LayoutDashboard,
+        },
+        { id: "people" as WorkspaceTab, label: "People & Staff", icon: Users },
+        {
+          id: "students" as WorkspaceTab,
+          label: "Students/Articleship",
+          icon: GraduationCap,
+        },
+      ],
+    },
+    {
+      group: "CLIENTS & JOBS",
+      items: [
+        { id: "crm" as WorkspaceTab, label: "Client CRM", icon: Briefcase },
+        {
+          id: "engagements" as WorkspaceTab,
+          label: "Engagements & Teams",
+          icon: FolderGit2,
+        },
+      ],
+    },
+    {
+      group: "OPERATIONS",
+      items: [
+        {
+          id: "tasks" as WorkspaceTab,
+          label: "Tasks & Deadlines",
+          icon: CheckSquare,
+        },
+        { id: "timesheets" as WorkspaceTab, label: "Timesheets", icon: Clock },
+      ],
+    },
+    {
+      group: "AUDIT & DOCS",
+      items: [
+        {
+          id: "documents" as WorkspaceTab,
+          label: "Document Vault",
+          icon: FileBox,
+        },
+        {
+          id: "audit-files" as WorkspaceTab,
+          label: "Working Papers",
+          icon: FileCheck,
+        },
+        {
+          id: "reviews" as WorkspaceTab,
+          label: "Review & Sign-offs",
           icon: Award,
           badge: pendingReviewsCount > 0 ? `${pendingReviewsCount}` : undefined,
-          badgeColor: 'bg-[#C58A3E] text-white',
+          badgeColor: "bg-[#C58A3E] text-white",
         },
       ],
     },
     {
-      group: 'PRACTICE MGMT',
+      group: "PRACTICE MGMT",
       items: [
         {
-          id: 'client-requests' as WorkspaceTab,
-          label: 'Client Requests',
+          id: "client-requests" as WorkspaceTab,
+          label: "Client Requests",
           icon: Inbox,
           badge: openRequestsCount > 0 ? `${openRequestsCount}` : undefined,
-          badgeColor: 'bg-[#8E362C] text-white',
+          badgeColor: "bg-[#8E362C] text-white",
         },
-        { id: 'finance' as WorkspaceTab, label: 'Office Finance', icon: CreditCard },
-        { id: 'settings' as WorkspaceTab, label: 'Settings', icon: Settings },
+        {
+          id: "finance" as WorkspaceTab,
+          label: "Office Finance",
+          icon: CreditCard,
+        },
+        { id: "settings" as WorkspaceTab, label: "Settings", icon: Settings },
       ],
     },
   ];
@@ -137,14 +165,14 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
     const newTenant: TenantItem = {
       id: `firm-${Date.now()}`,
       name: newFirmName.trim(),
-      location: newFirmLocation.trim() || 'Principal Office',
+      location: newFirmLocation.trim() || "Principal Office",
       activeEngagements: 0,
     };
 
     onAddNewTenant?.(newTenant);
     onSwitchTenant(newTenant.name);
-    setNewFirmName('');
-    setNewFirmLocation('');
+    setNewFirmName("");
+    setNewFirmLocation("");
     setIsAddFirmModalOpen(false);
     setTenantDropdownOpen(false);
   };
@@ -162,8 +190,8 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
       {/* Sidebar Container: 260px expanded / 72px collapsed */}
       <aside
         className={`motion-drawer fixed top-0 bottom-0 left-0 z-50 bg-[#FAF7F2] border-r border-[#EBE6DD] flex flex-col transition-all duration-300 ease-in-out lg:translate-x-0 ${
-          isOpenMobile ? 'translate-x-0' : '-translate-x-full'
-        } ${isCollapsed ? 'w-[72px]' : 'w-[260px]'}`}
+          isOpenMobile ? "translate-x-0" : "-translate-x-full"
+        } ${isCollapsed ? "w-[72px]" : "w-[260px]"}`}
       >
         {/* Top Header: Brand & Tenant Switcher */}
         <div className="p-3.5 border-b border-[#EBE6DD] bg-white/70">
@@ -171,7 +199,11 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
             {!isCollapsed ? (
               <div className="flex items-center space-x-2 min-w-0">
                 <span className="text-sm font-serif font-black tracking-[0.14em] text-[#113227] select-none uppercase truncate">
-                  AVEN<span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">—</span>QUIS
+                  AVEN
+                  <span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">
+                    —
+                  </span>
+                  QUIS
                 </span>
                 <span className="text-[8.5px] bg-[#113227] text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0">
                   FIRM OS
@@ -199,7 +231,11 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
               <button
                 id="sidebar-toggle-collapse-btn"
                 onClick={onToggleCollapse}
-                title={isCollapsed ? 'Expand sidebar (260px)' : 'Collapse sidebar (72px)'}
+                title={
+                  isCollapsed
+                    ? "Expand sidebar (260px)"
+                    : "Collapse sidebar (72px)"
+                }
                 className="hidden lg:flex p-1 text-[#78857F] hover:text-[#113227] hover:bg-[#FAF7F2] rounded-md transition-colors cursor-pointer"
                 aria-label="Toggle sidebar collapse"
               >
@@ -257,17 +293,21 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
                           }}
                           className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex items-center justify-between cursor-pointer ${
                             isActive
-                              ? 'bg-[#E1F3EE] text-[#113227] font-semibold'
-                              : 'hover:bg-[#FAF7F2] text-[#333]'
+                              ? "bg-[#E1F3EE] text-[#113227] font-semibold"
+                              : "hover:bg-[#FAF7F2] text-[#333]"
                           }`}
                         >
                           <div className="truncate pr-2">
-                            <span className="font-bold truncate block">{t.name}</span>
+                            <span className="font-bold truncate block">
+                              {t.name}
+                            </span>
                             <span className="text-[10px] opacity-75 block truncate">
                               {t.location} • {t.activeEngagements} Engagements
                             </span>
                           </div>
-                          {isActive && <Check className="w-3.5 h-3.5 text-[#113227] shrink-0" />}
+                          {isActive && (
+                            <Check className="w-3.5 h-3.5 text-[#113227] shrink-0" />
+                          )}
                         </button>
                       );
                     })}
@@ -316,9 +356,13 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
                 <div className="text-left truncate">
                   <p className="text-xs font-bold leading-tight flex items-center gap-1">
                     <span>AI Copilot</span>
-                    <span className="text-[8px] bg-[#C58A3E] text-black px-1 rounded-full font-bold">ISA</span>
+                    <span className="text-[8px] bg-[#C58A3E] text-black px-1 rounded-full font-bold">
+                      ISA
+                    </span>
                   </p>
-                  <p className="text-[9.5px] text-[#A6C4B9] leading-tight truncate">Audit &amp; Tax Research</p>
+                  <p className="text-[9.5px] text-[#A6C4B9] leading-tight truncate">
+                    Audit &amp; Tax Research
+                  </p>
                 </div>
               </div>
               <ExternalLink className="w-3 h-3 opacity-60 group-hover:opacity-100 shrink-0" />
@@ -362,26 +406,34 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
                       }}
                       title={isCollapsed ? item.label : undefined}
                       className={`w-full flex items-center ${
-                        isCollapsed ? 'justify-center px-0 py-2.5' : 'justify-between px-2.5 py-1.5'
+                        isCollapsed
+                          ? "justify-center px-0 py-2.5"
+                          : "justify-between px-2.5 py-1.5"
                       } motion-nav-item rounded-xl text-xs font-medium transition-all cursor-pointer group relative ${
                         isActive
-                          ? 'bg-[#113227] text-white shadow-2xs font-semibold'
-                          : 'text-[#3D4742] hover:bg-white/80 hover:text-[#113227]'
+                          ? "bg-[#113227] text-white shadow-2xs font-semibold"
+                          : "text-[#3D4742] hover:bg-white/80 hover:text-[#113227]"
                       }`}
                     >
-                      <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-2'} truncate`}>
+                      <div
+                        className={`flex items-center ${isCollapsed ? "justify-center" : "space-x-2"} truncate`}
+                      >
                         <Icon
                           className={`w-4 h-4 shrink-0 ${
-                            isActive ? 'text-[#C58A3E]' : 'text-[#66706B] group-hover:text-[#113227]'
+                            isActive
+                              ? "text-[#C58A3E]"
+                              : "text-[#66706B] group-hover:text-[#113227]"
                           }`}
                         />
-                        {!isCollapsed && <span className="truncate">{item.label}</span>}
+                        {!isCollapsed && (
+                          <span className="truncate">{item.label}</span>
+                        )}
                       </div>
 
                       {!isCollapsed && item.badge && (
                         <span
                           className={`motion-badge text-[9.5px] font-bold px-1.5 py-0.2 rounded-full ${
-                            item.badgeColor || 'bg-stone-200 text-stone-700'
+                            item.badgeColor || "bg-stone-200 text-stone-700"
                           }`}
                         >
                           {item.badge}
@@ -436,8 +488,12 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
               {userMenuOpen && (
                 <div className="motion-popover absolute bottom-full left-0 right-0 mb-2 p-2 bg-white rounded-xl shadow-xl border border-[#E5DDD0] z-50 animate-fadeIn text-xs">
                   <div className="pb-1.5 border-b border-[#F0EBE1]">
-                    <p className="font-bold text-[#1C1F1E]">{currentUser.name}</p>
-                    <p className="text-[10px] text-[#78857F] truncate">{currentUser.email}</p>
+                    <p className="font-bold text-[#1C1F1E]">
+                      {currentUser.name}
+                    </p>
+                    <p className="text-[10px] text-[#78857F] truncate">
+                      {currentUser.email}
+                    </p>
                     <div className="mt-1 flex items-center gap-1 text-[9.5px] font-semibold text-[#113227] bg-[#E1F3EE] px-1.5 py-0.5 rounded w-fit">
                       <UserCheck className="w-3 h-3" /> Active Session
                     </div>
@@ -445,7 +501,7 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
                   <div className="pt-1.5 space-y-1">
                     <button
                       onClick={() => {
-                        onSelectTab('settings');
+                        onSelectTab("settings");
                         setUserMenuOpen(false);
                       }}
                       className="w-full text-left p-1.5 rounded-md hover:bg-[#FAF7F2] text-[#333] flex items-center space-x-1.5"
@@ -489,8 +545,12 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
                   <Building className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold font-serif text-[#1C1F1E]">Add New Firm / Entity</h3>
-                  <p className="text-[11px] text-[#78857F]">Create a separated multi-tenant workspace</p>
+                  <h3 className="text-sm font-bold font-serif text-[#1C1F1E]">
+                    Add New Firm / Entity
+                  </h3>
+                  <p className="text-[11px] text-[#78857F]">
+                    Create a separated multi-tenant workspace
+                  </p>
                 </div>
               </div>
               <button
@@ -501,9 +561,14 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
               </button>
             </div>
 
-            <form onSubmit={handleCreateFirm} className="mt-4 space-y-3 text-xs">
+            <form
+              onSubmit={handleCreateFirm}
+              className="mt-4 space-y-3 text-xs"
+            >
               <div>
-                <label className="block font-bold text-[#1C1F1E] mb-1">Firm or Entity Legal Name *</label>
+                <label className="block font-bold text-[#1C1F1E] mb-1">
+                  Firm or Entity Legal Name *
+                </label>
                 <input
                   type="text"
                   required
@@ -515,7 +580,9 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
               </div>
 
               <div>
-                <label className="block font-bold text-[#1C1F1E] mb-1">Practice Location / Regional Hub</label>
+                <label className="block font-bold text-[#1C1F1E] mb-1">
+                  Practice Location / Regional Hub
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Singapore / Metro Hub Branch"
@@ -526,7 +593,11 @@ export const WorkspaceSidebar: React.FC<WorkspaceSidebarProps> = ({
               </div>
 
               <div className="p-3 bg-[#FAF7F2] border border-[#EAE4D8] rounded-xl text-[11px] text-[#55615B] leading-relaxed">
-                <span className="font-semibold text-[#113227]">Multi-Tenant Isolation:</span> New firms will receive isolated working paper registers, staff lists, and ICAB/ISA compliance governance.
+                <span className="font-semibold text-[#113227]">
+                  Multi-Tenant Isolation:
+                </span>{" "}
+                New firms will receive isolated working paper registers, staff
+                lists, and ICAB/ISA compliance governance.
               </div>
 
               <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#F0EBE1]">

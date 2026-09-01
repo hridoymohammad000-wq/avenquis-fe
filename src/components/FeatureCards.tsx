@@ -1,22 +1,24 @@
-import React from 'react';
-import { Users, Calendar, PieChart, FileText } from 'lucide-react';
-import { FEATURES } from '../data/content';
-import { FeatureItem } from '../types';
+import React from "react";
+import { Users, Calendar, PieChart, FileText } from "lucide-react";
+import { FEATURES } from "../data/content";
+import { FeatureItem } from "../types";
 
 interface FeatureCardsProps {
   onSelectFeature?: (feature: FeatureItem) => void;
 }
 
-export const FeatureCards: React.FC<FeatureCardsProps> = ({ onSelectFeature }) => {
-  const getIcon = (iconName: FeatureItem['iconName'], colorHex: string) => {
+export const FeatureCards: React.FC<FeatureCardsProps> = ({
+  onSelectFeature,
+}) => {
+  const getIcon = (iconName: FeatureItem["iconName"], colorHex: string) => {
     switch (iconName) {
-      case 'users':
+      case "users":
         return <Users className="w-5 h-5" style={{ color: colorHex }} />;
-      case 'calendar':
+      case "calendar":
         return <Calendar className="w-5 h-5" style={{ color: colorHex }} />;
-      case 'pie-chart':
+      case "pie-chart":
         return <PieChart className="w-5 h-5" style={{ color: colorHex }} />;
-      case 'file-text':
+      case "file-text":
         return <FileText className="w-5 h-5" style={{ color: colorHex }} />;
     }
   };
@@ -41,13 +43,13 @@ export const FeatureCards: React.FC<FeatureCardsProps> = ({ onSelectFeature }) =
 
               {/* Title & Micro metric/subtitle */}
               <div className="overflow-hidden">
-                <h3 
+                <h3
                   className="text-xs font-bold leading-tight truncate"
                   style={{ color: item.badge.text }}
                 >
                   {item.title}
                 </h3>
-                <p 
+                <p
                   className="text-[10px] opacity-75 font-medium mt-0.5 leading-tight truncate"
                   style={{ color: item.badge.text }}
                 >

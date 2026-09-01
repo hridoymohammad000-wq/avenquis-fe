@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Menu, X, ArrowRight, ShieldCheck, Sparkles, Building2 } from 'lucide-react';
-import { LANDING_NAV_LINKS } from '../../data/landingData';
+import React, { useState, useEffect } from "react";
+import {
+  Sun,
+  Moon,
+  Menu,
+  X,
+  ArrowRight,
+  ShieldCheck,
+  Sparkles,
+  Building2,
+} from "lucide-react";
+import { LANDING_NAV_LINKS } from "../../data/landingData";
 
 interface LandingNavbarProps {
   onSignInClick: () => void;
@@ -23,16 +32,19 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({
         setIsScrolled(false);
       }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     e.preventDefault();
     setMobileMenuOpen(false);
     const targetElement = document.querySelector(href);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
+      targetElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -40,18 +52,17 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
         isScrolled
-          ? 'backdrop-blur-md bg-[#FAF7F2]/90 border-b border-[#EBE6DD] shadow-xs py-3.5'
-          : 'bg-[#FAF7F2]/80 backdrop-blur-xs border-b border-transparent py-5'
+          ? "backdrop-blur-md bg-[#FAF7F2]/90 border-b border-[#EBE6DD] shadow-xs py-3.5"
+          : "bg-[#FAF7F2]/80 backdrop-blur-xs border-b border-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between">
-        
         {/* Left: Brand Monogram & Editorial Wordmark */}
         <a
           href="#hero"
           onClick={(e) => {
             e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="flex items-center space-x-3 group cursor-pointer focus:outline-none"
         >
@@ -64,7 +75,11 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({
           <div className="flex flex-col text-left">
             <div className="flex items-center">
               <span className="text-xl sm:text-2xl font-serif font-black tracking-[0.16em] text-[#113227] select-none uppercase leading-none">
-                AVEN<span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">—</span>QUIS
+                AVEN
+                <span className="text-[#C58A3E] font-sans font-light tracking-normal mx-0.5">
+                  —
+                </span>
+                QUIS
               </span>
             </div>
             <span className="text-[8.5px] uppercase tracking-[0.24em] font-bold text-[#8A5A18] mt-0.5">
@@ -94,11 +109,19 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({
           <button
             type="button"
             onClick={() => setIsDarkModeSim((prev) => !prev)}
-            title={isDarkModeSim ? 'Warm light aesthetic active' : 'Toggle ambient backlight'}
+            title={
+              isDarkModeSim
+                ? "Warm light aesthetic active"
+                : "Toggle ambient backlight"
+            }
             className="p-2 text-stone-400 hover:text-stone-700 transition-colors hidden sm:inline-flex rounded-lg hover:bg-[#EBE6DD]/50"
             aria-label="Toggle theme lighting"
           >
-            {isDarkModeSim ? <Moon className="w-4 h-4 text-[#C58A3E]" /> : <Sun className="w-4 h-4" />}
+            {isDarkModeSim ? (
+              <Moon className="w-4 h-4 text-[#C58A3E]" />
+            ) : (
+              <Sun className="w-4 h-4" />
+            )}
           </button>
 
           {/* Sign In Button (Opens modal) */}
@@ -129,7 +152,11 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({
             aria-label="Open mobile navigation"
             className="md:hidden p-2 text-stone-600 hover:text-stone-900 rounded-lg hover:bg-stone-100"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
