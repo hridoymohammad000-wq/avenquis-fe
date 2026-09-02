@@ -60,7 +60,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [selectedLogo, setSelectedLogo] = useState<string>('crest-gold');
 
   // Security State
-  const [isMfaEnabled, setIsMfaEnabled] = useState(true);
+  const [isMfaEnabled, setIsMfaEnabled] = useState(currentUser.mfaEnabled ?? false);
   const [isTotpModalOpen, setIsTotpModalOpen] = useState(false);
 
   // Quality & Defaults
@@ -86,8 +86,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     if (checked) {
       setIsTotpModalOpen(true);
     } else {
-      setIsMfaEnabled(false);
-      onToggleMfa(false);
+      setIsMfaEnabled(currentUser.mfaEnabled ?? false);
+      return;
     }
   };
 
