@@ -8,12 +8,12 @@ import {
   EyeOff,
   ArrowRight,
   Check,
-  Sparkles,
   UserCheck,
   ShieldCheck,
   Building2,
 } from 'lucide-react';
 import { AuthMode, AuthFormData } from '../../types';
+import { authApi } from '../../lib/api';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -29,6 +29,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [mode, setMode] = useState<AuthMode>('signin');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [mfaPending, setMfaPending] = useState(false);
+  const [mfaCode, setMfaCode] = useState('');
+  const [authError, setAuthError] = useState('');
 
   const [formData, setFormData] = useState<AuthFormData>({
     name: '',
@@ -60,48 +63,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleQuickRoleFill = (roleKey: 'partner' | 'manager' | 'senior' | 'student') => {
-    switch (roleKey) {
-      case 'partner':
-        setFormData({
-          name: 'Masud Rahman, FCA',
-          email: 'masud.rahman@rahman-ca.com',
-          password: '••••••••••••',
-          rememberMe: true,
-          role: 'Managing Partner',
-        });
-        break;
-      case 'manager':
-        setFormData({
-          name: 'Nabila Karim, ACA',
-          email: 'nabila.karim@rahman-ca.com',
-          password: '••••••••••••',
-          rememberMe: true,
-          role: 'Audit Manager',
-        });
-        break;
-      case 'senior':
-        setFormData({
-          name: 'Tariq Hasan',
-          email: 'tariq.hasan@rahman-ca.com',
-          password: '••••••••••••',
-          rememberMe: true,
-          role: 'Senior Auditor',
-        });
-        break;
-      case 'student':
-        setFormData({
-          name: 'Tanvir Ahmed',
-          email: 'tanvir.ahmed@fames-ca.com',
-          password: '••••••••••••',
-          rememberMe: true,
-          role: 'CA Article Student',
-        });
-        break;
-    }
-    setErrors({});
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Partial<Record<keyof AuthFormData, string>> = {};
@@ -126,40 +87,44 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    setAuthError('');
+    const request = mode === 'signup'
+      ? authApi.register(formData.email, formData.password, formData.name || '')
+      : authApi.login(formData.email, formData.password);
+    request.then((result) => {
+      if (mode === 'signin' && 'requireMfa' in result && result.requireMfa) {
+        setMfaPending(true);
+        return;
+      }
       onSuccess({
-        email: formData.email,
-        name: formData.name,
-        role: formData.role,
+        email: result.user.email,
+        name: result.user.fullName,
         mode,
       });
       onClose();
-    }, 700);
+    }).catch((error: Error) => {
+      setAuthError(error.message || 'Unable to authenticate.');
+    }).finally(() => {
+      setIsLoading(false);
+    });
   };
 
-  const handleInstantDemoLogin = (role: 'partner' | 'student') => {
-    handleQuickRoleFill(role);
+  const handleMfaSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!/^\d{6}$/.test(mfaCode)) {
+      setAuthError('Enter the six-digit code from your authenticator app.');
+      return;
+    }
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      if (role === 'partner') {
+    setAuthError('');
+    authApi.challengeMfa(mfaCode).then(() => {
         onSuccess({
-          email: 'masud.rahman@rahman-ca.com',
-          name: 'Masud Rahman, FCA',
-          role: 'Managing Partner',
+          email: formData.email,
+          name: formData.name,
           mode: 'signin',
         });
-      } else {
-        onSuccess({
-          email: 'tanvir.ahmed@fames-ca.com',
-          name: 'Tanvir Ahmed',
-          role: 'CA Article Student',
-          mode: 'signin',
-        });
-      }
       onClose();
-    }, 500);
+    }).catch((error: Error) => setAuthError(error.message || 'Invalid MFA code.')).finally(() => setIsLoading(false));
   };
 
   return (
@@ -224,52 +189,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </p>
         </motion.div>
 
-        {/* Quick Role Fill Pills */}
-        <motion.div
-          className="mb-6 p-3 rounded-2xl bg-[#FAF7F2] border border-[#ECE6DB]"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.24, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A5A18] flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#C58A3E]" /> 1-Click Role Logins
-            </span>
-            <span className="text-[10px] text-stone-400">Select persona:</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-            <button
-              type="button"
-              onClick={() => handleQuickRoleFill('partner')}
-              className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#E1F3EE] text-[#1F5946] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
-            >
-              Partner
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickRoleFill('manager')}
-              className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#FAF0DE] text-[#8A5A18] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
-            >
-              Manager
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickRoleFill('senior')}
-              className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#E2F1F8] text-[#1D526D] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
-            >
-              Senior
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickRoleFill('student')}
-              className="px-2 py-1.5 rounded-lg bg-white hover:bg-[#EDE9FE] text-[#5B21B6] text-[11px] font-semibold border border-[#E3DDD0] transition-colors cursor-pointer text-center"
-            >
-              CA Student
-            </button>
-          </div>
-        </motion.div>
+        {authError && <p className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">{authError}</p>}
 
-        {/* Main Form */}
+        {mfaPending ? (
+          <form onSubmit={handleMfaSubmit} className="space-y-4">
+            <p className="text-sm text-[#66706B]">Multi-factor authentication is required for this account.</p>
+            <input aria-label="MFA code" inputMode="numeric" maxLength={6} value={mfaCode} onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))} className="w-full rounded-xl border border-[#E0D8CA] bg-[#FAF7F2] px-4 py-3 text-center font-mono text-lg tracking-widest focus:outline-none" placeholder="000000" />
+            <button type="submit" disabled={isLoading} className="w-full rounded-xl bg-[#113227] py-3.5 text-sm font-bold text-white disabled:opacity-70">{isLoading ? 'Verifying…' : 'Verify MFA & Continue'}</button>
+          </form>
+        ) : (
+
         <motion.form
           onSubmit={handleSubmit}
           className="space-y-4"
@@ -371,6 +300,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             )}
           </button>
         </motion.form>
+        )}
 
         {/* Toggle Mode */}
         <div className="text-center mt-5 text-xs text-[#66706B]">

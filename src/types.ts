@@ -38,12 +38,17 @@ export interface ToastMessage {
 }
 
 export interface UserSession {
+  id?: string;
   name: string;
   email: string;
   role: string;
   tenant: string;
   initials: string;
   avatarColor: string;
+  tenantId?: string;
+  membershipId?: string;
+  permissions?: string[];
+  mfaEnabled?: boolean;
 }
 
 export type WorkspaceTab =

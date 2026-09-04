@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   X,
   ShieldCheck,
@@ -10,6 +10,7 @@ import {
   QrCode,
   Lock,
 } from 'lucide-react';
+import { authApi } from '../../../lib/api';
 
 interface TotpMfaModalProps {
   isOpen: boolean;
@@ -25,7 +26,18 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
   const [copiedKey, setCopiedKey] = useState(false);
   const [verificationCode, setVerificationCode] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const secretKey = 'AVNQ-9482-ICAB-7721-FCA2';
+  const [secretKey, setSecretKey] = useState('');
+  const [qrCode, setQrCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setErrorMsg('');
+    authApi.setupMfa().then((data) => {
+      setSecretKey(data.secret);
+      setQrCode(data.qrCode);
+    }).catch((error: Error) => setErrorMsg(error.message || 'Unable to start MFA setup.'));
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -37,13 +49,16 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
 
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
-    if (verificationCode.length < 6) {
+    if (!/^\d{6}$/.test(verificationCode)) {
       setErrorMsg('Please enter a valid 6-digit TOTP code from your authenticator app.');
       return;
     }
     setErrorMsg('');
-    onConfirmEnable();
-    onClose();
+    setIsLoading(true);
+    authApi.verifyMfa(verificationCode).then(() => {
+      onConfirmEnable();
+      onClose();
+    }).catch((error: Error) => setErrorMsg(error.message || 'Invalid MFA verification code.')).finally(() => setIsLoading(false));
   };
 
   return (
@@ -83,20 +98,8 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E1D5]">
-              {/* Stylized QR Code Visual */}
               <div className="w-28 h-28 bg-white p-2 rounded-xl border border-stone-300 flex items-center justify-center shadow-2xs shrink-0">
-                <div className="grid grid-cols-5 gap-1 w-full h-full p-1 bg-stone-900 rounded-sm">
-                  {Array.from({ length: 25 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className={`${
-                        (i % 2 === 0 || i % 3 === 0 || i === 0 || i === 4 || i === 20 || i === 24)
-                          ? 'bg-white'
-                          : 'bg-stone-900'
-                      } rounded-2xs`}
-                    />
-                  ))}
-                </div>
+                {qrCode ? <img src={qrCode} alt="MFA setup QR code" className="h-full w-full" /> : <QrCode className="h-10 w-10 text-stone-300" />}
               </div>
 
               <div className="space-y-1.5 min-w-0">
@@ -105,7 +108,7 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
                 </span>
                 <div className="flex items-center space-x-1.5 bg-white p-1.5 rounded-xl border border-stone-200">
                   <span className="font-mono text-xs font-bold text-[#113227] truncate">
-                    {secretKey}
+                    {secretKey || 'Loading secure secret…'}
                   </span>
                   <button
                     type="button"
@@ -160,7 +163,7 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
                 className="px-5 py-2 bg-[#113227] hover:bg-[#1A4536] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center space-x-1.5 shadow-xs"
               >
                 <Lock className="w-3.5 h-3.5 text-[#C58A3E]" />
-                <span>Verify &amp; Activate MFA</span>
+                <span>{isLoading ? 'Verifying…' : 'Verify &amp; Activate MFA'}</span>
               </button>
             </div>
           </form>
