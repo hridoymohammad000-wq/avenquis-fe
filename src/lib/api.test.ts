@@ -34,4 +34,16 @@ describe('apiRequest', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 })));
     await expect(apiRequest<{ ok: boolean }>('/health')).resolves.toEqual({ ok: true });
   });
+
+  it('recovers an expired session through refresh and retries the request', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ error: { code: 'INVALID_TOKEN' } }), { status: 401 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(apiRequest<{ ok: boolean }>('/api/v1/tenants')).resolves.toEqual({ ok: true });
+    expect(fetchMock).toHaveBeenNthCalledWith(2, expect.stringContaining('/api/v1/auth/refresh'), expect.objectContaining({ method: 'POST', credentials: 'include' }));
+    expect(fetchMock).toHaveBeenNthCalledWith(3, expect.stringContaining('/api/v1/tenants'), expect.objectContaining({ credentials: 'include' }));
+  });
 });

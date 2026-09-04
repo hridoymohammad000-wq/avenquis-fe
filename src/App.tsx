@@ -42,7 +42,11 @@ export default function App() {
       showToast(`Signed in as ${current.name}. Practice database synchronized.`, 'success');
     } catch (error) {
       showToast(error instanceof Error ? error.message : 'Unable to load your workspace.', 'info');
-      await authApi.logout().catch(() => undefined);
+      try {
+        await authApi.logout();
+      } catch {
+        showToast('Unable to end the server session. Please try again.', 'info');
+      }
     }
   };
 
@@ -65,8 +69,13 @@ export default function App() {
           initialTab={initialWorkspaceTab}
           initialUser={session || undefined}
           initialTenants={tenants}
-          onSignOut={() => {
-            authApi.logout().catch(() => undefined);
+          onSignOut={async () => {
+            try {
+              await authApi.logout();
+            } catch {
+              showToast('Unable to sign out from the server. Please try again.', 'info');
+              return;
+            }
             setSession(null);
             setIsAuthenticated(false);
             showToast('Signed out of Firm OS. Returned to public landing portal.', 'info');

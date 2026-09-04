@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Check, Sparkles, UserCheck } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Check, UserCheck } from 'lucide-react';
 import { AuthMode, AuthFormData } from '../types';
+import { authApi } from '../lib/api';
 
 interface AuthCardProps {
   onSuccess?: (userData: { email: string; name?: string; mode: AuthMode }) => void;
@@ -45,28 +46,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     }
   };
 
-  const handleQuickDemoFill = (type: 'admin' | 'staff') => {
-    if (type === 'admin') {
-      setFormData({
-        name: 'Eleanor Vance',
-        email: 'eleanor.vance@avenquis.com',
-        password: '••••••••••••',
-        rememberMe: true,
-        role: 'Operations Director',
-      });
-    } else {
-      setFormData({
-        name: 'Julian Sterling',
-        email: 'julian.s@avenquis.com',
-        password: '••••••••••••',
-        rememberMe: true,
-        role: 'Senior Finance Lead',
-      });
-    }
-    setErrors({});
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Partial<Record<keyof AuthFormData, string>> = {};
 
@@ -92,7 +72,10 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const result = mode === 'signup'
+        ? await authApi.register(formData.email, formData.password, formData.name || '')
+        : await authApi.login(formData.email, formData.password);
       setIsLoading(false);
       const greetingName = formData.name || formData.email.split('@')[0];
       setSuccessState(mode === 'signin' ? `Welcome back, ${greetingName}!` : `Account created for ${greetingName}!`);
@@ -101,47 +84,15 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         name: formData.name,
         mode,
       });
-    }, 1100);
-  };
-
-  const handleGoogleAuth = () => {
-    setIsLoading(true);
-    setTimeout(() => {
+      void result;
+    } catch {
       setIsLoading(false);
-      setSuccessState('Signed in securely with Google');
-      onSuccess?.({
-        email: 'alex.morgan@avenquis.com',
-        name: 'Alex Morgan',
-        mode: 'signin',
-      });
-    }, 900);
+      setErrors({ email: 'Unable to authenticate with the server.' });
+    }
   };
 
   return (
     <div className="w-full max-w-md mx-auto lg:mx-0">
-      {/* Quick demo pills for reviewers to test with 1-click */}
-      <div className="mb-3 flex items-center justify-between px-1">
-        <span className="text-[11px] font-semibold text-[#8B9691] uppercase tracking-wider flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-[#C58A3E]" /> Quick Demo
-        </span>
-        <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => handleQuickDemoFill('admin')}
-            className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-[#FAF7F2] hover:bg-[#E1F3EE] text-[#1F5946] border border-[#E3DDD1] transition-colors cursor-pointer"
-          >
-            Director
-          </button>
-          <button
-            type="button"
-            onClick={() => handleQuickDemoFill('staff')}
-            className="text-[11px] font-medium px-2.5 py-1 rounded-md bg-[#FAF7F2] hover:bg-[#FCEFD9] text-[#8A5A18] border border-[#E3DDD1] transition-colors cursor-pointer"
-          >
-            Finance Lead
-          </button>
-        </div>
-      </div>
-
       {/* Main Elevated Auth Card matching Natural Tones styling */}
       <div className="bg-white/95 w-full rounded-[2rem] p-8 sm:p-9 border border-[#EBE6DD] shadow-[0_20px_50px_rgba(28,31,30,0.08)] backdrop-blur-md text-left transition-all">
         
@@ -340,46 +291,6 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
-            </button>
-
-            {/* Divider: "or continue with" */}
-            <div className="relative py-4 flex items-center justify-center">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-stone-200" />
-              </div>
-              <span className="relative px-3 bg-white text-[10px] text-[#7A8782] uppercase tracking-widest font-semibold">
-                or continue with
-              </span>
-            </div>
-
-            {/* Social Auth: Outlined Continue with Google button */}
-            <button
-              id="google-auth-btn"
-              type="button"
-              onClick={handleGoogleAuth}
-              disabled={isLoading}
-              className="w-full py-3 border border-stone-200 rounded-xl text-sm font-semibold text-[#3D4842] flex items-center justify-center space-x-3 bg-white hover:bg-stone-50 transition-colors shadow-2xs cursor-pointer"
-            >
-              {/* Google Brand Colored SVG Icon */}
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  fill="#4285F4"
-                  d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.27v3.15C3.25 21.36 7.31 24 12 24z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.27C.46 8.2.0 10.05.0 12s.46 3.8 1.27 5.42l4.01-3.15z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.64 1.27 6.58l4.01 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
-                />
-              </svg>
-              <span className="whitespace-nowrap">Continue with Google</span>
             </button>
 
             {/* Card Footer: Toggle between Sign In & Sign Up */}
