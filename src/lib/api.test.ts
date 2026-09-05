@@ -1,37 +1,20 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { apiRequest, authApi } from './api';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { apiRequest, authApi, clearCsrfToken, setSessionExpiredHandler } from './api';
 
-afterEach(() => vi.restoreAllMocks());
+const response = (body: unknown, status = 200, headers?: HeadersInit) => new Response(JSON.stringify(body), { status, headers });
+const csrf = (token: string) => response({ data: { token } });
+beforeEach(() => { clearCsrfToken(); setSessionExpiredHandler(null); });
+afterEach(() => { vi.restoreAllMocks(); });
 
-describe('backend auth client', () => {
-  it('uses credentialed requests so HttpOnly sessions are sent', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { message: 'ok' } }), { status: 200 }));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await authApi.logout();
-
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/logout'), expect.objectContaining({ credentials: 'include', method: 'POST' }));
-  });
-
-  it('surfaces backend error codes for invalid credentials and expired sessions', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } }), { status: 401 })));
-
-    await expect(authApi.login('user@example.com', 'wrong')).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' });
-  });
-
-  it('sends MFA codes to the real challenge endpoint', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { message: 'verified' } }), { status: 200 }));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await authApi.challengeMfa('123456');
-
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/mfa/challenge'), expect.objectContaining({ body: JSON.stringify({ token: '123456' }) }));
-  });
-});
-
-describe('apiRequest', () => {
-  it('returns payload data for successful requests', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 })));
-    await expect(apiRequest<{ ok: boolean }>('/health')).resolves.toEqual({ ok: true });
-  });
+describe('cookie session client', () => {
+  it('sends credentials include and does not persist tokens on login without auth cookies', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(csrf('login-token')).mockResolvedValueOnce(response({ data: { user: { email: 'user@example.com' }, requireMfa: false } })); const storageSpy = vi.fn(); vi.stubGlobal('localStorage', { setItem: storageSpy }); vi.stubGlobal('sessionStorage', { setItem: storageSpy }); vi.stubGlobal('fetch', fetchMock); await authApi.login('user@example.com', 'password'); expect(fetchMock.mock.calls[1][1]).toEqual(expect.objectContaining({ credentials: 'include', method: 'POST' })); expect(fetchMock.mock.calls[1][1].headers.get('X-CSRF-Token')).toBe('login-token'); expect(storageSpy).not.toHaveBeenCalled(); });
+  it('surfaces login failures without attempting refresh', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(csrf('login-token')).mockResolvedValueOnce(response({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } }, 401)); vi.stubGlobal('fetch', fetchMock); await expect(authApi.login('user@example.com', 'wrong')).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' }); expect(fetchMock).toHaveBeenCalledTimes(2); });
+  it('restores boot sessions through the backend me endpoint', async () => { const fetchMock = vi.fn().mockResolvedValue(response({ data: { user: { id: 'u1' }, aal: 'aal1' } })); vi.stubGlobal('fetch', fetchMock); await expect(authApi.me()).resolves.toMatchObject({ user: { id: 'u1' } }); expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/me'), expect.objectContaining({ credentials: 'include' })); });
+  it('sends a fetched CSRF header for refresh', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(csrf('refresh-token')).mockResolvedValueOnce(response({ data: { userId: 'u1' } })); vi.stubGlobal('fetch', fetchMock); await authApi.refresh(); expect(new Headers(fetchMock.mock.calls[1][1].headers).get('X-CSRF-Token')).toBe('refresh-token'); expect(fetchMock.mock.calls[1][1].credentials).toBe('include'); });
+  it('refreshes a stale CSRF token once and retries refresh', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(csrf('stale-token')).mockResolvedValueOnce(response({ error: 'Invalid CSRF token' }, 403)).mockResolvedValueOnce(csrf('fresh-token')).mockResolvedValueOnce(response({ data: { userId: 'u1' } })); vi.stubGlobal('fetch', fetchMock); await authApi.refresh(); expect(fetchMock).toHaveBeenCalledTimes(4); expect(new Headers(fetchMock.mock.calls[3][1].headers).get('X-CSRF-Token')).toBe('fresh-token'); });
+  it('does not recurse forever when refresh CSRF retry also fails', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(csrf('one')).mockResolvedValueOnce(response({ error: 'Invalid CSRF token' }, 403)).mockResolvedValueOnce(csrf('two')).mockResolvedValueOnce(response({ error: 'Invalid CSRF token' }, 403)); vi.stubGlobal('fetch', fetchMock); await expect(authApi.refresh()).rejects.toMatchObject({ status: 403 }); expect(fetchMock).toHaveBeenCalledTimes(4); });
+  it('refreshes concurrent 401 requests through one refresh flow', async () => { let resourceCalls = 0; const fetchMock = vi.fn().mockImplementation((url: string) => { if (url.endsWith('/csrf-token')) return Promise.resolve(csrf('shared')); if (url.endsWith('/auth/refresh')) return Promise.resolve(response({ data: { ok: true } })); resourceCalls += 1; return Promise.resolve(resourceCalls <= 2 ? response({ error: { code: 'INVALID_TOKEN' } }, 401) : response({ data: { ok: true } })); }); vi.stubGlobal('fetch', fetchMock); await expect(Promise.all([apiRequest('/api/v1/tenants'), apiRequest('/api/v1/tenants')])).resolves.toEqual([{ ok: true }, { ok: true }]); expect(fetchMock.mock.calls.filter(([url]) => url.endsWith('/auth/refresh'))).toHaveLength(1); });
+  it('reports refresh failure and does not loop', async () => { const expired = vi.fn(); setSessionExpiredHandler(expired); const fetchMock = vi.fn().mockResolvedValueOnce(response({ error: { code: 'INVALID_TOKEN' } }, 401)).mockResolvedValueOnce(csrf('refresh-token')).mockResolvedValueOnce(response({ error: { code: 'INVALID_REFRESH_TOKEN' } }, 401)); vi.stubGlobal('fetch', fetchMock); await expect(apiRequest('/api/v1/tenants')).rejects.toMatchObject({ code: 'INVALID_REFRESH_TOKEN' }); expect(expired).toHaveBeenCalledTimes(1); expect(fetchMock).toHaveBeenCalledTimes(3); });
+  it('adds CSRF only to unsafe requests, not safe GETs', async () => { const fetchMock = vi.fn().mockImplementation((url: string) => url.endsWith('/csrf-token') ? Promise.resolve(csrf('unsafe-token')) : Promise.resolve(response({ data: { ok: true } }))); vi.stubGlobal('fetch', fetchMock); await apiRequest('/api/v1/tenants'); await apiRequest('/api/v1/tenants/switch', { method: 'POST', body: '{}' }); expect(fetchMock).toHaveBeenCalledTimes(3); expect(fetchMock.mock.calls[0][1].headers).not.toHaveProperty('X-CSRF-Token'); expect(fetchMock.mock.calls[2][1].headers.get('X-CSRF-Token')).toBe('unsafe-token'); });
+  it('surfaces logout failure and invalid MFA codes', async () => { const fetchMock = vi.fn().mockImplementation((url: string) => url.endsWith('/csrf-token') ? Promise.resolve(csrf('action-token')) : Promise.resolve(response({ error: { code: 'INVALID_MFA_CODE' } }, 401))); vi.stubGlobal('fetch', fetchMock); await expect(authApi.challengeMfa('000000')).rejects.toMatchObject({ code: 'INVALID_MFA_CODE' }); await expect(authApi.logout()).rejects.toMatchObject({ code: 'INVALID_MFA_CODE' }); });
 });

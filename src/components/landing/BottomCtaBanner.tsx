@@ -67,11 +67,11 @@ export const BottomCtaBanner: React.FC<BottomCtaBannerProps> = ({
           <div className="mt-12 pt-8 border-t border-[#1F5946] flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs text-[#A6BFB5] font-mono">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#C58A3E]" />
-              <span>Designed for ISO 27001 &amp; SOC 2 Standards</span>
+              <span>Security controls designed for professional practice workflows</span>
             </div>
             <div className="flex items-center gap-2">
               <Building2 className="w-4 h-4 text-[#C58A3E]" />
-              <span>ICAB &amp; ISA 220 Aligned Workflows</span>
+              <span>Workflows designed to support ICAB &amp; ISA documentation</span>
             </div>
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-[#C58A3E]" />

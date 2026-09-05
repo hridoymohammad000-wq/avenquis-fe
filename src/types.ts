@@ -19,17 +19,6 @@ export interface NavLinkItem {
   id: string;
 }
 
-export type AuthMode = 'signin' | 'signup' | 'forgot';
-
-export interface AuthFormData {
-  name?: string;
-  email: string;
-  password: string;
-  confirmPassword?: string;
-  rememberMe: boolean;
-  role?: string;
-}
-
 export interface ToastMessage {
   id: string;
   type: 'success' | 'info' | 'error';
