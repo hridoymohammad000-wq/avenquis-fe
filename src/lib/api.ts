@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+const API_URL = (import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://avenquis-be-5byp.onrender.com' : 'http://localhost:3000')).replace(/\/$/, '');
 const CSRF_PATH = '/api/v1/auth/csrf-token';
 const UNSAFE = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 export interface ApiError extends Error { code?: string; status?: number; }
