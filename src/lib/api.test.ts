@@ -1,49 +1,19 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { apiRequest, authApi } from './api';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { apiRequest, authApi, clearCsrfToken, setSessionExpiredHandler } from './api';
 
-afterEach(() => vi.restoreAllMocks());
+const response = (body: unknown, status = 200, headers?: HeadersInit) => new Response(JSON.stringify(body), { status, headers });
+beforeEach(() => { clearCsrfToken(); setSessionExpiredHandler(null); });
+afterEach(() => { vi.restoreAllMocks(); });
 
-describe('backend auth client', () => {
-  it('uses credentialed requests so HttpOnly sessions are sent', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { message: 'ok' } }), { status: 200 }));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await authApi.logout();
-
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/logout'), expect.objectContaining({ credentials: 'include', method: 'POST' }));
-  });
-
-  it('surfaces backend error codes for invalid credentials and expired sessions', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } }), { status: 401 })));
-
-    await expect(authApi.login('user@example.com', 'wrong')).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' });
-  });
-
-  it('sends MFA codes to the real challenge endpoint', async () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { message: 'verified' } }), { status: 200 }));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await authApi.challengeMfa('123456');
-
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/mfa/challenge'), expect.objectContaining({ body: JSON.stringify({ token: '123456' }) }));
-  });
-});
-
-describe('apiRequest', () => {
-  it('returns payload data for successful requests', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 })));
-    await expect(apiRequest<{ ok: boolean }>('/health')).resolves.toEqual({ ok: true });
-  });
-
-  it('recovers an expired session through refresh and retries the request', async () => {
-    const fetchMock = vi.fn()
-      .mockResolvedValueOnce(new Response(JSON.stringify({ error: { code: 'INVALID_TOKEN' } }), { status: 401 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ data: { ok: true } }), { status: 200 }));
-    vi.stubGlobal('fetch', fetchMock);
-
-    await expect(apiRequest<{ ok: boolean }>('/api/v1/tenants')).resolves.toEqual({ ok: true });
-    expect(fetchMock).toHaveBeenNthCalledWith(2, expect.stringContaining('/api/v1/auth/refresh'), expect.objectContaining({ method: 'POST', credentials: 'include' }));
-    expect(fetchMock).toHaveBeenNthCalledWith(3, expect.stringContaining('/api/v1/tenants'), expect.objectContaining({ credentials: 'include' }));
-  });
+describe('cookie session client', () => {
+  it('uses credentials include and never persists tokens in browser storage', async () => { const fetchMock = vi.fn().mockResolvedValue(response({ data: { message: 'ok' } })); const storageSpy = vi.fn(); vi.stubGlobal('localStorage', { setItem: storageSpy }); vi.stubGlobal('sessionStorage', { setItem: storageSpy }); vi.stubGlobal('fetch', fetchMock); await authApi.login('user@example.com', 'password'); expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/login'), expect.objectContaining({ credentials: 'include', method: 'POST' })); expect(storageSpy).not.toHaveBeenCalled(); });
+  it('surfaces login failures without attempting refresh', async () => { const fetchMock = vi.fn().mockResolvedValue(response({ error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password' } }, 401)); vi.stubGlobal('fetch', fetchMock); await expect(authApi.login('user@example.com', 'wrong')).rejects.toMatchObject({ status: 401, code: 'INVALID_CREDENTIALS' }); expect(fetchMock).toHaveBeenCalledTimes(1); });
+  it('restores boot sessions through the backend me endpoint', async () => { const fetchMock = vi.fn().mockResolvedValue(response({ data: { user: { id: 'u1' }, aal: 'aal1' } })); vi.stubGlobal('fetch', fetchMock); await expect(authApi.me()).resolves.toMatchObject({ user: { id: 'u1' } }); expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/api/v1/auth/me'), expect.objectContaining({ credentials: 'include' })); });
+  it('adds a fetched CSRF token only to unsafe cookie requests', async () => { const fetchMock = vi.fn().mockImplementation((url: string) => url.endsWith('/csrf-token') ? Promise.resolve(response({ data: { csrfToken: 'server-token' } })) : Promise.resolve(response({ data: { ok: true } }))); vi.stubGlobal('fetch', fetchMock); await apiRequest('/api/v1/tenants/switch', { method: 'POST', body: JSON.stringify({ tenantId: 't1' }) }); expect(fetchMock).toHaveBeenNthCalledWith(1, expect.stringContaining('/csrf-token'), expect.objectContaining({ credentials: 'include' })); expect(fetchMock.mock.calls[1][1].headers.get('X-CSRF-Token')).toBe('server-token'); });
+  it('does not fetch CSRF or send its header for safe GET requests', async () => { const fetchMock = vi.fn().mockResolvedValue(response({ data: { ok: true } })); vi.stubGlobal('fetch', fetchMock); await apiRequest('/api/v1/tenants'); expect(fetchMock).toHaveBeenCalledTimes(1); expect(fetchMock.mock.calls[0][1].headers).not.toHaveProperty('X-CSRF-Token'); });
+  it('refreshes once and retries an expired session', async () => { const fetchMock = vi.fn().mockResolvedValueOnce(response({ error: { code: 'INVALID_TOKEN' } }, 401)).mockResolvedValueOnce(response({ data: { userId: 'u1' } })).mockResolvedValueOnce(response({ data: { ok: true } })); vi.stubGlobal('fetch', fetchMock); await expect(apiRequest('/api/v1/tenants')).resolves.toEqual({ ok: true }); expect(fetchMock).toHaveBeenNthCalledWith(2, expect.stringContaining('/auth/refresh'), expect.objectContaining({ method: 'POST', credentials: 'include' })); expect(fetchMock).toHaveBeenCalledTimes(3); });
+  it('uses one refresh for concurrent 401 responses', async () => { let calls = 0; const fetchMock = vi.fn().mockImplementation((url: string) => { if (url.endsWith('/auth/refresh')) return Promise.resolve(response({ data: { ok: true } })); calls += 1; return Promise.resolve(calls <= 2 ? response({ error: { code: 'INVALID_TOKEN' } }, 401) : response({ data: { ok: true } })); }); vi.stubGlobal('fetch', fetchMock); await expect(Promise.all([apiRequest('/api/v1/tenants'), apiRequest('/api/v1/tenants')])).resolves.toEqual([{ ok: true }, { ok: true }]); expect(fetchMock.mock.calls.filter(([url]) => url.endsWith('/auth/refresh'))).toHaveLength(1); });
+  it('reports refresh failure and does not loop', async () => { const expired = vi.fn(); setSessionExpiredHandler(expired); const fetchMock = vi.fn().mockResolvedValueOnce(response({ error: { code: 'INVALID_TOKEN' } }, 401)).mockResolvedValueOnce(response({ error: { code: 'INVALID_REFRESH_TOKEN' } }, 401)); vi.stubGlobal('fetch', fetchMock); await expect(apiRequest('/api/v1/tenants')).rejects.toMatchObject({ code: 'INVALID_REFRESH_TOKEN' }); expect(expired).toHaveBeenCalledTimes(1); expect(fetchMock).toHaveBeenCalledTimes(2); });
+  it('uses the real MFA challenge endpoint and surfaces invalid codes', async () => { const fetchMock = vi.fn().mockImplementation((url: string) => url.endsWith('/csrf-token') ? Promise.resolve(response({ data: { token: 'server-token' } })) : Promise.resolve(response({ error: { code: 'INVALID_MFA_CODE', message: 'Invalid MFA code' } }, 401))); vi.stubGlobal('fetch', fetchMock); await expect(authApi.challengeMfa('000000')).rejects.toMatchObject({ code: 'INVALID_MFA_CODE' }); expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/auth/mfa/challenge'), expect.objectContaining({ credentials: 'include', body: JSON.stringify({ token: '000000' }) })); });
+  it('surfaces logout failure so callers can preserve local state', async () => { const fetchMock = vi.fn().mockImplementation((url: string) => url.endsWith('/csrf-token') ? Promise.resolve(response({ data: { token: 'server-token' } })) : Promise.resolve(response({ error: { code: 'LOGOUT_FAILED' } }, 500))); vi.stubGlobal('fetch', fetchMock); await expect(authApi.logout()).rejects.toMatchObject({ status: 500, code: 'LOGOUT_FAILED' }); });
 });
