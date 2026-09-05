@@ -57,9 +57,9 @@ export const TRUST_METRICS: MetricItem[] = [
     id: 'rls',
     title: 'Multi-Tenant Isolation',
     subtitle: 'Strict PostgreSQL RLS',
-    tag: 'Zero Cross-Tenant Leakage',
-    highlight: '100% Isolated',
-    description: 'Every SQL query executes inside an active tenant transaction with fail-closed cryptographic boundaries.',
+    tag: 'Tenant-Scoped RLS Controls',
+    highlight: 'Tenant Policy Architecture',
+    description: 'Tenant-scoped database policies are designed to support isolated workflows and controlled access boundaries.',
   },
   {
     id: 'immutable',
@@ -67,7 +67,7 @@ export const TRUST_METRICS: MetricItem[] = [
     subtitle: 'Versioned Sign-Offs & Hashes',
     tag: 'ISA 220 & ISA 230 Compliant',
     highlight: 'SHA-256 Seals',
-    description: 'Working paper revisions, partner reviews, and sign-offs are cryptographically sealed with permanent audit trails.',
+    description: 'Working paper revisions, partner reviews, and sign-offs can use SHA-256 evidence integrity controls designed to support audit documentation workflows.',
   },
   {
     id: 'controlled-ai',
@@ -83,7 +83,7 @@ export const TRUST_METRICS: MetricItem[] = [
     subtitle: 'ICAB & NBR Regulatory Ready',
     tag: 'Statutory Standards Built-in',
     highlight: 'Bangladesh & Global',
-    description: 'Pre-configured for local 15% VAT, TDS withholding rules, and international ISA audit governance.',
+    description: 'Supports workflows that can be configured for local VAT, TDS, and audit-governance requirements.',
   },
 ];
 
@@ -166,7 +166,7 @@ export const CORE_MODULES: ModulePillar[] = [
     previewSnippet: {
       type: 'timesheet',
       label: 'Weekly Timesheet • 42.5 Billable Hrs',
-      status: 'Partner Approved',
+      status: 'Illustrative approved state',
     },
   },
   {
@@ -193,7 +193,7 @@ export const CORE_MODULES: ModulePillar[] = [
     previewSnippet: {
       type: 'audit',
       label: 'WP-REV-01 • Revenue Substantive Testing',
-      status: 'Signed Off • SHA-256 Sealed',
+      status: 'Illustrative integrity state',
     },
   },
   {
@@ -220,7 +220,7 @@ export const CORE_MODULES: ModulePillar[] = [
     previewSnippet: {
       type: 'finance',
       label: 'Invoice #INV-2026-081 • BDT 1,150,000',
-      status: 'Dispatched & Cleared',
+      status: 'Illustrative reconciliation state',
     },
   },
   {
@@ -238,7 +238,7 @@ export const CORE_MODULES: ModulePillar[] = [
       border: '#DDD6FE',
     },
     keyFeatures: [
-      'Zero external data transmission: firm files remain strictly private',
+      'Human-review controls for AI-assisted workflows',
       'Instant ISA 220 review queue summarization and blocker identification',
       'Automated PBC reminder email drafting with specific missing documents',
       'One-click navigation directly to affected working papers and ledgers',
@@ -258,9 +258,9 @@ export const ARCHITECTURE_INVARIANTS: ArchitectureInvariant[] = [
     code: 'SEC-INV-01',
     title: 'PostgreSQL Row Level Security (RLS)',
     description:
-      'Every single SQL query executed by the backend is parameterized with the authenticated tenant ID. Hardware-enforced kernel-level database filters guarantee zero cross-tenant data visibility.',
-    standardCitation: 'ISO 27001 § A.9.4 & SOC 2 CC6.1',
-    securityImpact: 'Guaranteed Multi-Tenant Isolation',
+      'Tenant-scoped policy controls are designed to support isolated workflow boundaries without making an absolute isolation guarantee.',
+    standardCitation: 'Tenant policy architecture benchmark',
+    securityImpact: 'Designed for Tenant-Scoped Workflows',
   },
   {
     id: 'immutable-audit-trail',
@@ -291,48 +291,6 @@ export const ARCHITECTURE_INVARIANTS: ArchitectureInvariant[] = [
   },
 ];
 
-export const PRICING_ROADMAP = [
-  {
-    id: 'private-testing',
-    badge: 'Current Stage (Private V1)',
-    name: 'Private Firm Deployment',
-    price: 'Invited Practice Alpha',
-    period: 'Exclusive Pilot',
-    description: 'Dedicated instance deployment for invited chartered accountancy & consulting practices.',
-    featured: true,
-    features: [
-      'Full Access to all 6 Core Modules',
-      'Unlimited Engagements, Clients & Working Papers',
-      'Up to 50 Staff & CA Article Students',
-      'ICAB & ISA 220 Working Paper Checklists',
-      'Statutory 15% VAT & Operating Finance Ledger',
-      'Dedicated Migration Concierge (Excel / Legacy tools)',
-      'Direct Weekly Feature Requests with Engineering Team',
-    ],
-    ctaText: 'Start Private Testing',
-    note: 'Active for verified accounting practices during current deployment phase.',
-  },
-  {
-    id: 'public-saas',
-    badge: 'Upcoming Public Release',
-    name: 'Enterprise Multi-Office',
-    price: '$49',
-    period: '/ seat / month',
-    description: 'Scale multi-branch chartered firms and corporate advisory groups across regional offices.',
-    featured: false,
-    features: [
-      'Everything in Private Practice Edition',
-      'Multi-Branch & Multi-Tenant Practice Consolidation',
-      'Custom ERP, Banking & Tax Portal Integrations',
-      'Dedicated VPC or On-Premise Container Option',
-      'SSO (SAML 2.0 / Okta / Azure AD)',
-      '24/7 Dedicated Partner SLA & Security Audits',
-      'Automated NBR Return Dispatch Connectors',
-    ],
-    ctaText: 'Request Enterprise Briefing',
-    note: 'Public SaaS rollout scheduled following V5 deployment milestone.',
-  },
-];
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
@@ -345,19 +303,19 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: 'Compliance & Security',
     question: 'Where is firm and client financial data stored?',
     answer:
-      'All practice data is hosted in high-security, ISO 27001-certified cloud infrastructure with PostgreSQL Row-Level Security (RLS) guaranteeing strict tenant isolation. Data is encrypted at rest using AES-256 and in transit via TLS 1.3.',
+      'The backend uses PostgreSQL Row-Level Security (RLS) policy controls designed to support tenant-scoped workflows. Deployment-specific hosting, encryption, and certification details should be confirmed for the relevant environment.',
   },
   {
     category: 'AI & Privacy',
     question: 'Does the AI Copilot use our confidential audit working papers to train public models?',
     answer:
-      'No. The AI Copilot operates strictly in a read-only, ephemeral context window. Your working papers, client financials, and internal notes are never used for model training or shared across tenants.',
+      'The product direction includes human-review controls and scoped AI-assisted workflows. Data retention and model-training treatment depend on the deployed provider configuration and applicable contract, so they should be confirmed before use with confidential material.',
   },
   {
     category: 'Operations & Billing',
     question: 'Can we convert unbilled staff timesheet hours into client fee invoices automatically?',
     answer:
-      'Yes. The Office Finance & Invoicing engine directly aggregates approved staff billable hours for active engagements, allows custom billing rates, applies the statutory 15% VAT, and generates official ICAB-compliant fee tax invoices with one click.',
+      'The Office Finance & Invoicing workflow is designed to aggregate approved billable hours, apply configured VAT rules, and support invoice preparation. Any statutory or ICAB-specific treatment should be verified for the deployment.',
   },
   {
     category: 'Onboarding',

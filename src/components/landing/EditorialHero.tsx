@@ -86,7 +86,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
             onClick={onStartTesting}
             className="w-full sm:w-auto bg-[#113227] hover:bg-[#1A4537] text-white px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-emerald-950/15 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer group"
           >
-            <span>Start Private Testing</span>
+            <span>Request a Demo</span>
             <ArrowRight className="w-4 h-4 text-[#C58A3E] group-hover:translate-x-1 transition-transform" />
           </button>
 
@@ -96,7 +96,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
             onClick={onExploreArchitecture}
             className="w-full sm:w-auto bg-white/90 hover:bg-white text-[#1C1F1E] border border-[#DCD5C7] px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-2xs hover:border-[#113227]/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Explore Platform</span>
+            <span>Explore Demo</span>
             <ExternalLink className="w-4 h-4 text-[#8A5A18]" />
           </button>
         </motion.div>
@@ -190,7 +190,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-1 rounded-full bg-[#E1F3EE] text-[#1F5946] border border-[#C8E9DE] text-xs font-bold flex items-center gap-1.5">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      Two-Partner Signed &amp; Sealed
+                      Illustrative signed state
                     </span>
                     <span className="text-xs font-mono px-2 py-1 bg-stone-100 rounded text-stone-600 border border-stone-200">
                       SHA-256: 8f4a...29c1
@@ -228,7 +228,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
                       <span className="font-semibold text-stone-800">WP-A01: Letter of Engagement &amp; Independence Declaration</span>
                       <span className="font-mono text-stone-500">ISA 210 § 4.2</span>
                       <span className="text-stone-600">MR / ZC</span>
-                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Partner Signed</span>
+                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Illustrative</span>
                     </div>
                     <div className="py-2.5 flex items-center justify-between">
                       <span className="font-semibold text-stone-800">WP-B04: Trade Receivables Circularization Confirmation</span>
@@ -346,14 +346,14 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
                     <span className="text-stone-600">Beximco Pharma Audit</span>
                     <span className="text-stone-500 font-mono">AUD-SUB-01</span>
                     <span className="font-bold text-stone-800">8.0 hrs</span>
-                    <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Approved</span>
+                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Illustrative</span>
                   </div>
                   <div className="flex items-center justify-between py-1 border-t border-stone-100">
                     <span className="font-medium text-stone-800">Nabila Karim (Audit Manager)</span>
                     <span className="text-stone-600">Square Textiles Review</span>
                     <span className="text-stone-500 font-mono">MGR-REV-04</span>
                     <span className="font-bold text-stone-800">6.5 hrs</span>
-                    <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Approved</span>
+                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded">Illustrative</span>
                   </div>
                 </div>
               </div>
@@ -372,7 +372,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
                     </h3>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[#E1F3EE] text-[#1F5946] font-bold text-xs border border-[#C8E9DE]">
-                    Paid &amp; Reconciled via BEFTN
+                    Illustrative reconciliation state
                   </span>
                 </div>
 
