@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef } from "react";
 import {
   X,
   Printer,
@@ -9,8 +9,8 @@ import {
   ShieldCheck,
   CreditCard,
   Landmark,
-} from 'lucide-react';
-import { InvoiceRecord, FirmProfile } from '../../../types';
+} from "lucide-react";
+import { InvoiceRecord, FirmProfile } from "../../../types";
 
 interface InvoicePreviewModalProps {
   invoice: InvoiceRecord | null;
@@ -36,7 +36,6 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 text-left animate-fadeIn">
       <div className="bg-[#FAF7F2] w-full max-w-3xl rounded-3xl border border-[#EBE6DD] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        
         {/* Modal Action Header */}
         <div className="p-4 sm:p-5 bg-white border-b border-[#EBE6DD] flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -45,20 +44,26 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="text-sm font-bold text-[#1C1F1E]">Tax Invoice Preview</h3>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  invoice.status === 'Paid'
-                    ? 'bg-[#E1F3EE] text-[#1F5946]'
-                    : invoice.status === 'Overdue'
-                    ? 'bg-[#FDE6E2] text-[#8E362C]'
-                    : invoice.status === 'Draft'
-                    ? 'bg-stone-100 text-stone-600'
-                    : 'bg-[#FAF0DE] text-[#8A5A18]'
-                }`}>
+                <h3 className="text-sm font-bold text-[#1C1F1E]">
+                  Tax Invoice Preview
+                </h3>
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    invoice.status === "Paid"
+                      ? "bg-[#E1F3EE] text-[#1F5946]"
+                      : invoice.status === "Overdue"
+                        ? "bg-[#FDE6E2] text-[#8E362C]"
+                        : invoice.status === "Draft"
+                          ? "bg-stone-100 text-stone-600"
+                          : "bg-[#FAF0DE] text-[#8A5A18]"
+                  }`}
+                >
                   {invoice.status}
                 </span>
               </div>
-              <p className="text-xs text-[#7A8782] font-mono">{invoice.invoiceNo}</p>
+              <p className="text-xs text-[#7A8782] font-mono">
+                {invoice.invoiceNo}
+              </p>
             </div>
           </div>
 
@@ -87,8 +92,10 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
         </div>
 
         {/* Invoice Paper Document Body */}
-        <div className="p-6 sm:p-10 overflow-y-auto space-y-8 bg-white m-3 sm:m-6 rounded-2xl border border-[#E8E1D5] shadow-xs print:m-0 print:border-0 print:shadow-none" ref={printRef}>
-          
+        <div
+          className="p-6 sm:p-10 overflow-y-auto space-y-8 bg-white m-3 sm:m-6 rounded-2xl border border-[#E8E1D5] shadow-xs print:m-0 print:border-0 print:shadow-none"
+          ref={printRef}
+        >
           {/* Header & Firm Letterhead */}
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b-2 border-[#113227]">
             <div>
@@ -104,9 +111,19 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                 {firmProfile.principalAddress}
               </p>
               <div className="text-[11px] text-stone-500 mt-2 space-y-0.5 font-mono">
-                <div>Registration: <span className="font-semibold text-stone-700">{firmProfile.firmRegistrationNo}</span></div>
-                <div>{firmProfile.taxIdentificationNo} • {firmProfile.binNumber}</div>
-                <div>Email: {firmProfile.contactEmail} • Tel: {firmProfile.contactPhone}</div>
+                <div>
+                  Registration:{" "}
+                  <span className="font-semibold text-stone-700">
+                    {firmProfile.firmRegistrationNo}
+                  </span>
+                </div>
+                <div>
+                  {firmProfile.taxIdentificationNo} • {firmProfile.binNumber}
+                </div>
+                <div>
+                  Email: {firmProfile.contactEmail} • Tel:{" "}
+                  {firmProfile.contactPhone}
+                </div>
               </div>
             </div>
 
@@ -118,9 +135,24 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                 {invoice.invoiceNo}
               </div>
               <div className="mt-3 text-xs space-y-1 text-stone-600 font-mono">
-                <div><span className="text-stone-400">Issue Date:</span> <span className="font-bold text-stone-800">{invoice.issueDate}</span></div>
-                <div><span className="text-stone-400">Payment Due:</span> <span className="font-bold text-[#8E362C]">{invoice.dueDate}</span></div>
-                <div><span className="text-stone-400">Basis:</span> <span className="font-semibold text-stone-700">{invoice.billingBasis || 'Fixed Milestone'}</span></div>
+                <div>
+                  <span className="text-stone-400">Issue Date:</span>{" "}
+                  <span className="font-bold text-stone-800">
+                    {invoice.issueDate}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-stone-400">Payment Due:</span>{" "}
+                  <span className="font-bold text-[#8E362C]">
+                    {invoice.dueDate}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-stone-400">Basis:</span>{" "}
+                  <span className="font-semibold text-stone-700">
+                    {invoice.billingBasis || "Fixed Milestone"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -152,7 +184,8 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                 {invoice.service}
               </p>
               <p className="text-[11px] text-stone-500 mt-1">
-                Structured in alignment with ICAB professional guidelines, Bangladesh VAT Act 2012 &amp; Income Tax Act 2023.
+                Structured in alignment with ICAB professional guidelines,
+                Bangladesh VAT Act 2012 &amp; Income Tax Act 2023.
               </p>
             </div>
           </div>
@@ -163,7 +196,9 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
               <thead className="bg-[#FAF7F2] border-b border-[#EBE6DD] text-[#7A8782] font-bold uppercase text-[10px] tracking-wider">
                 <tr>
                   <th className="px-4 py-3">#</th>
-                  <th className="px-4 py-3">Description of Professional Services</th>
+                  <th className="px-4 py-3">
+                    Description of Professional Services
+                  </th>
                   <th className="px-4 py-3 text-right">Hours / Rate</th>
                   <th className="px-4 py-3 text-right">Amount (BDT)</th>
                 </tr>
@@ -172,12 +207,16 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                 {invoice.lineItems && invoice.lineItems.length > 0 ? (
                   invoice.lineItems.map((item, idx) => (
                     <tr key={item.id || idx}>
-                      <td className="px-4 py-3.5 text-stone-400 font-mono">{idx + 1}</td>
+                      <td className="px-4 py-3.5 text-stone-400 font-mono">
+                        {idx + 1}
+                      </td>
                       <td className="px-4 py-3.5 font-medium text-stone-800">
                         {item.description}
                       </td>
                       <td className="px-4 py-3.5 text-right text-stone-600 font-mono">
-                        {item.hours ? `${item.hours} hrs @ ৳${(item.rate || 0).toLocaleString()}` : '—'}
+                        {item.hours
+                          ? `${item.hours} hrs @ ৳${(item.rate || 0).toLocaleString()}`
+                          : "—"}
                       </td>
                       <td className="px-4 py-3.5 text-right font-mono font-bold text-stone-900">
                         BDT {item.amount.toLocaleString()}
@@ -190,7 +229,9 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                     <td className="px-4 py-3.5 font-medium text-stone-800">
                       {invoice.service}
                     </td>
-                    <td className="px-4 py-3.5 text-right text-stone-600 font-mono">—</td>
+                    <td className="px-4 py-3.5 text-right text-stone-600 font-mono">
+                      —
+                    </td>
                     <td className="px-4 py-3.5 text-right font-mono font-bold text-stone-900">
                       BDT {invoice.amount.toLocaleString()}
                     </td>
@@ -203,11 +244,18 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
             <div className="p-4 bg-[#FAF8F5] border-t border-[#EBE6DD] flex flex-col items-end space-y-1.5 text-xs font-mono">
               <div className="flex justify-between w-64 text-stone-600">
                 <span>Subtotal (Professional Fee):</span>
-                <span className="font-semibold">BDT {invoice.amount.toLocaleString()}</span>
+                <span className="font-semibold">
+                  BDT {invoice.amount.toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between w-64 text-stone-600">
-                <span>VAT ({invoice.vatRate !== undefined ? invoice.vatRate : 15}% Standard):</span>
-                <span className="font-semibold">BDT {invoice.vatAmount.toLocaleString()}</span>
+                <span>
+                  VAT ({invoice.vatRate !== undefined ? invoice.vatRate : 15}%
+                  Standard):
+                </span>
+                <span className="font-semibold">
+                  BDT {invoice.vatAmount.toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between w-64 pt-2 border-t border-[#E5DDD0] text-sm font-bold text-[#113227]">
                 <span>Total Payable:</span>
@@ -224,13 +272,29 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                 <span>Bank Remittance Instructions</span>
               </div>
               <p className="text-[11px] text-stone-600">
-                Please remit payments via BEFTN, RTGS, or Account Payee Cheque in favor of:
+                Please remit payments via BEFTN, RTGS, or Account Payee Cheque
+                in favor of:
               </p>
               <div className="text-[11px] font-mono text-stone-800 font-medium space-y-0.5">
-                <div>Beneficiary: <span className="font-bold">{firmProfile.firmName}</span></div>
-                <div>Bank: <span className="font-bold">Eastern Bank Ltd (Gulshan Branch)</span></div>
-                <div>Account No: <span className="font-bold text-[#113227]">1041029482019</span></div>
-                <div>Routing No: <span className="font-bold">090271829</span></div>
+                <div>
+                  Beneficiary:{" "}
+                  <span className="font-bold">{firmProfile.firmName}</span>
+                </div>
+                <div>
+                  Bank:{" "}
+                  <span className="font-bold">
+                    Eastern Bank Ltd (Gulshan Branch)
+                  </span>
+                </div>
+                <div>
+                  Account No:{" "}
+                  <span className="font-bold text-[#113227]">
+                    1041029482019
+                  </span>
+                </div>
+                <div>
+                  Routing No: <span className="font-bold">090271829</span>
+                </div>
               </div>
             </div>
 
@@ -241,8 +305,12 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
                     {firmProfile.managingPartner}
                   </span>
                 </div>
-                <p className="text-[11px] font-bold text-stone-800">Authorized Partner Signatory</p>
-                <p className="text-[10px] text-stone-500 font-mono">For {firmProfile.firmName}</p>
+                <p className="text-[11px] font-bold text-stone-800">
+                  Authorized Partner Signatory
+                </p>
+                <p className="text-[10px] text-stone-500 font-mono">
+                  For {firmProfile.firmName}
+                </p>
               </div>
             </div>
           </div>
@@ -250,7 +318,9 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
           {/* Notes & Regulatory Disclaimers */}
           {invoice.notes && (
             <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 text-[11px] text-stone-600">
-              <span className="font-bold text-stone-700">Notes / Remarks: </span>
+              <span className="font-bold text-stone-700">
+                Notes / Remarks:{" "}
+              </span>
               {invoice.notes}
             </div>
           )}
@@ -269,7 +339,6 @@ export const InvoicePreviewModal: React.FC<InvoicePreviewModalProps> = ({
             Close Preview
           </button>
         </div>
-
       </div>
     </div>
   );

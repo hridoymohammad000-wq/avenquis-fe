@@ -64,7 +64,6 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 text-left animate-fadeIn">
       <div className="bg-white w-full max-w-md rounded-3xl border border-[#EBE6DD] shadow-2xl overflow-hidden flex flex-col">
-        
         {/* Header */}
         <div className="p-5 bg-[#FAF7F2] border-b border-[#EBE6DD] flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -72,8 +71,12 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#1C1F1E]">Configure TOTP Authenticator</h3>
-              <p className="text-xs text-[#7A8782]">Two-factor security for audit sign-off authority.</p>
+              <h3 className="text-base font-bold text-[#1C1F1E]">
+                Configure TOTP Authenticator
+              </h3>
+              <p className="text-xs text-[#7A8782]">
+                Two-factor security for audit sign-off authority.
+              </p>
             </div>
           </div>
 
@@ -87,14 +90,14 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
 
         {/* Body */}
         <div className="p-6 space-y-5">
-          
           {/* Step 1: QR Code & Key */}
           <div className="space-y-3">
             <span className="text-[10.5px] font-extrabold uppercase tracking-wider text-[#8A9691] block">
               Step 1: Scan QR Code with Authenticator App
             </span>
             <p className="text-xs text-stone-600">
-              Use Google Authenticator, Microsoft Authenticator, or 1Password on your mobile device.
+              Use Google Authenticator, Microsoft Authenticator, or 1Password on
+              your mobile device.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E1D5]">
@@ -116,10 +119,16 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
                     className="p-1 text-stone-500 hover:text-stone-800 cursor-pointer shrink-0"
                     title="Copy Secret Key"
                   >
-                    {copiedKey ? <Check className="w-3.5 h-3.5 text-[#1F5946]" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedKey ? (
+                      <Check className="w-3.5 h-3.5 text-[#1F5946]" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
                   </button>
                 </div>
-                <span className="text-[10px] text-stone-400 block">Account: AVENQUIS | Admin (Firm Administrator)</span>
+                <span className="text-[10px] text-stone-400 block">
+                  Account: AVENQUIS | Admin (Firm Administrator)
+                </span>
               </div>
             </div>
           </div>
@@ -135,8 +144,8 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
               maxLength={6}
               value={verificationCode}
               onChange={(e) => {
-                setVerificationCode(e.target.value.replace(/\D/g, ''));
-                setErrorMsg('');
+                setVerificationCode(e.target.value.replace(/\D/g, ""));
+                setErrorMsg("");
               }}
               placeholder="e.g. 748291"
               className="w-full px-4 py-3 bg-[#FAF8F5] border border-[#E5DDD0] rounded-2xl text-center text-lg font-mono font-bold tracking-widest text-[#113227] focus:outline-none focus:border-[#113227]"
@@ -167,9 +176,7 @@ export const TotpMfaModal: React.FC<TotpMfaModalProps> = ({
               </button>
             </div>
           </form>
-
         </div>
-
       </div>
     </div>
   );

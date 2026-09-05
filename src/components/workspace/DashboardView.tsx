@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { AnimatedNumber, MotionProgressBar } from '../motion/MotionPrimitives';
+import React, { useState } from "react";
+import { motion } from "motion/react";
+import { AnimatedNumber, MotionProgressBar } from "../motion/MotionPrimitives";
 import {
   Briefcase,
   Award,
@@ -31,7 +31,7 @@ import {
   UserCheck,
   X,
   Lock,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   EngagementRecord,
   TaskRecord,
@@ -41,8 +41,8 @@ import {
   ClientRecord,
   AuditActivityEvent,
   WorkspaceTab,
-} from '../../types';
-import { INITIAL_AUDIT_ACTIVITIES } from '../../data/workspaceData';
+} from "../../types";
+import { INITIAL_AUDIT_ACTIVITIES } from "../../data/workspaceData";
 
 interface DashboardViewProps {
   engagements: EngagementRecord[];
@@ -57,11 +57,15 @@ interface DashboardViewProps {
   onAddTask?: (task: Partial<TaskRecord>) => void;
   onAddTimesheet?: (ts: Partial<TimesheetEntry>) => void;
   onAddWorkingPaper?: (wp: Partial<WorkingPaper>) => void;
-  onUpdateTaskStatus?: (taskId: string, status: TaskRecord['status']) => void;
-  onUpdateEngagementStage?: (engagementId: string, stage: EngagementRecord['stage']) => void;
+  onUpdateTaskStatus?: (taskId: string, status: TaskRecord["status"]) => void;
+  onUpdateEngagementStage?: (
+    engagementId: string,
+    stage: EngagementRecord["stage"],
+  ) => void;
 }
 
-type PipelineFilter = 'all' | 'Statutory Audit' | 'Tax Compliance' | 'Special Advisory';
+type PipelineFilter =
+  "all" | "Statutory Audit" | "Tax Compliance" | "Special Advisory";
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   engagements,
@@ -80,74 +84,124 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onUpdateEngagementStage,
 }) => {
   // Filters & State
-  const [pipelineFilter, setPipelineFilter] = useState<PipelineFilter>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activityFeed, setActivityFeed] = useState<AuditActivityEvent[]>(INITIAL_AUDIT_ACTIVITIES);
+  const [pipelineFilter, setPipelineFilter] = useState<PipelineFilter>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activityFeed, setActivityFeed] = useState<AuditActivityEvent[]>(
+    INITIAL_AUDIT_ACTIVITIES,
+  );
 
   // Modals
-  const [isNewEngagementModalOpen, setIsNewEngagementModalOpen] = useState(false);
+  const [isNewEngagementModalOpen, setIsNewEngagementModalOpen] =
+    useState(false);
   const [isLogTimeModalOpen, setIsLogTimeModalOpen] = useState(false);
   const [isUploadWpModalOpen, setIsUploadWpModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [selectedEngagementDetail, setSelectedEngagementDetail] = useState<EngagementRecord | null>(null);
+  const [selectedEngagementDetail, setSelectedEngagementDetail] =
+    useState<EngagementRecord | null>(null);
 
   // New Engagement Form State
-  const [newEngClient, setNewEngClient] = useState('');
-  const [newEngService, setNewEngService] = useState<EngagementRecord['serviceType']>('Statutory Audit');
-  const [newEngManager, setNewEngManager] = useState('Zahirul Islam, FCA');
-  const [newEngPartner, setNewEngPartner] = useState('Fouzia Haque, FCA');
-  const [newEngDueDate, setNewEngDueDate] = useState('2026-10-31');
+  const [newEngClient, setNewEngClient] = useState("");
+  const [newEngService, setNewEngService] =
+    useState<EngagementRecord["serviceType"]>("Statutory Audit");
+  const [newEngManager, setNewEngManager] = useState("Zahirul Islam, FCA");
+  const [newEngPartner, setNewEngPartner] = useState("Fouzia Haque, FCA");
+  const [newEngDueDate, setNewEngDueDate] = useState("2026-10-31");
   const [newEngBudget, setNewEngBudget] = useState(180);
 
   // Log Time Form State
-  const [logTimeClient, setLogTimeClient] = useState(engagements[0]?.clientName || 'Apex Footwear & Polymer Ltd.');
-  const [logTimeCode, setLogTimeCode] = useState(engagements[0]?.engagementCode || 'AUD-2026-081');
-  const [logTimeHours, setLogTimeHours] = useState('4.5');
-  const [logTimeDesc, setLogTimeDesc] = useState('');
+  const [logTimeClient, setLogTimeClient] = useState(
+    engagements[0]?.clientName || "Apex Footwear & Polymer Ltd.",
+  );
+  const [logTimeCode, setLogTimeCode] = useState(
+    engagements[0]?.engagementCode || "AUD-2026-081",
+  );
+  const [logTimeHours, setLogTimeHours] = useState("4.5");
+  const [logTimeDesc, setLogTimeDesc] = useState("");
   const [logTimeBillable, setLogTimeBillable] = useState(true);
 
   // Upload WP Form State
-  const [wpRefCode, setWpRefCode] = useState('B-250');
-  const [wpTitle, setWpTitle] = useState('');
-  const [wpClient, setWpClient] = useState(engagements[0]?.clientName || 'Apex Footwear & Polymer Ltd.');
-  const [wpFileName, setWpFileName] = useState('');
+  const [wpRefCode, setWpRefCode] = useState("B-250");
+  const [wpTitle, setWpTitle] = useState("");
+  const [wpClient, setWpClient] = useState(
+    engagements[0]?.clientName || "Apex Footwear & Polymer Ltd.",
+  );
+  const [wpFileName, setWpFileName] = useState("");
 
   // New Quick Task Form State
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskClient, setTaskClient] = useState(engagements[0]?.clientName || 'Apex Footwear & Polymer Ltd.');
-  const [taskPriority, setTaskPriority] = useState<TaskRecord['priority']>('High');
-  const [taskDueDate, setTaskDueDate] = useState('2026-09-08');
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskClient, setTaskClient] = useState(
+    engagements[0]?.clientName || "Apex Footwear & Polymer Ltd.",
+  );
+  const [taskPriority, setTaskPriority] =
+    useState<TaskRecord["priority"]>("High");
+  const [taskDueDate, setTaskDueDate] = useState("2026-09-08");
 
   // Computed Metrics
-  const pendingSignOffs = signoffs.filter((s) => s.status === 'Pending');
-  const urgentTasks = tasks.filter((t) => t.status !== 'Completed');
+  const pendingSignOffs = signoffs.filter((s) => s.status === "Pending");
+  const urgentTasks = tasks.filter((t) => t.status !== "Completed");
 
   // Breakdown of active engagements by service category
-  const auditCount = engagements.filter((e) => e.serviceType === 'Statutory Audit' || e.serviceType === 'Internal Audit').length;
-  const taxCount = engagements.filter((e) => e.serviceType === 'Tax Compliance' || e.serviceType === 'VAT Assessment').length;
-  const advisoryCount = engagements.filter((e) => e.serviceType === 'Special Advisory' || e.serviceType === 'Transfer Pricing' || e.serviceType === 'Due Diligence').length;
+  const auditCount = engagements.filter(
+    (e) =>
+      e.serviceType === "Statutory Audit" || e.serviceType === "Internal Audit",
+  ).length;
+  const taxCount = engagements.filter(
+    (e) =>
+      e.serviceType === "Tax Compliance" || e.serviceType === "VAT Assessment",
+  ).length;
+  const advisoryCount = engagements.filter(
+    (e) =>
+      e.serviceType === "Special Advisory" ||
+      e.serviceType === "Transfer Pricing" ||
+      e.serviceType === "Due Diligence",
+  ).length;
 
   // Unbilled / Logged Hours & Billing Value
-  const totalLoggedHours = engagements.reduce((sum, e) => sum + e.loggedHours, 0);
-  const totalBudgetHours = engagements.reduce((sum, e) => sum + e.budgetHours, 0);
+  const totalLoggedHours = engagements.reduce(
+    (sum, e) => sum + e.loggedHours,
+    0,
+  );
+  const totalBudgetHours = engagements.reduce(
+    (sum, e) => sum + e.budgetHours,
+    0,
+  );
   // Average standard billing rate = BDT 10,000 / USD $100 per hour
-  const estBillingValue = (totalLoggedHours * 10500).toLocaleString('en-US');
+  const estBillingValue = (totalLoggedHours * 10500).toLocaleString("en-US");
 
   // Compliance Deadlines countdown (filings within 7 days from Aug 31, 2026 -> Sep 7, 2026)
   const filingsWithin7Days = [
-    { client: 'Orbit Textiles Group', type: 'VAT Return (Mushak 9.1)', due: '2026-09-04', daysLeft: 4, critical: true },
-    { client: 'Apex Footwear Ltd.', type: 'AIT Challan Reconciliation', due: '2026-09-06', daysLeft: 6, critical: true },
-    { client: 'Novartis Healthcare', type: 'Deferred Tax Schedule', due: '2026-09-07', daysLeft: 7, critical: false },
+    {
+      client: "Orbit Textiles Group",
+      type: "VAT Return (Mushak 9.1)",
+      due: "2026-09-04",
+      daysLeft: 4,
+      critical: true,
+    },
+    {
+      client: "Apex Footwear Ltd.",
+      type: "AIT Challan Reconciliation",
+      due: "2026-09-06",
+      daysLeft: 6,
+      critical: true,
+    },
+    {
+      client: "Novartis Healthcare",
+      type: "Deferred Tax Schedule",
+      due: "2026-09-07",
+      daysLeft: 7,
+      critical: false,
+    },
   ];
 
   // Pipeline Filtered List
   const filteredEngagements = engagements.filter((eng) => {
     const matchesFilter =
-      pipelineFilter === 'all'
+      pipelineFilter === "all"
         ? true
-        : pipelineFilter === 'Tax Compliance'
-        ? eng.serviceType === 'Tax Compliance' || eng.serviceType === 'VAT Assessment'
-        : eng.serviceType === pipelineFilter;
+        : pipelineFilter === "Tax Compliance"
+          ? eng.serviceType === "Tax Compliance" ||
+            eng.serviceType === "VAT Assessment"
+          : eng.serviceType === pipelineFilter;
 
     const matchesSearch =
       eng.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -171,8 +225,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         leadPartner: newEngPartner,
         dueDate: newEngDueDate,
         budgetHours: Number(newEngBudget) || 150,
-        stage: 'Planning',
-        health: 'On Track',
+        stage: "Planning",
+        health: "On Track",
         progressPercent: 5,
         loggedHours: 0,
       });
@@ -181,18 +235,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     // Add activity
     const newAct: AuditActivityEvent = {
       id: `act-${Date.now()}`,
-      type: 'stage_change',
+      type: "stage_change",
       title: `New Engagement Created (${newEngService})`,
       description: `Initiated engagement for ${newEngClient}. Assigned to ${newEngManager}.`,
-      actor: 'Zahirul Islam, FCA',
-      actorRole: 'Manager - Audit & Tax',
-      timestamp: 'Just now',
+      actor: "Zahirul Islam, FCA",
+      actorRole: "Manager - Audit & Tax",
+      timestamp: "Just now",
       ref: newEngService.slice(0, 3).toUpperCase(),
     };
     setActivityFeed((prev) => [newAct, ...prev]);
 
     setIsNewEngagementModalOpen(false);
-    setNewEngClient('');
+    setNewEngClient("");
   };
 
   const handleLogTimeSubmit = (e: React.FormEvent) => {
@@ -204,34 +258,36 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         clientName: logTimeClient,
         engagementCode: logTimeCode,
         hours: hoursNum,
-        taskDescription: logTimeDesc || 'Audit & compliance procedures conducted according to ISA.',
+        taskDescription:
+          logTimeDesc ||
+          "Audit & compliance procedures conducted according to ISA.",
         billable: logTimeBillable,
-        date: '2026-08-31',
-        staffName: 'Zahirul Islam, FCA',
+        date: "2026-08-31",
+        staffName: "Zahirul Islam, FCA",
       });
     }
 
     // Add activity
     const newAct: AuditActivityEvent = {
       id: `act-${Date.now()}`,
-      type: 'timesheet',
+      type: "timesheet",
       title: `Logged ${hoursNum} Billable Hours`,
-      description: `${logTimeClient} • ${logTimeDesc || 'Substantive testing procedures'}`,
-      actor: 'Zahirul Islam, FCA',
-      actorRole: 'Manager',
-      timestamp: 'Just now',
+      description: `${logTimeClient} • ${logTimeDesc || "Substantive testing procedures"}`,
+      actor: "Zahirul Islam, FCA",
+      actorRole: "Manager",
+      timestamp: "Just now",
       ref: logTimeCode,
     };
     setActivityFeed((prev) => [newAct, ...prev]);
 
     setIsLogTimeModalOpen(false);
-    setLogTimeDesc('');
+    setLogTimeDesc("");
   };
 
   const handleUploadWpSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanRef = wpRefCode.trim() || 'WP-999';
-    const cleanTitle = wpTitle.trim() || 'Substantive Audit Working Paper';
+    const cleanRef = wpRefCode.trim() || "WP-999";
+    const cleanTitle = wpTitle.trim() || "Substantive Audit Working Paper";
     const generatedHash = `0x${Math.random().toString(16).substring(2, 14)}`;
 
     if (onAddWorkingPaper) {
@@ -239,9 +295,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         wpRef: cleanRef,
         title: cleanTitle,
         clientName: wpClient,
-        preparedBy: 'Zahirul Islam, FCA',
-        preparedDate: '2026-08-31',
-        status: 'Ready for Review',
+        preparedBy: "Zahirul Islam, FCA",
+        preparedDate: "2026-08-31",
+        status: "Ready for Review",
         fileHash: generatedHash,
         findingsCount: 0,
         checklistComplete: true,
@@ -251,19 +307,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     // Add activity
     const newAct: AuditActivityEvent = {
       id: `act-${Date.now()}`,
-      type: 'upload',
+      type: "upload",
       title: `Working Paper ${cleanRef} Uploaded`,
       description: `${cleanTitle} for ${wpClient}. Tamper-evident hash: ${generatedHash}`,
-      actor: 'Zahirul Islam, FCA',
-      actorRole: 'Manager',
-      timestamp: 'Just now',
+      actor: "Zahirul Islam, FCA",
+      actorRole: "Manager",
+      timestamp: "Just now",
       ref: cleanRef,
     };
     setActivityFeed((prev) => [newAct, ...prev]);
 
     setIsUploadWpModalOpen(false);
-    setWpTitle('');
-    setWpFileName('');
+    setWpTitle("");
+    setWpFileName("");
   };
 
   const handleQuickTaskSubmit = (e: React.FormEvent) => {
@@ -276,27 +332,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         clientName: taskClient,
         priority: taskPriority,
         dueDate: taskDueDate,
-        assignedTo: 'Zahirul Islam, FCA',
-        status: 'Todo',
+        assignedTo: "Zahirul Islam, FCA",
+        status: "Todo",
         estimatedHours: 4,
-        category: 'Audit Workpaper',
+        category: "Audit Workpaper",
       });
     }
 
     setIsTaskModalOpen(false);
-    setTaskTitle('');
+    setTaskTitle("");
   };
 
-  const handleToggleTask = (taskId: string, currentStatus: TaskRecord['status']) => {
+  const handleToggleTask = (
+    taskId: string,
+    currentStatus: TaskRecord["status"],
+  ) => {
     if (onUpdateTaskStatus) {
-      const nextStatus = currentStatus === 'Done' ? 'In Progress' : 'Done';
+      const nextStatus = currentStatus === "Done" ? "In Progress" : "Done";
       onUpdateTaskStatus(taskId, nextStatus);
     }
   };
 
   return (
     <div className="space-y-7 animate-fadeIn text-left pb-12">
-      
       {/* 1. TOP WELCOME & COCKPIT HEADER WITH QUICK ACTION BUTTONS */}
       <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#EBE6DD] shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative overflow-hidden">
         {/* Subtle decorative gold sheen accent */}
@@ -314,7 +372,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             Firm Executive Overview &amp; Compliance Hub
           </h1>
           <p className="text-xs sm:text-sm text-[#66706B] max-w-2xl leading-relaxed">
-            Real-time multi-engagement monitoring, audit quality review &amp; sign-off controls, timesheet velocity, and statutory filing deadlines.
+            Real-time multi-engagement monitoring, audit quality review &amp;
+            sign-off controls, timesheet velocity, and statutory filing
+            deadlines.
           </p>
         </div>
 
@@ -351,11 +411,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* 2. KPI SUMMARY CARDS (4 CARDS GRID) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        
         {/* Card 1: Active Engagements */}
         <motion.div
           id="kpi-active-engagements"
-          onClick={() => onNavigateTab('engagements')}
+          onClick={() => onNavigateTab("engagements")}
           className="motion-card p-5 rounded-2xl bg-white border border-[#EBE6DD] hover:border-[#D6CCC0] hover:shadow-sm transition-all duration-200 cursor-pointer group flex flex-col justify-between"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -379,16 +438,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C1F1E]">
                 <AnimatedNumber value={engagements.length} />
               </h3>
-              <span className="text-xs text-[#8A9691] font-medium">Jobs in Progress</span>
+              <span className="text-xs text-[#8A9691] font-medium">
+                Jobs in Progress
+              </span>
             </div>
           </div>
 
           {/* Breakdown Badge */}
           <div className="mt-4 pt-3 border-t border-[#F0EBE1]">
             <div className="flex flex-wrap items-center gap-1.5 text-[10.5px] font-medium text-[#55605B]">
-              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">Audit: <strong>{auditCount}</strong></span>
-              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">Tax: <strong>{taxCount}</strong></span>
-              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">Advisory: <strong>{advisoryCount}</strong></span>
+              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">
+                Audit: <strong>{auditCount}</strong>
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">
+                Tax: <strong>{taxCount}</strong>
+              </span>
+              <span className="px-1.5 py-0.5 rounded bg-[#FAF8F5] border border-[#EBE5DA]">
+                Advisory: <strong>{advisoryCount}</strong>
+              </span>
             </div>
           </div>
         </motion.div>
@@ -396,7 +463,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 2: Pending Sign-offs & Reviews */}
         <motion.div
           id="kpi-pending-reviews"
-          onClick={() => onNavigateTab('reviews')}
+          onClick={() => onNavigateTab("reviews")}
           className="motion-card p-5 rounded-2xl bg-white border border-[#EBE6DD] hover:border-[#D6CCC0] hover:shadow-sm transition-all duration-200 cursor-pointer group flex flex-col justify-between"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -420,7 +487,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C1F1E]">
                 <AnimatedNumber value={pendingSignOffs.length} />
               </h3>
-              <span className="text-xs text-[#8A5A18] font-semibold">ISA 220 Action Items</span>
+              <span className="text-xs text-[#8A5A18] font-semibold">
+                ISA 220 Action Items
+              </span>
             </div>
           </div>
 
@@ -435,7 +504,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 3: Unbilled Timesheet Hours */}
         <motion.div
           id="kpi-unbilled-hours"
-          onClick={() => onNavigateTab('timesheets')}
+          onClick={() => onNavigateTab("timesheets")}
           className="motion-card p-5 rounded-2xl bg-white border border-[#EBE6DD] hover:border-[#D6CCC0] hover:shadow-sm transition-all duration-200 cursor-pointer group flex flex-col justify-between"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -458,13 +527,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#1C1F1E]">
                 <AnimatedNumber value={totalLoggedHours} /> hrs
               </h3>
-              <span className="text-xs text-[#66706B]">/ {totalBudgetHours}h cap</span>
+              <span className="text-xs text-[#66706B]">
+                / {totalBudgetHours}h cap
+              </span>
             </div>
           </div>
 
           <div className="mt-4 pt-3 border-t border-[#F0EBE1]">
             <p className="text-[11px] text-[#55605B] font-medium">
-              Est. billing value: <strong className="text-[#113227] font-mono">৳{estBillingValue}</strong>
+              Est. billing value:{" "}
+              <strong className="text-[#113227] font-mono">
+                ৳{estBillingValue}
+              </strong>
             </p>
           </div>
         </motion.div>
@@ -472,7 +546,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Card 4: Compliance Deadlines (Countdown within 7 days) */}
         <motion.div
           id="kpi-compliance-deadlines"
-          onClick={() => onNavigateTab('tasks')}
+          onClick={() => onNavigateTab("tasks")}
           className="motion-card p-5 rounded-2xl bg-white border border-[#EBE6DD] hover:border-[#D6CCC0] hover:shadow-sm transition-all duration-200 cursor-pointer group flex flex-col justify-between"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -495,21 +569,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#8E362C]">
                 <AnimatedNumber value={filingsWithin7Days.length} /> Filings
               </h3>
-              <span className="text-xs text-[#8E362C] font-semibold">Urgent Target</span>
+              <span className="text-xs text-[#8E362C] font-semibold">
+                Urgent Target
+              </span>
             </div>
           </div>
 
           <div className="mt-4 pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-[11px]">
-            <span className="text-[#7A8782] truncate">Next: <strong>Orbit VAT (Sep 04)</strong></span>
+            <span className="text-[#7A8782] truncate">
+              Next: <strong>Orbit VAT (Sep 04)</strong>
+            </span>
             <span className="text-[#8E362C] font-bold shrink-0">4d left</span>
           </div>
         </motion.div>
-
       </div>
 
       {/* 3. ENGAGEMENT PIPELINE & STATUS TRACKER (FULL DATA TABLE WITH QUICK FILTER PILLS) */}
       <div className="bg-white rounded-3xl border border-[#EBE6DD] p-5 sm:p-6 shadow-2xs space-y-5">
-        
         {/* Header with Title & Filter Controls */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#F0EBE1]">
           <div>
@@ -522,13 +598,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </span>
             </div>
             <p className="text-xs text-[#7A8782] mt-0.5">
-              Live progress, health telemetry, ISA stage milestones, and staffing accountability.
+              Live progress, health telemetry, ISA stage milestones, and
+              staffing accountability.
             </p>
           </div>
 
           {/* Search and Filter Pills */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-            
             {/* Search Input */}
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#8A9691]" />
@@ -544,47 +620,46 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {/* Quick Filter Pills */}
             <div className="flex items-center space-x-1.5 p-1 bg-[#FAF7F2] border border-[#E5DDD0] rounded-xl overflow-x-auto">
               <button
-                onClick={() => setPipelineFilter('all')}
+                onClick={() => setPipelineFilter("all")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  pipelineFilter === 'all'
-                    ? 'bg-[#113227] text-white shadow-2xs'
-                    : 'text-[#66706B] hover:text-[#1C1F1E]'
+                  pipelineFilter === "all"
+                    ? "bg-[#113227] text-white shadow-2xs"
+                    : "text-[#66706B] hover:text-[#1C1F1E]"
                 }`}
               >
                 All ({engagements.length})
               </button>
               <button
-                onClick={() => setPipelineFilter('Statutory Audit')}
+                onClick={() => setPipelineFilter("Statutory Audit")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  pipelineFilter === 'Statutory Audit'
-                    ? 'bg-[#113227] text-white shadow-2xs'
-                    : 'text-[#66706B] hover:text-[#1C1F1E]'
+                  pipelineFilter === "Statutory Audit"
+                    ? "bg-[#113227] text-white shadow-2xs"
+                    : "text-[#66706B] hover:text-[#1C1F1E]"
                 }`}
               >
                 Statutory Audit ({auditCount})
               </button>
               <button
-                onClick={() => setPipelineFilter('Tax Compliance')}
+                onClick={() => setPipelineFilter("Tax Compliance")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  pipelineFilter === 'Tax Compliance'
-                    ? 'bg-[#113227] text-white shadow-2xs'
-                    : 'text-[#66706B] hover:text-[#1C1F1E]'
+                  pipelineFilter === "Tax Compliance"
+                    ? "bg-[#113227] text-white shadow-2xs"
+                    : "text-[#66706B] hover:text-[#1C1F1E]"
                 }`}
               >
                 Corporate Tax ({taxCount})
               </button>
               <button
-                onClick={() => setPipelineFilter('Special Advisory')}
+                onClick={() => setPipelineFilter("Special Advisory")}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                  pipelineFilter === 'Special Advisory'
-                    ? 'bg-[#113227] text-white shadow-2xs'
-                    : 'text-[#66706B] hover:text-[#1C1F1E]'
+                  pipelineFilter === "Special Advisory"
+                    ? "bg-[#113227] text-white shadow-2xs"
+                    : "text-[#66706B] hover:text-[#1C1F1E]"
                 }`}
               >
                 Special Advisory ({advisoryCount})
               </button>
             </div>
-
           </div>
         </div>
 
@@ -604,7 +679,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </thead>
             <tbody className="divide-y divide-[#F0EBE1] text-xs">
               {filteredEngagements.map((eng) => {
-                const health = eng.health || 'On Track';
+                const health = eng.health || "On Track";
                 return (
                   <tr
                     key={eng.id}
@@ -622,7 +697,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             {eng.clientName}
                           </div>
                           <div className="flex items-center space-x-1.5 text-[10.5px] font-mono text-[#7A8782]">
-                            <span className="text-[#C58A3E] font-semibold">{eng.engagementCode}</span>
+                            <span className="text-[#C58A3E] font-semibold">
+                              {eng.engagementCode}
+                            </span>
                             <span>•</span>
                             <span>{eng.budgetHours}h budget</span>
                           </div>
@@ -658,17 +735,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                             className="font-bold text-[10px] px-1.5 py-0.2 rounded"
                             style={{
                               backgroundColor:
-                                eng.stage === 'Fieldwork'
-                                  ? '#FCEFD9'
-                                  : eng.stage === 'Review' || eng.stage === 'Sign-off'
-                                  ? '#E1F3EE'
-                                  : '#E2F1F8',
+                                eng.stage === "Fieldwork"
+                                  ? "#FCEFD9"
+                                  : eng.stage === "Review" ||
+                                      eng.stage === "Sign-off"
+                                    ? "#E1F3EE"
+                                    : "#E2F1F8",
                               color:
-                                eng.stage === 'Fieldwork'
-                                  ? '#8A5A18'
-                                  : eng.stage === 'Review' || eng.stage === 'Sign-off'
-                                  ? '#1F5946'
-                                  : '#1D526D',
+                                eng.stage === "Fieldwork"
+                                  ? "#8A5A18"
+                                  : eng.stage === "Review" ||
+                                      eng.stage === "Sign-off"
+                                    ? "#1F5946"
+                                    : "#1D526D",
                             }}
                           >
                             {eng.stage}
@@ -678,7 +757,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           </span>
                         </div>
                         <div className="w-full bg-[#ECE5D9] h-1.5 rounded-full overflow-hidden">
-                          <MotionProgressBar value={eng.progressPercent} className="bg-[#113227] h-full rounded-full" />
+                          <MotionProgressBar
+                            value={eng.progressPercent}
+                            className="bg-[#113227] h-full rounded-full"
+                          />
                         </div>
                       </div>
                     </td>
@@ -687,20 +769,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     <td className="py-3.5 px-3">
                       <span
                         className={`inline-flex items-center space-x-1.5 px-2 py-0.8 rounded-full text-[10.5px] font-bold ${
-                          health === 'On Track'
-                            ? 'bg-[#E1F3EE] text-[#1F5946] border border-[#C5E8DC]'
-                            : health === 'At Risk'
-                            ? 'bg-[#FCEFD9] text-[#8A5A18] border border-[#ECD9B8]'
-                            : 'bg-[#FDE6E2] text-[#8E362C] border border-[#F4CCC6]'
+                          health === "On Track"
+                            ? "bg-[#E1F3EE] text-[#1F5946] border border-[#C5E8DC]"
+                            : health === "At Risk"
+                              ? "bg-[#FCEFD9] text-[#8A5A18] border border-[#ECD9B8]"
+                              : "bg-[#FDE6E2] text-[#8E362C] border border-[#F4CCC6]"
                         }`}
                       >
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${
-                            health === 'On Track'
-                              ? 'bg-emerald-600'
-                              : health === 'At Risk'
-                              ? 'bg-amber-600 animate-pulse'
-                              : 'bg-rose-600 animate-pulse'
+                            health === "On Track"
+                              ? "bg-emerald-600"
+                              : health === "At Risk"
+                                ? "bg-amber-600 animate-pulse"
+                                : "bg-rose-600 animate-pulse"
                           }`}
                         />
                         <span>{health}</span>
@@ -714,8 +796,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           {eng.dueDate}
                         </div>
                         <div className="text-[10px] text-[#8A9691]">
-                          {new Date(eng.dueDate) < new Date('2026-09-10') ? (
-                            <span className="text-[#8E362C] font-semibold">Priority filing</span>
+                          {new Date(eng.dueDate) < new Date("2026-09-10") ? (
+                            <span className="text-[#8E362C] font-semibold">
+                              Priority filing
+                            </span>
                           ) : (
                             <span>Standard schedule</span>
                           )}
@@ -724,7 +808,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </td>
 
                     {/* Actions Button */}
-                    <td className="py-3.5 pr-1 text-right" onClick={(e) => e.stopPropagation()}>
+                    <td
+                      className="py-3.5 pr-1 text-right"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="flex items-center justify-end space-x-1.5">
                         <button
                           onClick={() => setSelectedEngagementDetail(eng)}
@@ -733,7 +820,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           Details
                         </button>
                         <button
-                          onClick={() => onNavigateTab('engagements')}
+                          onClick={() => onNavigateTab("engagements")}
                           className="p-1.5 rounded-lg text-[#8A9691] hover:text-[#113227] hover:bg-[#FAF7F2] transition-colors"
                           title="Open in Engagements module"
                         >
@@ -752,22 +839,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="pt-3 border-t border-[#F0EBE1] flex flex-col sm:flex-row items-center justify-between text-xs text-[#7A8782] gap-2">
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-4 h-4 text-[#1F5946]" />
-            <span>ISA 300 / ISA 220 Practice Standard • All jobs tracked under FAMES &amp; R Quality Controls</span>
+            <span>
+              ISA 300 / ISA 220 Practice Standard • All jobs tracked under FAMES
+              &amp; R Quality Controls
+            </span>
           </div>
           <button
-            onClick={() => onNavigateTab('engagements')}
+            onClick={() => onNavigateTab("engagements")}
             className="font-bold text-[#113227] hover:underline flex items-center space-x-1 cursor-pointer"
           >
             <span>Open Comprehensive Engagements Module</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-
       </div>
 
       {/* 4. QUICK ACTION WIDGETS & TIMELINE: "My Urgent Tasks" and "Recent Audit Activity" */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
         {/* Left Widget: "My Urgent Tasks" (7 cols) */}
         <div className="lg:col-span-7 bg-white rounded-3xl border border-[#EBE6DD] p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-4">
           <div>
@@ -790,7 +878,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <span>Add Task</span>
                 </button>
                 <button
-                  onClick={() => onNavigateTab('tasks')}
+                  onClick={() => onNavigateTab("tasks")}
                   className="text-xs font-bold text-[#113227] hover:underline cursor-pointer"
                 >
                   View All →
@@ -801,14 +889,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {/* Task Item List with Interactive Checkbox Status */}
             <div className="space-y-2.5">
               {tasks.slice(0, 5).map((task) => {
-                const isDone = task.status === 'Completed';
+                const isDone = task.status === "Completed";
                 return (
                   <div
                     key={task.id}
                     className={`p-3 rounded-2xl border transition-all flex items-start justify-between gap-3 ${
                       isDone
-                        ? 'bg-[#F9F7F5] border-[#E8E1D5] opacity-60'
-                        : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-white hover:border-[#D5CBBC]'
+                        ? "bg-[#F9F7F5] border-[#E8E1D5] opacity-60"
+                        : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-white hover:border-[#D5CBBC]"
                     }`}
                   >
                     <div className="flex items-start space-x-3 min-w-0">
@@ -817,10 +905,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         onClick={() => handleToggleTask(task.id, task.status)}
                         className={`w-5 h-5 mt-0.5 rounded-lg border flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
                           isDone
-                            ? 'bg-[#113227] border-[#113227] text-white'
-                            : 'bg-white border-[#C8BFB0] hover:border-[#113227]'
+                            ? "bg-[#113227] border-[#113227] text-white"
+                            : "bg-white border-[#C8BFB0] hover:border-[#113227]"
                         }`}
-                        title={isDone ? 'Mark as incomplete' : 'Mark as completed'}
+                        title={
+                          isDone ? "Mark as incomplete" : "Mark as completed"
+                        }
                       >
                         {isDone && <Check className="w-3.5 h-3.5" />}
                       </button>
@@ -830,25 +920,28 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           {/* Priority Badge */}
                           <span
                             className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded uppercase ${
-                              task.priority === 'Urgent'
-                                ? 'bg-[#FDE6E2] text-[#8E362C]'
-                                : task.priority === 'High'
-                                ? 'bg-[#FCEFD9] text-[#8A5A18]'
-                                : 'bg-[#E2F1F8] text-[#1D526D]'
+                              task.priority === "Urgent"
+                                ? "bg-[#FDE6E2] text-[#8E362C]"
+                                : task.priority === "High"
+                                  ? "bg-[#FCEFD9] text-[#8A5A18]"
+                                  : "bg-[#E2F1F8] text-[#1D526D]"
                             }`}
                           >
                             {task.priority}
                           </span>
                           <span
                             className={`text-xs font-bold text-[#1C1F1E] truncate ${
-                              isDone ? 'line-through text-[#7A8782]' : ''
+                              isDone ? "line-through text-[#7A8782]" : ""
                             }`}
                           >
                             {task.title}
                           </span>
                         </div>
                         <p className="text-[11px] text-[#66706B] truncate">
-                          {task.clientName} • Assigned: <strong className="text-[#333]">{task.assignedTo}</strong>
+                          {task.clientName} • Assigned:{" "}
+                          <strong className="text-[#333]">
+                            {task.assignedTo}
+                          </strong>
                         </p>
                       </div>
                     </div>
@@ -858,7 +951,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       <span className="text-[11px] font-mono font-bold text-[#8E362C] block">
                         Due {task.dueDate}
                       </span>
-                      <span className="text-[10px] text-[#88948F]">{task.estimatedHours}h est.</span>
+                      <span className="text-[10px] text-[#88948F]">
+                        {task.estimatedHours}h est.
+                      </span>
                     </div>
                   </div>
                 );
@@ -869,7 +964,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-xs text-[#7A8782]">
             <span>Assigned lead tasks automatically sync with timesheets</span>
             <button
-              onClick={() => onNavigateTab('tasks')}
+              onClick={() => onNavigateTab("tasks")}
               className="text-xs font-bold text-[#113227] hover:underline"
             >
               Open Operational Task Board →
@@ -885,7 +980,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <h3 className="text-base font-serif font-bold text-[#1C1F1E]">
                   Recent Audit Activity
                 </h3>
-                <p className="text-[11px] text-[#7A8782]">Append-only regulatory event trail</p>
+                <p className="text-[11px] text-[#7A8782]">
+                  Append-only regulatory event trail
+                </p>
               </div>
               <span className="text-[10.5px] font-mono text-[#1F5946] bg-[#E1F3EE] px-2 py-0.5 rounded-full font-bold">
                 Live Feed
@@ -895,20 +992,24 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             {/* Event Timeline List */}
             <div className="space-y-3 max-h-[340px] overflow-y-auto custom-scrollbar pr-1">
               {activityFeed.map((event) => {
-                const getEventIcon = (type: AuditActivityEvent['type']) => {
+                const getEventIcon = (type: AuditActivityEvent["type"]) => {
                   switch (type) {
-                    case 'upload':
+                    case "upload":
                       return <FileUp className="w-3.5 h-3.5 text-[#1F5946]" />;
-                    case 'signoff':
-                      return <CheckCircle2 className="w-3.5 h-3.5 text-[#8A5A18]" />;
-                    case 'pbc':
+                    case "signoff":
+                      return (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#8A5A18]" />
+                      );
+                    case "pbc":
                       return <Inbox className="w-3.5 h-3.5 text-[#1D526D]" />;
-                    case 'timesheet':
+                    case "timesheet":
                       return <Clock className="w-3.5 h-3.5 text-[#C58A3E]" />;
-                    case 'stage_change':
+                    case "stage_change":
                       return <Layers className="w-3.5 h-3.5 text-[#113227]" />;
                     default:
-                      return <CircleDot className="w-3.5 h-3.5 text-[#7A8782]" />;
+                      return (
+                        <CircleDot className="w-3.5 h-3.5 text-[#7A8782]" />
+                      );
                   }
                 };
 
@@ -932,7 +1033,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </p>
 
                     <div className="pt-1 flex items-center justify-between text-[10px] text-[#7A8782]">
-                      <span>By: <strong className="text-[#333]">{event.actor}</strong> {event.actorRole && `(${event.actorRole})`}</span>
+                      <span>
+                        By:{" "}
+                        <strong className="text-[#333]">{event.actor}</strong>{" "}
+                        {event.actorRole && `(${event.actorRole})`}
+                      </span>
                       {event.ref && (
                         <span className="font-mono font-bold text-[#C58A3E] bg-white px-1.5 py-0.2 rounded border border-[#E5DDD0]">
                           {event.ref}
@@ -948,14 +1053,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-xs text-[#7A8782]">
             <span>Audit trail locked with immutable logs</span>
             <button
-              onClick={() => onNavigateTab('reviews')}
+              onClick={() => onNavigateTab("reviews")}
               className="text-xs font-bold text-[#113227] hover:underline"
             >
               Review Board →
             </button>
           </div>
         </div>
-
       </div>
 
       {/* ========================================================================= */}
@@ -964,14 +1068,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {isNewEngagementModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E5DDD0] shadow-2xl p-6 sm:p-7 max-w-lg w-full text-left space-y-5">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
               <div>
                 <h3 className="text-lg font-serif font-bold text-[#1C1F1E]">
                   Create New Client Engagement
                 </h3>
                 <p className="text-xs text-[#7A8782]">
-                  Set up audit, tax, or advisory engagement under ISA 300 planning.
+                  Set up audit, tax, or advisory engagement under ISA 300
+                  planning.
                 </p>
               </div>
               <button
@@ -982,8 +1086,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </button>
             </div>
 
-            <form onSubmit={handleCreateEngagementSubmit} className="space-y-4 text-xs">
-              
+            <form
+              onSubmit={handleCreateEngagementSubmit}
+              className="space-y-4 text-xs"
+            >
               <div>
                 <label className="block font-bold text-[#1C1F1E] mb-1">
                   Client Organization *
@@ -1005,14 +1111,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </label>
                   <select
                     value={newEngService}
-                    onChange={(e) => setNewEngService(e.target.value as EngagementRecord['serviceType'])}
+                    onChange={(e) =>
+                      setNewEngService(
+                        e.target.value as EngagementRecord["serviceType"],
+                      )
+                    }
                     className="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5CBBC] text-xs text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                   >
-                    <option value="Statutory Audit">Statutory Audit (ISA)</option>
-                    <option value="Tax Compliance">Corporate Tax Compliance</option>
-                    <option value="VAT Assessment">VAT Assessment &amp; Mushak</option>
+                    <option value="Statutory Audit">
+                      Statutory Audit (ISA)
+                    </option>
+                    <option value="Tax Compliance">
+                      Corporate Tax Compliance
+                    </option>
+                    <option value="VAT Assessment">
+                      VAT Assessment &amp; Mushak
+                    </option>
                     <option value="Special Advisory">Special Advisory</option>
-                    <option value="Transfer Pricing">Transfer Pricing Study</option>
+                    <option value="Transfer Pricing">
+                      Transfer Pricing Study
+                    </option>
                     <option value="Due Diligence">Due Diligence Review</option>
                   </select>
                 </div>
@@ -1042,9 +1160,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     onChange={(e) => setNewEngManager(e.target.value)}
                     className="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5CBBC] text-xs text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                   >
-                    <option value="Zahirul Islam, FCA">Zahirul Islam, FCA</option>
-                    <option value="Mahmudur Rahman, ACA">Mahmudur Rahman, ACA</option>
-                    <option value="Nadia Sharmin, ACCA">Nadia Sharmin, ACCA</option>
+                    <option value="Zahirul Islam, FCA">
+                      Zahirul Islam, FCA
+                    </option>
+                    <option value="Mahmudur Rahman, ACA">
+                      Mahmudur Rahman, ACA
+                    </option>
+                    <option value="Nadia Sharmin, ACCA">
+                      Nadia Sharmin, ACCA
+                    </option>
                   </select>
                 </div>
 
@@ -1058,7 +1182,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     className="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5CBBC] text-xs text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                   >
                     <option value="Fouzia Haque, FCA">Fouzia Haque, FCA</option>
-                    <option value="Zahirul Islam, FCA">Zahirul Islam, FCA</option>
+                    <option value="Zahirul Islam, FCA">
+                      Zahirul Islam, FCA
+                    </option>
                   </select>
                 </div>
               </div>
@@ -1092,7 +1218,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -1103,14 +1228,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {isLogTimeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E5DDD0] shadow-2xl p-6 sm:p-7 max-w-lg w-full text-left space-y-5">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
               <div>
                 <h3 className="text-lg font-serif font-bold text-[#1C1F1E]">
                   Log Billable Working Hours
                 </h3>
                 <p className="text-xs text-[#7A8782]">
-                  Record audit procedures and partner review hours for billing reconciliation.
+                  Record audit procedures and partner review hours for billing
+                  reconciliation.
                 </p>
               </div>
               <button
@@ -1122,7 +1247,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <form onSubmit={handleLogTimeSubmit} className="space-y-4 text-xs">
-              
               <div>
                 <label className="block font-bold text-[#1C1F1E] mb-1">
                   Engagement Job *
@@ -1130,7 +1254,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <select
                   value={logTimeCode}
                   onChange={(e) => {
-                    const selected = engagements.find((eng) => eng.engagementCode === e.target.value);
+                    const selected = engagements.find(
+                      (eng) => eng.engagementCode === e.target.value,
+                    );
                     setLogTimeCode(e.target.value);
                     if (selected) setLogTimeClient(selected.clientName);
                   }}
@@ -1138,7 +1264,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 >
                   {engagements.map((eng) => (
                     <option key={eng.id} value={eng.engagementCode}>
-                      {eng.engagementCode} - {eng.clientName} ({eng.serviceType})
+                      {eng.engagementCode} - {eng.clientName} ({eng.serviceType}
+                      )
                     </option>
                   ))}
                 </select>
@@ -1169,7 +1296,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       onChange={(e) => setLogTimeBillable(e.target.checked)}
                       className="w-4 h-4 rounded border-[#D5CBBC] text-[#113227] focus:ring-[#113227]"
                     />
-                    <span className="font-bold text-[#1C1F1E]">Billable to Client</span>
+                    <span className="font-bold text-[#1C1F1E]">
+                      Billable to Client
+                    </span>
                   </label>
                 </div>
               </div>
@@ -1205,7 +1334,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -1216,14 +1344,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {isUploadWpModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E5DDD0] shadow-2xl p-6 sm:p-7 max-w-lg w-full text-left space-y-5">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
               <div>
                 <h3 className="text-lg font-serif font-bold text-[#1C1F1E]">
                   Upload &amp; Hash Working Paper
                 </h3>
                 <p className="text-xs text-[#7A8782]">
-                  Registers tamper-evident digital hashes in vault according to ISA 230.
+                  Registers tamper-evident digital hashes in vault according to
+                  ISA 230.
                 </p>
               </div>
               <button
@@ -1235,7 +1363,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <form onSubmit={handleUploadWpSubmit} className="space-y-4 text-xs">
-              
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block font-bold text-[#1C1F1E] mb-1">
@@ -1291,10 +1418,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <label className="flex flex-col items-center justify-center p-5 rounded-2xl border-2 border-dashed border-[#D5CBBC] bg-[#FAF8F5] hover:bg-[#F2ECE1] transition-colors cursor-pointer text-center">
                   <FileUp className="w-7 h-7 text-[#113227] mb-1.5" />
                   <span className="font-bold text-[#1C1F1E] text-xs">
-                    {wpFileName ? wpFileName : 'Click to select or drag working paper here'}
+                    {wpFileName
+                      ? wpFileName
+                      : "Click to select or drag working paper here"}
                   </span>
                   <span className="text-[10px] text-[#7A8782] mt-0.5">
-                    Supports .xlsx, .pdf, .docx (Max 25MB, auto-hashed with SHA-256)
+                    Supports .xlsx, .pdf, .docx (Max 25MB, auto-hashed with
+                    SHA-256)
                   </span>
                   <input
                     type="file"
@@ -1310,7 +1440,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               <div className="p-3 rounded-xl bg-[#E1F3EE] border border-[#C5E8DC] flex items-center space-x-2 text-[11px] text-[#1F5946]">
                 <ShieldCheck className="w-4 h-4 shrink-0 text-[#C58A3E]" />
-                <span>Working paper will be digitally stamped and indexed for manager sign-off.</span>
+                <span>
+                  Working paper will be digitally stamped and indexed for
+                  manager sign-off.
+                </span>
               </div>
 
               <div className="pt-3 border-t border-[#F0EBE1] flex items-center justify-end space-x-2">
@@ -1330,7 +1463,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -1341,7 +1473,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {isTaskModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E5DDD0] shadow-2xl p-6 sm:p-7 max-w-lg w-full text-left space-y-5">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
               <div>
                 <h3 className="text-lg font-serif font-bold text-[#1C1F1E]">
@@ -1359,7 +1490,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </button>
             </div>
 
-            <form onSubmit={handleQuickTaskSubmit} className="space-y-4 text-xs">
+            <form
+              onSubmit={handleQuickTaskSubmit}
+              className="space-y-4 text-xs"
+            >
               <div>
                 <label className="block font-bold text-[#1C1F1E] mb-1">
                   Task Title *
@@ -1398,7 +1532,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </label>
                   <select
                     value={taskPriority}
-                    onChange={(e) => setTaskPriority(e.target.value as TaskRecord['priority'])}
+                    onChange={(e) =>
+                      setTaskPriority(e.target.value as TaskRecord["priority"])
+                    }
                     className="w-full px-3 py-2 rounded-xl bg-[#FAF7F2] border border-[#D5CBBC] text-xs text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                   >
                     <option value="Urgent">Urgent (Red)</option>
@@ -1438,7 +1574,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -1449,7 +1584,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {selectedEngagementDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E5DDD0] shadow-2xl p-6 sm:p-7 max-w-xl w-full text-left space-y-5">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
               <div className="flex items-center space-x-2.5">
                 <span className="text-xs font-mono font-bold text-[#113227] bg-[#E1F3EE] px-2 py-0.8 rounded-lg">
@@ -1460,7 +1594,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     {selectedEngagementDetail.clientName}
                   </h3>
                   <p className="text-xs text-[#7A8782]">
-                    {selectedEngagementDetail.serviceType} • Due {selectedEngagementDetail.dueDate}
+                    {selectedEngagementDetail.serviceType} • Due{" "}
+                    {selectedEngagementDetail.dueDate}
                   </p>
                 </div>
               </div>
@@ -1473,32 +1608,54 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <div className="space-y-4 text-xs">
-              
               {/* Metrics row */}
               <div className="grid grid-cols-3 gap-3 p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#ECE5D9]">
                 <div>
-                  <span className="text-[10px] text-[#7A8782] block">Current Stage</span>
-                  <span className="font-bold text-[#113227] text-sm">{selectedEngagementDetail.stage}</span>
+                  <span className="text-[10px] text-[#7A8782] block">
+                    Current Stage
+                  </span>
+                  <span className="font-bold text-[#113227] text-sm">
+                    {selectedEngagementDetail.stage}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#7A8782] block">Health Status</span>
-                  <span className="font-bold text-[#8A5A18] text-sm">{selectedEngagementDetail.health || 'On Track'}</span>
+                  <span className="text-[10px] text-[#7A8782] block">
+                    Health Status
+                  </span>
+                  <span className="font-bold text-[#8A5A18] text-sm">
+                    {selectedEngagementDetail.health || "On Track"}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#7A8782] block">Hours Logged</span>
+                  <span className="text-[10px] text-[#7A8782] block">
+                    Hours Logged
+                  </span>
                   <span className="font-bold text-[#1C1F1E] text-sm">
-                    {selectedEngagementDetail.loggedHours} / {selectedEngagementDetail.budgetHours}h
+                    {selectedEngagementDetail.loggedHours} /{" "}
+                    {selectedEngagementDetail.budgetHours}h
                   </span>
                 </div>
               </div>
 
               {/* Team staffing */}
               <div>
-                <h4 className="font-bold text-[#1C1F1E] mb-1.5">Engagement Leadership &amp; Team</h4>
+                <h4 className="font-bold text-[#1C1F1E] mb-1.5">
+                  Engagement Leadership &amp; Team
+                </h4>
                 <div className="space-y-1.5 text-[11px] text-[#55605B] bg-[#FAF7F2] p-3 rounded-xl border border-[#EBE5DA]">
-                  <p><strong>Lead Partner:</strong> {selectedEngagementDetail.leadPartner}</p>
-                  <p><strong>Lead Manager:</strong> {selectedEngagementDetail.leadManager}</p>
-                  <p><strong>Assigned Team:</strong> {selectedEngagementDetail.teamMembers?.join(', ') || 'Nadia Sharmin, Sabbir Ahmed'}</p>
+                  <p>
+                    <strong>Lead Partner:</strong>{" "}
+                    {selectedEngagementDetail.leadPartner}
+                  </p>
+                  <p>
+                    <strong>Lead Manager:</strong>{" "}
+                    {selectedEngagementDetail.leadManager}
+                  </p>
+                  <p>
+                    <strong>Assigned Team:</strong>{" "}
+                    {selectedEngagementDetail.teamMembers?.join(", ") ||
+                      "Nadia Sharmin, Sabbir Ahmed"}
+                  </p>
                 </div>
               </div>
 
@@ -1511,7 +1668,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <div className="w-full bg-[#EAE3D5] h-2.5 rounded-full overflow-hidden">
                   <div
                     className="bg-[#113227] h-full rounded-full transition-all duration-300"
-                    style={{ width: `${selectedEngagementDetail.progressPercent}%` }}
+                    style={{
+                      width: `${selectedEngagementDetail.progressPercent}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -1522,7 +1681,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   type="button"
                   onClick={() => {
                     setSelectedEngagementDetail(null);
-                    onNavigateTab('engagements');
+                    onNavigateTab("engagements");
                   }}
                   className="text-xs font-bold text-[#113227] hover:underline flex items-center space-x-1"
                 >
@@ -1537,13 +1696,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   Close
                 </button>
               </div>
-
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 };

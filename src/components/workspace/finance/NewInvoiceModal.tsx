@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   X,
   Plus,
@@ -11,8 +11,13 @@ import {
   Percent,
   FileCheck,
   AlertCircle,
-} from 'lucide-react';
-import { InvoiceRecord, InvoiceLineItem, ClientRecord, EngagementRecord } from '../../../types';
+} from "lucide-react";
+import {
+  InvoiceRecord,
+  InvoiceLineItem,
+  ClientRecord,
+  EngagementRecord,
+} from "../../../types";
 
 interface NewInvoiceModalProps {
   isOpen: boolean;
@@ -29,25 +34,36 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
   clients,
   engagements,
 }) => {
-  const [selectedClient, setSelectedClient] = useState(clients[0]?.name || 'Apex Footwear & Polymer Ltd.');
-  const [selectedEngagement, setSelectedEngagement] = useState(
-    engagements.find((e) => e.clientName === selectedClient)?.engagementCode || 'AUD-2026-081'
+  const [selectedClient, setSelectedClient] = useState(
+    clients[0]?.name || "Apex Footwear & Polymer Ltd.",
   );
-  const [serviceTitle, setServiceTitle] = useState('Statutory Audit FY25 - Milestone & Fieldwork');
-  const [billingBasis, setBillingBasis] = useState<InvoiceRecord['billingBasis']>('Fixed Milestone');
-  const [issueDate, setIssueDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedEngagement, setSelectedEngagement] = useState(
+    engagements.find((e) => e.clientName === selectedClient)?.engagementCode ||
+      "AUD-2026-081",
+  );
+  const [serviceTitle, setServiceTitle] = useState(
+    "Statutory Audit FY25 - Milestone & Fieldwork",
+  );
+  const [billingBasis, setBillingBasis] =
+    useState<InvoiceRecord["billingBasis"]>("Fixed Milestone");
+  const [issueDate, setIssueDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [dueDate, setDueDate] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() + 30);
-    return d.toISOString().split('T')[0];
+    return d.toISOString().split("T")[0];
   });
   const [vatRate, setVatRate] = useState<number>(15);
-  const [notes, setNotes] = useState('Payment due within 30 days of invoice receipt via direct bank remittance.');
+  const [notes, setNotes] = useState(
+    "Payment due within 30 days of invoice receipt via direct bank remittance.",
+  );
 
   const [lineItems, setLineItems] = useState<InvoiceLineItem[]>([
     {
-      id: 'li-init-1',
-      description: 'Statutory Audit FY25 - Interim Substantive Testing & Inventory Verification',
+      id: "li-init-1",
+      description:
+        "Statutory Audit FY25 - Interim Substantive Testing & Inventory Verification",
       hours: 40,
       rate: 5000,
       amount: 200000,
@@ -62,26 +78,37 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
     const relatedEng = engagements.find((e) => e.clientName === clientName);
     if (relatedEng) {
       setSelectedEngagement(relatedEng.engagementCode);
-      setServiceTitle(`${relatedEng.serviceType} (${relatedEng.engagementCode})`);
+      setServiceTitle(
+        `${relatedEng.serviceType} (${relatedEng.engagementCode})`,
+      );
     } else {
-      setSelectedEngagement('');
+      setSelectedEngagement("");
       setServiceTitle(`Professional Services - ${clientName}`);
     }
   };
 
   // Auto-fill from unbilled timesheet hours
   const handleAutofillTimesheets = () => {
-    const activeEng = engagements.find((e) => e.engagementCode === selectedEngagement) || engagements[0];
-    const clientTimesheetRate = selectedClient.includes('Synapse') ? 10000 : 5000;
-    const estimatedUnbilledHours = Math.max(16, (activeEng?.loggedHours || 42) - 10);
+    const activeEng =
+      engagements.find((e) => e.engagementCode === selectedEngagement) ||
+      engagements[0];
+    const clientTimesheetRate = selectedClient.includes("Synapse")
+      ? 10000
+      : 5000;
+    const estimatedUnbilledHours = Math.max(
+      16,
+      (activeEng?.loggedHours || 42) - 10,
+    );
 
     const generatedItems: InvoiceLineItem[] = [
       {
         id: `li-ts-${Date.now()}-1`,
-        description: `Partner & Manager Quality Review: ${activeEng?.serviceType || 'Statutory Audit'} (${activeEng?.engagementCode || 'AUD-2026'})`,
+        description: `Partner & Manager Quality Review: ${activeEng?.serviceType || "Statutory Audit"} (${activeEng?.engagementCode || "AUD-2026"})`,
         hours: Math.round(estimatedUnbilledHours * 0.35),
         rate: clientTimesheetRate * 1.5,
-        amount: Math.round(estimatedUnbilledHours * 0.35) * (clientTimesheetRate * 1.5),
+        amount:
+          Math.round(estimatedUnbilledHours * 0.35) *
+          (clientTimesheetRate * 1.5),
       },
       {
         id: `li-ts-${Date.now()}-2`,
@@ -92,7 +119,7 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
       },
     ];
 
-    setBillingBasis('Time & Materials (Timesheet)');
+    setBillingBasis("Time & Materials (Timesheet)");
     setLineItems(generatedItems);
   };
 
@@ -102,7 +129,7 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
       ...prev,
       {
         id: `li-custom-${Date.now()}`,
-        description: 'Additional professional audit/tax consultation',
+        description: "Additional professional audit/tax consultation",
         hours: 10,
         rate: 4500,
         amount: 45000,
@@ -110,18 +137,22 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
     ]);
   };
 
-  const handleUpdateLineItem = (id: string, updates: Partial<InvoiceLineItem>) => {
+  const handleUpdateLineItem = (
+    id: string,
+    updates: Partial<InvoiceLineItem>,
+  ) => {
     setLineItems((prev) =>
       prev.map((item) => {
         if (item.id !== id) return item;
         const next = { ...item, ...updates };
         if (updates.hours !== undefined || updates.rate !== undefined) {
-          const h = updates.hours !== undefined ? updates.hours : next.hours || 0;
+          const h =
+            updates.hours !== undefined ? updates.hours : next.hours || 0;
           const r = updates.rate !== undefined ? updates.rate : next.rate || 0;
           if (h && r) next.amount = h * r;
         }
         return next;
-      })
+      }),
     );
   };
 
@@ -131,7 +162,10 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
   };
 
   // Calculations
-  const subtotalAmount = lineItems.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0);
+  const subtotalAmount = lineItems.reduce(
+    (acc, curr) => acc + (Number(curr.amount) || 0),
+    0,
+  );
   const vatAmount = Math.round((subtotalAmount * (vatRate || 0)) / 100);
   const grandTotal = subtotalAmount + vatAmount;
 
@@ -141,7 +175,9 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
 
     onGenerateInvoice({
       clientName: selectedClient,
-      engagementRef: selectedEngagement ? `${selectedEngagement} (${selectedClient})` : undefined,
+      engagementRef: selectedEngagement
+        ? `${selectedEngagement} (${selectedClient})`
+        : undefined,
       service: serviceTitle,
       billingBasis,
       lineItems,
@@ -151,7 +187,7 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
       totalAmount: grandTotal,
       issueDate,
       dueDate,
-      status: 'Sent',
+      status: "Sent",
       notes,
     });
     onClose();
@@ -160,7 +196,6 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 text-left animate-fadeIn">
       <div className="bg-white w-full max-w-2xl rounded-3xl border border-[#EBE6DD] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        
         {/* Header */}
         <div className="p-5 bg-[#FAF7F2] border-b border-[#EBE6DD] flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -168,9 +203,12 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
               <CreditCard className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#1C1F1E]">Generate Client Invoice</h3>
+              <h3 className="text-base font-bold text-[#1C1F1E]">
+                Generate Client Invoice
+              </h3>
               <p className="text-xs text-[#7A8782]">
-                Create statutory fee invoice with optional timesheet hours auto-population.
+                Create statutory fee invoice with optional timesheet hours
+                auto-population.
               </p>
             </div>
           </div>
@@ -185,7 +223,6 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5">
-          
           {/* Client & Engagement Selection */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -249,7 +286,9 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
                 className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#E5DDD0] rounded-xl text-xs text-[#1C1F1E] focus:outline-none"
               >
                 <option value="Fixed Milestone">Fixed Milestone</option>
-                <option value="Time & Materials (Timesheet)">Time &amp; Materials</option>
+                <option value="Time & Materials (Timesheet)">
+                  Time &amp; Materials
+                </option>
                 <option value="Monthly Retainer">Monthly Retainer</option>
                 <option value="Special Assignment">Special Assignment</option>
               </select>
@@ -263,9 +302,12 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
                 <Sparkles className="w-3.5 h-3.5" />
               </div>
               <div className="text-xs">
-                <span className="font-bold text-[#113227] block">Auto-populate from Unbilled Timesheets</span>
+                <span className="font-bold text-[#113227] block">
+                  Auto-populate from Unbilled Timesheets
+                </span>
                 <span className="text-[11px] text-[#66706B]">
-                  Extract unbilled staff hours logged on {selectedClient.split(' ')[0]}.
+                  Extract unbilled staff hours logged on{" "}
+                  {selectedClient.split(" ")[0]}.
                 </span>
               </div>
             </div>
@@ -298,12 +340,19 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
 
             <div className="space-y-2 border border-[#EBE6DD] rounded-2xl p-3 bg-[#FAF8F5]">
               {lineItems.map((item, idx) => (
-                <div key={item.id} className="grid grid-cols-12 gap-2 items-center bg-white p-2.5 rounded-xl border border-[#EAE3D5]">
+                <div
+                  key={item.id}
+                  className="grid grid-cols-12 gap-2 items-center bg-white p-2.5 rounded-xl border border-[#EAE3D5]"
+                >
                   <div className="col-span-6">
                     <input
                       type="text"
                       value={item.description}
-                      onChange={(e) => handleUpdateLineItem(item.id, { description: e.target.value })}
+                      onChange={(e) =>
+                        handleUpdateLineItem(item.id, {
+                          description: e.target.value,
+                        })
+                      }
                       placeholder="Description of service rendered..."
                       className="w-full px-2.5 py-1.5 bg-[#FAF8F5] border border-[#E5DDD0] rounded-lg text-xs text-[#1C1F1E] focus:outline-none"
                     />
@@ -312,8 +361,12 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
                     <input
                       type="number"
                       placeholder="Hours"
-                      value={item.hours || ''}
-                      onChange={(e) => handleUpdateLineItem(item.id, { hours: Number(e.target.value) })}
+                      value={item.hours || ""}
+                      onChange={(e) =>
+                        handleUpdateLineItem(item.id, {
+                          hours: Number(e.target.value),
+                        })
+                      }
                       className="w-full px-2 py-1.5 bg-[#FAF8F5] border border-[#E5DDD0] rounded-lg text-xs text-[#1C1F1E] text-center font-mono focus:outline-none"
                     />
                   </div>
@@ -321,8 +374,12 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
                     <input
                       type="number"
                       placeholder="Rate / Total"
-                      value={item.amount || ''}
-                      onChange={(e) => handleUpdateLineItem(item.id, { amount: Number(e.target.value) })}
+                      value={item.amount || ""}
+                      onChange={(e) =>
+                        handleUpdateLineItem(item.id, {
+                          amount: Number(e.target.value),
+                        })
+                      }
                       className="w-full px-2.5 py-1.5 bg-[#FAF8F5] border border-[#E5DDD0] rounded-lg text-xs text-[#113227] font-bold font-mono focus:outline-none"
                     />
                   </div>
@@ -434,9 +491,7 @@ export const NewInvoiceModal: React.FC<NewInvoiceModalProps> = ({
               <span>Generate &amp; Dispatch Invoice</span>
             </button>
           </div>
-
         </form>
-
       </div>
     </div>
   );

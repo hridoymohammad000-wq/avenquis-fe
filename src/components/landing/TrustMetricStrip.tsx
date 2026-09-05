@@ -1,12 +1,18 @@
-import React from 'react';
-import { ShieldCheck, Database, FileKey, Bot, CheckCircle2, Award } from 'lucide-react';
-import { TRUST_METRICS } from '../../data/landingData';
+import React from "react";
+import {
+  ShieldCheck,
+  Database,
+  FileKey,
+  Bot,
+  CheckCircle2,
+  Award,
+} from "lucide-react";
+import { TRUST_METRICS } from "../../data/landingData";
 
 export const TrustMetricStrip: React.FC = () => {
   return (
     <section className="relative z-10 py-12 border-y border-[#EBE6DD] bg-white/70 backdrop-blur-xs">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Strip Header */}
         <div className="text-center mb-8">
           <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#8A5A18]">
@@ -28,8 +34,12 @@ export const TrustMetricStrip: React.FC = () => {
                 {/* Top Badge & Icon */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="w-8 h-8 rounded-xl bg-white border border-[#E3DDD0] flex items-center justify-center text-[#113227] group-hover:scale-105 transition-transform">
-                    {idx === 0 && <Database className="w-4 h-4 text-[#113227]" />}
-                    {idx === 1 && <FileKey className="w-4 h-4 text-[#8A5A18]" />}
+                    {idx === 0 && (
+                      <Database className="w-4 h-4 text-[#113227]" />
+                    )}
+                    {idx === 1 && (
+                      <FileKey className="w-4 h-4 text-[#8A5A18]" />
+                    )}
                     {idx === 2 && <Bot className="w-4 h-4 text-[#1F5946]" />}
                     {idx === 3 && <Award className="w-4 h-4 text-[#C58A3E]" />}
                   </div>
@@ -63,7 +73,6 @@ export const TrustMetricStrip: React.FC = () => {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

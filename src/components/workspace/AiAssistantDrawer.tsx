@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import {
   Sparkles,
   Send,
@@ -20,8 +20,8 @@ import {
   FileText,
   Building,
   Briefcase,
-} from 'lucide-react';
-import { UserSession, WorkspaceTab } from '../../types';
+} from "lucide-react";
+import { UserSession, WorkspaceTab } from "../../types";
 
 interface AiAssistantDrawerProps {
   isOpen: boolean;
@@ -34,7 +34,12 @@ interface AiAssistantDrawerProps {
 interface ActionButton {
   label: string;
   icon?: string;
-  actionType: 'navigate' | 'copy' | 'dispatch_reminder' | 'open_invoice_modal' | 'view_wp';
+  actionType:
+    | "navigate"
+    | "copy"
+    | "dispatch_reminder"
+    | "open_invoice_modal"
+    | "view_wp";
   targetTab?: WorkspaceTab;
   payload?: any;
 }
@@ -49,7 +54,7 @@ interface OutputCard {
 
 interface Message {
   id: string;
-  sender: 'ai' | 'user';
+  sender: "ai" | "user";
   text: string;
   timestamp: string;
   references?: string[];
@@ -63,34 +68,38 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   onNavigateTab,
   onTriggerAction,
 }) => {
-  const [inputQuery, setInputQuery] = useState('');
+  const [inputQuery, setInputQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 'msg-1',
-      sender: 'ai',
+      id: "msg-1",
+      sender: "ai",
       text: `Greetings, ${currentUser.name}. I am the AVENQUIS Firm Copilot operating strictly within your practice unit. I provide instant analysis on active client working papers, pending ISA 220 quality reviews, unbilled timesheets, and statutory tax compliance under Bangladesh Tax Act 2023.`,
-      timestamp: 'Just now',
-      references: ['ISA 220 (Quality Management)', 'ISA 500 (Audit Evidence)', 'Income Tax Act 2023'],
+      timestamp: "Just now",
+      references: [
+        "ISA 220 (Quality Management)",
+        "ISA 500 (Audit Evidence)",
+        "Income Tax Act 2023",
+      ],
       outputCard: {
-        title: 'Active Practice Context Loaded',
-        badge: 'ICAB & ISA Grounded',
+        title: "Active Practice Context Loaded",
+        badge: "ICAB & ISA Grounded",
         summary: `Practice scope for ${currentUser.tenant}: 5 active engagements, 2 pending review sign-offs, and 3 client PBC requests currently tracked.`,
         bulletPoints: [
-          'Apex Footwear FY25: WP B-200 Bank Recon awaiting Partner signature.',
-          'Orbit Textiles: Overdue VAT appeal fee invoice (BDT 2.87 Lac).',
-          'Novartis Healthcare: Q3 Tax Retainer reconciled and cleared.',
+          "Apex Footwear FY25: WP B-200 Bank Recon awaiting Partner signature.",
+          "Orbit Textiles: Overdue VAT appeal fee invoice (BDT 2.87 Lac).",
+          "Novartis Healthcare: Q3 Tax Retainer reconciled and cleared.",
         ],
         actionButtons: [
           {
-            label: 'View Pending Sign-offs',
-            actionType: 'navigate',
-            targetTab: 'reviews',
+            label: "View Pending Sign-offs",
+            actionType: "navigate",
+            targetTab: "reviews",
           },
           {
-            label: 'Inspect Client Requests',
-            actionType: 'navigate',
-            targetTab: 'client-requests',
+            label: "Inspect Client Requests",
+            actionType: "navigate",
+            targetTab: "client-requests",
           },
         ],
       },
@@ -101,17 +110,33 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isOpen]);
 
   // Contextual Prompt Chips (Explicitly matching user request specifications)
   const contextualChips = [
-    { label: 'Summarize pending audit sign-offs', query: 'Summarize pending audit sign-offs' },
-    { label: 'Draft client document reminder', query: 'Draft client document reminder for Apex Footwear' },
-    { label: 'Check unbilled hours for Client X', query: 'Check unbilled hours for Apex Footwear & Polymer Ltd.' },
-    { label: 'Test inventory NRV under IAS 2', query: 'How do I test inventory NRV under IAS 2 for manufacturing clients?' },
-    { label: 'ISA 505 standard bank confirmation', query: 'Provide ISA 505 standard bank confirmation wording' },
+    {
+      label: "Summarize pending audit sign-offs",
+      query: "Summarize pending audit sign-offs",
+    },
+    {
+      label: "Draft client document reminder",
+      query: "Draft client document reminder for Apex Footwear",
+    },
+    {
+      label: "Check unbilled hours for Client X",
+      query: "Check unbilled hours for Apex Footwear & Polymer Ltd.",
+    },
+    {
+      label: "Test inventory NRV under IAS 2",
+      query:
+        "How do I test inventory NRV under IAS 2 for manufacturing clients?",
+    },
+    {
+      label: "ISA 505 standard bank confirmation",
+      query: "Provide ISA 505 standard bank confirmation wording",
+    },
   ];
 
   const handleCopyText = (text: string, id: string) => {
@@ -121,20 +146,20 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
   };
 
   const handleActionButtonClick = (btn: ActionButton) => {
-    if (btn.actionType === 'navigate' && btn.targetTab && onNavigateTab) {
+    if (btn.actionType === "navigate" && btn.targetTab && onNavigateTab) {
       onNavigateTab(btn.targetTab);
       onClose();
-    } else if (btn.actionType === 'copy' && btn.payload) {
-      handleCopyText(btn.payload, 'card-copy');
-    } else if (btn.actionType === 'dispatch_reminder' && onTriggerAction) {
-      onTriggerAction('dispatch_reminder', btn.payload);
-      if (onNavigateTab) onNavigateTab('client-requests');
+    } else if (btn.actionType === "copy" && btn.payload) {
+      handleCopyText(btn.payload, "card-copy");
+    } else if (btn.actionType === "dispatch_reminder" && onTriggerAction) {
+      onTriggerAction("dispatch_reminder", btn.payload);
+      if (onNavigateTab) onNavigateTab("client-requests");
       onClose();
-    } else if (btn.actionType === 'open_invoice_modal' && onNavigateTab) {
-      onNavigateTab('finance');
+    } else if (btn.actionType === "open_invoice_modal" && onNavigateTab) {
+      onNavigateTab("finance");
       onClose();
-    } else if (btn.actionType === 'view_wp' && onNavigateTab) {
-      onNavigateTab('audit-files');
+    } else if (btn.actionType === "view_wp" && onNavigateTab) {
+      onNavigateTab("audit-files");
       onClose();
     }
   };
@@ -145,51 +170,64 @@ export const AiAssistantDrawer: React.FC<AiAssistantDrawerProps> = ({
 
     const userMsg: Message = {
       id: `usr-${Date.now()}`,
-      sender: 'user',
+      sender: "user",
       text: textToSend,
-      timestamp: 'Now',
+      timestamp: "Now",
     };
 
     setMessages((prev) => [...prev, userMsg]);
-    setInputQuery('');
+    setInputQuery("");
     setIsTyping(true);
 
     setTimeout(() => {
-      let aiResponseText = '';
+      let aiResponseText = "";
       let refs: string[] = [];
       let card: OutputCard | undefined = undefined;
 
       const lower = textToSend.toLowerCase();
 
       // 1. "Summarize pending audit sign-offs"
-      if (lower.includes('sign-off') || lower.includes('pending audit') || lower.includes('review queue')) {
+      if (
+        lower.includes("sign-off") ||
+        lower.includes("pending audit") ||
+        lower.includes("review queue")
+      ) {
         aiResponseText = `I have audited the working paper queue under **ISA 220 (Quality Management for an Audit)**. There are currently **2 working papers** requiring formal supervisory review before financial statement sign-off:`;
-        refs = ['ISA 220 (Revised) Paras 29-34', 'ISA 230 Audit Documentation', 'ICAB Quality Assurance Review'];
+        refs = [
+          "ISA 220 (Revised) Paras 29-34",
+          "ISA 230 Audit Documentation",
+          "ICAB Quality Assurance Review",
+        ];
         card = {
-          title: 'ISA 220 Supervisory Review Summary',
-          badge: '2 Papers Pending',
-          summary: 'Working papers prepared and verified with SHA-256 digital seals waiting for Partner & Manager sign-off.',
+          title: "ISA 220 Supervisory Review Summary",
+          badge: "2 Papers Pending",
+          summary:
+            "Working papers prepared and verified with SHA-256 digital seals waiting for Partner & Manager sign-off.",
           bulletPoints: [
-            'WP B-200: Cash & Bank Balances (Apex Footwear FY25) - Manager Sign-off Complete, awaiting Senior Partner Fouzia Haque, FCA.',
-            'WP E-500: Inventory NRV & Valuation Testing (Apex Footwear FY25) - Awaiting Manager Review with 2 open audit queries.',
-            'WP C-301: Revenue Cutoff Testing (Orbit Textiles) - 100% procedures completed by Nadia Sharmin, ACCA.',
+            "WP B-200: Cash & Bank Balances (Apex Footwear FY25) - Manager Sign-off Complete, awaiting Senior Partner Fouzia Haque, FCA.",
+            "WP E-500: Inventory NRV & Valuation Testing (Apex Footwear FY25) - Awaiting Manager Review with 2 open audit queries.",
+            "WP C-301: Revenue Cutoff Testing (Orbit Textiles) - 100% procedures completed by Nadia Sharmin, ACCA.",
           ],
           actionButtons: [
             {
-              label: 'Open Sign-off Queue',
-              actionType: 'navigate',
-              targetTab: 'reviews',
+              label: "Open Sign-off Queue",
+              actionType: "navigate",
+              targetTab: "reviews",
             },
             {
-              label: 'View Working Papers',
-              actionType: 'view_wp',
-              targetTab: 'audit-files',
+              label: "View Working Papers",
+              actionType: "view_wp",
+              targetTab: "audit-files",
             },
           ],
         };
       }
       // 2. "Draft client document reminder"
-      else if (lower.includes('reminder') || lower.includes('draft client') || lower.includes('pbc')) {
+      else if (
+        lower.includes("reminder") ||
+        lower.includes("draft client") ||
+        lower.includes("pbc")
+      ) {
         const emailDraft = `Subject: URGENT: Outstanding Audit Deliverables for FY2025-26 - Apex Footwear & Polymer Ltd.
 
 Dear Mr. Tanvir Ahmed (Head of Accounts & Finance),
@@ -212,98 +250,133 @@ Manager - Audit & Assurance
 FAMES & R / AVENQUIS Chartered Accountants`;
 
         aiResponseText = `I have drafted a formal, ISA 500-compliant document reminder letter for your client's accounts department:`;
-        refs = ['ISA 500 Audit Evidence', 'PBC Portal Protocol', 'Client Requisition Standard'];
+        refs = [
+          "ISA 500 Audit Evidence",
+          "PBC Portal Protocol",
+          "Client Requisition Standard",
+        ];
         card = {
-          title: 'Draft Client Escalation Letter',
-          badge: 'Ready to Dispatch',
-          summary: 'Formal notice addressing CFO & Accounts Lead with list of delinquent PBC deliverables and deadline.',
+          title: "Draft Client Escalation Letter",
+          badge: "Ready to Dispatch",
+          summary:
+            "Formal notice addressing CFO & Accounts Lead with list of delinquent PBC deliverables and deadline.",
           bulletPoints: [
-            'Includes direct portal upload instructions and SHA-256 cryptographic verification disclaimer.',
-            'Cites mandatory statutory audit timetable for upcoming Audit Committee.',
+            "Includes direct portal upload instructions and SHA-256 cryptographic verification disclaimer.",
+            "Cites mandatory statutory audit timetable for upcoming Audit Committee.",
           ],
           actionButtons: [
             {
-              label: copiedId === 'draft-email' ? 'Draft Copied!' : 'Copy Draft to Clipboard',
-              actionType: 'copy',
+              label:
+                copiedId === "draft-email"
+                  ? "Draft Copied!"
+                  : "Copy Draft to Clipboard",
+              actionType: "copy",
               payload: emailDraft,
             },
             {
-              label: 'Dispatch Client Reminder',
-              actionType: 'dispatch_reminder',
-              payload: { clientName: 'Apex Footwear', ticketNo: 'PBC-2026-901' },
+              label: "Dispatch Client Reminder",
+              actionType: "dispatch_reminder",
+              payload: {
+                clientName: "Apex Footwear",
+                ticketNo: "PBC-2026-901",
+              },
             },
           ],
         };
       }
       // 3. "Check unbilled hours for Client X"
-      else if (lower.includes('unbilled') || lower.includes('timesheet') || lower.includes('client x') || lower.includes('apex')) {
+      else if (
+        lower.includes("unbilled") ||
+        lower.includes("timesheet") ||
+        lower.includes("client x") ||
+        lower.includes("apex")
+      ) {
         aiResponseText = `Here is the real-time unbilled work-in-progress (WIP) analysis for **Apex Footwear & Polymer Ltd.** across all active engagement codes:`;
-        refs = ['Timesheet Ledger FY26', 'Partner Fee Schedule', 'WIP Realization Ratio'];
+        refs = [
+          "Timesheet Ledger FY26",
+          "Partner Fee Schedule",
+          "WIP Realization Ratio",
+        ];
         card = {
-          title: 'Unbilled Hours & WIP Summary (Apex Footwear)',
-          badge: 'BDT 2.15 Lac WIP',
-          summary: '42 unbilled hours logged across 3 audit team members during interim substantive procedures.',
+          title: "Unbilled Hours & WIP Summary (Apex Footwear)",
+          badge: "BDT 2.15 Lac WIP",
+          summary:
+            "42 unbilled hours logged across 3 audit team members during interim substantive procedures.",
           bulletPoints: [
-            'Zahirul Islam, FCA (Manager): 12.5 hrs @ ৳8,500/hr = BDT 106,250',
-            'Nadia Sharmin, ACCA (Senior): 18.0 hrs @ ৳4,500/hr = BDT 81,000',
-            'Sabbir Ahmed (Articled Student): 11.5 hrs @ ৳2,400/hr = BDT 27,600',
-            'Total Unbilled WIP Subtotal: BDT 214,850 + 15% VAT (BDT 32,227) = BDT 247,077',
+            "Zahirul Islam, FCA (Manager): 12.5 hrs @ ৳8,500/hr = BDT 106,250",
+            "Nadia Sharmin, ACCA (Senior): 18.0 hrs @ ৳4,500/hr = BDT 81,000",
+            "Sabbir Ahmed (Articled Student): 11.5 hrs @ ৳2,400/hr = BDT 27,600",
+            "Total Unbilled WIP Subtotal: BDT 214,850 + 15% VAT (BDT 32,227) = BDT 247,077",
           ],
           actionButtons: [
             {
-              label: 'Generate Invoice from WIP',
-              actionType: 'open_invoice_modal',
-              targetTab: 'finance',
+              label: "Generate Invoice from WIP",
+              actionType: "open_invoice_modal",
+              targetTab: "finance",
             },
             {
-              label: 'Inspect Staff Timesheets',
-              actionType: 'navigate',
-              targetTab: 'timesheets',
+              label: "Inspect Staff Timesheets",
+              actionType: "navigate",
+              targetTab: "timesheets",
             },
           ],
         };
       }
       // 4. Inventory NRV under IAS 2
-      else if (lower.includes('nrv') || lower.includes('ias 2') || lower.includes('inventory')) {
+      else if (
+        lower.includes("nrv") ||
+        lower.includes("ias 2") ||
+        lower.includes("inventory")
+      ) {
         aiResponseText = `Under **IAS 2 (Inventories)**, inventory items must be stated at the *lower of cost and net realizable value (NRV)*. Here is the recommended substantive testing procedure for manufacturing audit clients:`;
-        refs = ['IAS 2 Paras 9-33', 'ISA 501 Inventory Physical Verification', 'WP Ref E-500'];
+        refs = [
+          "IAS 2 Paras 9-33",
+          "ISA 501 Inventory Physical Verification",
+          "WP Ref E-500",
+        ];
         card = {
-          title: 'IAS 2 Inventory Valuation Procedure Guide',
-          badge: 'Substantive Checklist',
-          summary: 'Audit testing matrix to verify potential inventory write-downs and slow-moving provision adequacy.',
+          title: "IAS 2 Inventory Valuation Procedure Guide",
+          badge: "Substantive Checklist",
+          summary:
+            "Audit testing matrix to verify potential inventory write-downs and slow-moving provision adequacy.",
           bulletPoints: [
-            'Test subsequent selling prices on post-year-end sales invoices.',
-            'Estimate completion costs (direct labor + variable factory electricity/overheads).',
-            'Estimate marketing, distribution, and export freight costs to deduct.',
-            'Identify non-moving chemical & polymer batches exceeding 180 days in factory storage.',
+            "Test subsequent selling prices on post-year-end sales invoices.",
+            "Estimate completion costs (direct labor + variable factory electricity/overheads).",
+            "Estimate marketing, distribution, and export freight costs to deduct.",
+            "Identify non-moving chemical & polymer batches exceeding 180 days in factory storage.",
           ],
           actionButtons: [
             {
-              label: 'View Inventory Working Paper',
-              actionType: 'view_wp',
-              targetTab: 'audit-files',
+              label: "View Inventory Working Paper",
+              actionType: "view_wp",
+              targetTab: "audit-files",
             },
           ],
         };
       }
       // 5. Bank Confirmation ISA 505
-      else if (lower.includes('505') || lower.includes('bank confirmation')) {
+      else if (lower.includes("505") || lower.includes("bank confirmation")) {
         aiResponseText = `Under **ISA 505 (External Confirmations)**, the auditor must maintain direct control over standard confirmation requests to commercial banking institutions:`;
-        refs = ['ISA 505 Paras 7-14', 'ISA 500 Appropriate Evidence', 'ICAB Bank Confirmation Format'];
+        refs = [
+          "ISA 505 Paras 7-14",
+          "ISA 500 Appropriate Evidence",
+          "ICAB Bank Confirmation Format",
+        ];
         card = {
-          title: 'ISA 505 Standard Bank Confirmation Protocol',
-          badge: 'Direct Verification',
-          summary: 'Mandatory confirmation requests must cover all active, dormant, and zero-balance deposit and loan facilities.',
+          title: "ISA 505 Standard Bank Confirmation Protocol",
+          badge: "Direct Verification",
+          summary:
+            "Mandatory confirmation requests must cover all active, dormant, and zero-balance deposit and loan facilities.",
           bulletPoints: [
-            'Direct dispatch to bank head office treasury / branch manager with client authorization letter.',
-            'Confirmation of outstanding Letter of Credit (LC) liabilities & Bank Guarantees.',
-            'Confirmation of foreign exchange forward contracts and pledged collateral assets.',
+            "Direct dispatch to bank head office treasury / branch manager with client authorization letter.",
+            "Confirmation of outstanding Letter of Credit (LC) liabilities & Bank Guarantees.",
+            "Confirmation of foreign exchange forward contracts and pledged collateral assets.",
           ],
           actionButtons: [
             {
-              label: 'Inspect Cash & Bank Workpaper',
-              actionType: 'view_wp',
-              targetTab: 'audit-files',
+              label: "Inspect Cash & Bank Workpaper",
+              actionType: "view_wp",
+              targetTab: "audit-files",
             },
           ],
         };
@@ -311,14 +384,18 @@ FAMES & R / AVENQUIS Chartered Accountants`;
       // Default
       else {
         aiResponseText = `I have analyzed your query across **${currentUser.tenant}** practice records and applicable International Standards on Auditing (ISA) and IFRS:\n\n- All working papers in AVENQUIS maintain cryptographic SHA-256 digital seals.\n- All team timesheets are indexed for instantaneous milestone and hourly fee invoicing.\n- Let me know if you would like me to draft client correspondence, calculate materiality thresholds, or summarize partner sign-off queues.`;
-        refs = ['ISA 220 Quality Management', 'IFRS Framework', 'Firm OS Engine'];
+        refs = [
+          "ISA 220 Quality Management",
+          "IFRS Framework",
+          "Firm OS Engine",
+        ];
       }
 
       const aiMsg: Message = {
         id: `ai-${Date.now()}`,
-        sender: 'ai',
+        sender: "ai",
         text: aiResponseText,
-        timestamp: 'Just now',
+        timestamp: "Just now",
         references: refs,
         outputCard: card,
       };
@@ -332,10 +409,10 @@ FAMES & R / AVENQUIS Chartered Accountants`;
     setMessages([
       {
         id: `msg-reset-${Date.now()}`,
-        sender: 'ai',
+        sender: "ai",
         text: `Conversation history cleared. Ready for your next audit research query, client reminder draft, or sign-off review.`,
-        timestamp: 'Just now',
-        references: ['ISA 220', 'Income Tax Act 2023'],
+        timestamp: "Just now",
+        references: ["ISA 220", "Income Tax Act 2023"],
       },
     ]);
   };
@@ -353,7 +430,6 @@ FAMES & R / AVENQUIS Chartered Accountants`;
       {/* Slide-over Drawer Container */}
       <div className="absolute inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
         <div className="w-screen max-w-lg bg-[#FAF7F2] border-l border-[#EBE6DD] shadow-2xl flex flex-col justify-between animate-slideLeft">
-          
           {/* Drawer Header */}
           <div className="p-4 sm:p-5 border-b border-[#EBE6DD] bg-white flex flex-col space-y-2.5">
             <div className="flex items-center justify-between">
@@ -366,7 +442,11 @@ FAMES & R / AVENQUIS Chartered Accountants`;
                     AVENQUIS AI Audit Copilot
                   </h3>
                   <p className="text-[11px] text-[#7A8782]">
-                    Practice: <span className="font-semibold text-stone-700">{currentUser.tenant.split(' ')[0]}</span> • {currentUser.name.split(',')[0]}
+                    Practice:{" "}
+                    <span className="font-semibold text-stone-700">
+                      {currentUser.tenant.split(" ")[0]}
+                    </span>{" "}
+                    • {currentUser.name.split(",")[0]}
                   </p>
                 </div>
               </div>
@@ -392,7 +472,9 @@ FAMES & R / AVENQUIS Chartered Accountants`;
             <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-[#E1F3EE] border border-[#BDE5D9] text-[#1F5946] text-xs font-semibold">
               <div className="flex items-center space-x-1.5">
                 <Lock className="w-3.5 h-3.5 text-[#1F5946]" />
-                <span className="font-bold">Firm Context Protected • Read-Only Scope</span>
+                <span className="font-bold">
+                  Firm Context Protected • Read-Only Scope
+                </span>
               </div>
               <span className="text-[10px] bg-white text-[#113227] px-1.5 py-0.2 rounded font-mono font-bold">
                 Cmd + J
@@ -425,15 +507,17 @@ FAMES & R / AVENQUIS Chartered Accountants`;
               <div
                 key={msg.id}
                 className={`flex flex-col space-y-1.5 ${
-                  msg.sender === 'user' ? 'items-end' : 'items-start'
+                  msg.sender === "user" ? "items-end" : "items-start"
                 }`}
               >
                 {/* Message Header Tag */}
                 <div className="flex items-center space-x-1.5 text-[10px] text-stone-400 px-1 font-mono">
-                  {msg.sender === 'ai' ? (
+                  {msg.sender === "ai" ? (
                     <>
                       <Bot className="w-3 h-3 text-[#113227]" />
-                      <span className="font-bold text-[#113227]">AVENQUIS Copilot</span>
+                      <span className="font-bold text-[#113227]">
+                        AVENQUIS Copilot
+                      </span>
                     </>
                   ) : (
                     <>
@@ -447,9 +531,9 @@ FAMES & R / AVENQUIS Chartered Accountants`;
                 {/* Message Text Bubble */}
                 <div
                   className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[92%] shadow-2xs ${
-                    msg.sender === 'user'
-                      ? 'bg-[#113227] text-white font-medium rounded-tr-xs'
-                      : 'bg-white border border-[#EBE6DD] text-[#1C1F1E] rounded-tl-xs'
+                    msg.sender === "user"
+                      ? "bg-[#113227] text-white font-medium rounded-tr-xs"
+                      : "bg-white border border-[#EBE6DD] text-[#1C1F1E] rounded-tl-xs"
                   }`}
                 >
                   <p className="whitespace-pre-line">{msg.text}</p>
@@ -493,8 +577,13 @@ FAMES & R / AVENQUIS Chartered Accountants`;
                     {msg.outputCard.bulletPoints && (
                       <div className="space-y-1 bg-[#FAF8F5] p-2.5 rounded-xl border border-[#EAE3D5]">
                         {msg.outputCard.bulletPoints.map((pt, idx) => (
-                          <div key={idx} className="flex items-start space-x-2 text-[11px] text-[#1C1F1E]">
-                            <span className="text-[#C58A3E] font-bold mt-0.5">▪</span>
+                          <div
+                            key={idx}
+                            className="flex items-start space-x-2 text-[11px] text-[#1C1F1E]"
+                          >
+                            <span className="text-[#C58A3E] font-bold mt-0.5">
+                              ▪
+                            </span>
                             <span className="leading-snug">{pt}</span>
                           </div>
                         ))}
@@ -502,20 +591,21 @@ FAMES & R / AVENQUIS Chartered Accountants`;
                     )}
 
                     {/* Direct Action Buttons */}
-                    {msg.outputCard.actionButtons && msg.outputCard.actionButtons.length > 0 && (
-                      <div className="pt-1 flex flex-wrap gap-2">
-                        {msg.outputCard.actionButtons.map((btn, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => handleActionButtonClick(btn)}
-                            className="px-3 py-1.5 rounded-xl bg-[#113227] hover:bg-[#1A4536] text-white text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-colors cursor-pointer"
-                          >
-                            <span>{btn.label}</span>
-                            <ArrowRight className="w-3 h-3 text-[#C58A3E]" />
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {msg.outputCard.actionButtons &&
+                      msg.outputCard.actionButtons.length > 0 && (
+                        <div className="pt-1 flex flex-wrap gap-2">
+                          {msg.outputCard.actionButtons.map((btn, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => handleActionButtonClick(btn)}
+                              className="px-3 py-1.5 rounded-xl bg-[#113227] hover:bg-[#1A4536] text-white text-xs font-bold flex items-center space-x-1.5 shadow-2xs transition-colors cursor-pointer"
+                            >
+                              <span>{btn.label}</span>
+                              <ArrowRight className="w-3 h-3 text-[#C58A3E]" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
                   </div>
                 )}
               </div>
@@ -559,7 +649,6 @@ FAMES & R / AVENQUIS Chartered Accountants`;
               <span>Context restricted to active client files</span>
             </div>
           </div>
-
         </div>
       </div>
     </div>

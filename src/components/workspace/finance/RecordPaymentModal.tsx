@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   X,
   CreditCard,
@@ -8,8 +8,8 @@ import {
   DollarSign,
   FileCheck,
   Receipt,
-} from 'lucide-react';
-import { InvoiceRecord, CollectionRecord, UserSession } from '../../../types';
+} from "lucide-react";
+import { InvoiceRecord, CollectionRecord, UserSession } from "../../../types";
 
 interface RecordPaymentModalProps {
   isOpen: boolean;
@@ -26,24 +26,32 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
   onRecordPayment,
   currentUser,
 }) => {
-  const pendingInvoices = invoices.filter((i) => i.status !== 'Paid');
+  const pendingInvoices = invoices.filter((i) => i.status !== "Paid");
   const [selectedInvoiceId, setSelectedInvoiceId] = useState(
-    pendingInvoices[0]?.id || invoices[0]?.id || ''
+    pendingInvoices[0]?.id || invoices[0]?.id || "",
   );
 
-  const selectedInvoice = invoices.find((i) => i.id === selectedInvoiceId) || invoices[0];
+  const selectedInvoice =
+    invoices.find((i) => i.id === selectedInvoiceId) || invoices[0];
 
   const [receiptNo, setReceiptNo] = useState(
-    `MR-2026-0${Math.floor(80 + Math.random() * 20)}`
+    `MR-2026-0${Math.floor(80 + Math.random() * 20)}`,
   );
-  const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
-  const [amount, setAmount] = useState<number>(selectedInvoice?.totalAmount || 300000);
-  const [paymentMethod, setPaymentMethod] = useState<CollectionRecord['paymentMethod']>('Bank BEFTN');
-  const [bankRef, setBankRef] = useState('EBL-BEFTN-994102');
+  const [paymentDate, setPaymentDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [amount, setAmount] = useState<number>(
+    selectedInvoice?.totalAmount || 300000,
+  );
+  const [paymentMethod, setPaymentMethod] =
+    useState<CollectionRecord["paymentMethod"]>("Bank BEFTN");
+  const [bankRef, setBankRef] = useState("EBL-BEFTN-994102");
   const [depositedAccount, setDepositedAccount] = useState(
-    'Eastern Bank Ltd - Principal Practice Account #104102948'
+    "Eastern Bank Ltd - Principal Practice Account #104102948",
   );
-  const [remarks, setRemarks] = useState('Full settlement received towards professional fee invoice.');
+  const [remarks, setRemarks] = useState(
+    "Full settlement received towards professional fee invoice.",
+  );
 
   if (!isOpen) return null;
 
@@ -70,7 +78,7 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
       paymentMethod,
       bankRef,
       depositedAccount,
-      status: 'Cleared & Credited',
+      status: "Cleared & Credited",
       receivedBy: currentUser.name,
       remarks,
     });
@@ -80,7 +88,6 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 text-left animate-fadeIn">
       <div className="bg-white w-full max-w-lg rounded-3xl border border-[#EBE6DD] shadow-2xl overflow-hidden flex flex-col">
-        
         {/* Header */}
         <div className="p-5 bg-[#FAF7F2] border-b border-[#EBE6DD] flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -88,7 +95,9 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
               <Receipt className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#1C1F1E]">Record Client Payment</h3>
+              <h3 className="text-base font-bold text-[#1C1F1E]">
+                Record Client Payment
+              </h3>
               <p className="text-xs text-[#7A8782]">
                 Log client bank receipt &amp; update invoice collection status.
               </p>
@@ -105,7 +114,6 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          
           <div>
             <label className="block text-[10px] font-extrabold uppercase tracking-wider text-stone-500 mb-1">
               Select Invoice to Settle *
@@ -117,7 +125,8 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
             >
               {invoices.map((inv) => (
                 <option key={inv.id} value={inv.id}>
-                  {inv.invoiceNo} - {inv.clientName} (BDT {inv.totalAmount.toLocaleString()} • {inv.status})
+                  {inv.invoiceNo} - {inv.clientName} (BDT{" "}
+                  {inv.totalAmount.toLocaleString()} • {inv.status})
                 </option>
               ))}
             </select>
@@ -235,9 +244,7 @@ export const RecordPaymentModal: React.FC<RecordPaymentModalProps> = ({
               <span>Record &amp; Issue Receipt</span>
             </button>
           </div>
-
         </form>
-
       </div>
     </div>
   );

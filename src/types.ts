@@ -2,7 +2,7 @@ export interface FeatureItem {
   id: string;
   title: string;
   subtitle: string;
-  iconName: 'users' | 'calendar' | 'pie-chart' | 'file-text';
+  iconName: "users" | "calendar" | "pie-chart" | "file-text";
   badge: {
     label: string;
     bg: string;
@@ -21,7 +21,7 @@ export interface NavLinkItem {
 
 export interface ToastMessage {
   id: string;
-  type: 'success' | 'info' | 'error';
+  type: "success" | "info" | "error";
   title: string;
   message: string;
 }
@@ -41,19 +41,19 @@ export interface UserSession {
 }
 
 export type WorkspaceTab =
-  | 'dashboard'
-  | 'people'
-  | 'students'
-  | 'crm'
-  | 'engagements'
-  | 'tasks'
-  | 'timesheets'
-  | 'documents'
-  | 'audit-files'
-  | 'reviews'
-  | 'client-requests'
-  | 'finance'
-  | 'settings';
+  | "dashboard"
+  | "people"
+  | "students"
+  | "crm"
+  | "engagements"
+  | "tasks"
+  | "timesheets"
+  | "documents"
+  | "audit-files"
+  | "reviews"
+  | "client-requests"
+  | "finance"
+  | "settings";
 
 export interface StaffActivityLog {
   id: string;
@@ -68,9 +68,14 @@ export interface StaffMember {
   email: string;
   phone: string;
   designation: string;
-  department: 'Audit & Assurance' | 'Taxation & Regulatory' | 'Advisory' | 'Finance & Admin';
-  role: 'Partner' | 'Senior Manager' | 'Manager' | 'Senior Associate' | 'Associate';
-  status: 'Active' | 'On Leave' | 'In Field';
+  department:
+    | "Audit & Assurance"
+    | "Taxation & Regulatory"
+    | "Advisory"
+    | "Finance & Admin";
+  role:
+    "Partner" | "Senior Manager" | "Manager" | "Senior Associate" | "Associate";
+  status: "Active" | "On Leave" | "In Field";
   activeEngagementsCount: number;
   billableUtilization: number; // percentage
   avatarUrl?: string;
@@ -91,9 +96,11 @@ export interface StudentArticle {
   joiningDate: string;
   completionDate: string;
   principalMentor: string;
-  examLevel: 'Knowledge Level' | 'Business Level' | 'Advanced Level' | 'Qualified';
-  examLeaveStatus?: 'None' | 'On Exam Leave' | 'Approved Upcoming' | 'Completed';
-  stipendStatus: 'Paid' | 'Processing';
+  examLevel:
+    "Knowledge Level" | "Business Level" | "Advanced Level" | "Qualified";
+  examLeaveStatus?:
+    "None" | "On Exam Leave" | "Approved Upcoming" | "Completed";
+  stipendStatus: "Paid" | "Processing";
   stipendAmount: number;
   leaveBalanceDays: number;
   workingDaysLogged: number;
@@ -106,7 +113,7 @@ export interface ClientBillingHistoryItem {
   engagement: string;
   amount: number;
   date: string;
-  status: 'Paid' | 'Pending' | 'Overdue';
+  status: "Paid" | "Pending" | "Overdue";
 }
 
 export interface ClientKycRecord {
@@ -132,9 +139,9 @@ export interface ClientRecord {
   tradeLicenseNo?: string;
   relationshipPartner: string;
   annualFee: number;
-  status: 'Active' | 'Under Review' | 'Onboarding';
+  status: "Active" | "Under Review" | "Onboarding";
   activeEngagements: number;
-  riskRating: 'Low' | 'Medium' | 'High';
+  riskRating: "Low" | "Medium" | "High";
   kycDetails?: ClientKycRecord;
   billingHistory?: ClientBillingHistoryItem[];
   companyOverview?: string;
@@ -142,7 +149,12 @@ export interface ClientRecord {
 
 export interface EngagementTeamMemberRole {
   name: string;
-  role: 'Engagement Partner' | 'Audit Manager' | 'In-Charge / Senior' | 'Articled Student' | 'Tax Specialist';
+  role:
+    | "Engagement Partner"
+    | "Audit Manager"
+    | "In-Charge / Senior"
+    | "Articled Student"
+    | "Tax Specialist";
   avatarInitials: string;
 }
 
@@ -150,9 +162,22 @@ export interface EngagementRecord {
   id: string;
   engagementCode: string;
   clientName: string;
-  serviceType: 'Statutory Audit' | 'Tax Compliance' | 'Due Diligence' | 'Internal Audit' | 'Transfer Pricing' | 'VAT Assessment' | 'Special Advisory';
-  stage: 'Planning' | 'Fieldwork' | 'Review' | 'Sign-off' | 'Completed' | 'Reporting';
-  health?: 'On Track' | 'At Risk' | 'Delayed';
+  serviceType:
+    | "Statutory Audit"
+    | "Tax Compliance"
+    | "Due Diligence"
+    | "Internal Audit"
+    | "Transfer Pricing"
+    | "VAT Assessment"
+    | "Special Advisory";
+  stage:
+    | "Planning"
+    | "Fieldwork"
+    | "Review"
+    | "Sign-off"
+    | "Completed"
+    | "Reporting";
+  health?: "On Track" | "At Risk" | "Delayed";
   leadManager: string;
   leadPartner: string;
   teamMembers: string[];
@@ -169,7 +194,7 @@ export interface EngagementRecord {
 
 export interface AuditActivityEvent {
   id: string;
-  type: 'upload' | 'signoff' | 'pbc' | 'timesheet' | 'stage_change';
+  type: "upload" | "signoff" | "pbc" | "timesheet" | "stage_change";
   title: string;
   description: string;
   actor: string;
@@ -190,17 +215,31 @@ export interface TaskRecord {
   clientName: string;
   engagementCode?: string;
   assignedTo: string;
-  priority: 'Critical' | 'High' | 'Medium' | 'Low';
-  status: 'Todo' | 'In Progress' | 'Blocked' | 'Done';
+  priority: "Critical" | "High" | "Medium" | "Low";
+  status: "Todo" | "In Progress" | "Blocked" | "Done";
   dueDate: string;
   estimatedHours: number;
-  category: 'Field Audit' | 'Report Drafting' | 'Tax Computation' | 'Client Meeting' | 'Audit Workpaper' | 'Tax Filing' | 'Documentation' | 'Client Query';
+  category:
+    | "Field Audit"
+    | "Report Drafting"
+    | "Tax Computation"
+    | "Client Meeting"
+    | "Audit Workpaper"
+    | "Tax Filing"
+    | "Documentation"
+    | "Client Query";
   subtasks?: TaskSubtask[];
 }
 
 export interface WorkCodeOption {
   code: string;
-  name: 'Field Audit' | 'Report Drafting' | 'Tax Computation' | 'Client Meeting' | 'General Review' | 'Admin & Training';
+  name:
+    | "Field Audit"
+    | "Report Drafting"
+    | "Tax Computation"
+    | "Client Meeting"
+    | "General Review"
+    | "Admin & Training";
   billable: boolean;
   color: string;
 }
@@ -209,7 +248,8 @@ export interface WeeklyTimesheetRow {
   id: string;
   clientName: string;
   engagementCode: string;
-  workCode: 'Field Audit' | 'Report Drafting' | 'Tax Computation' | 'Client Meeting';
+  workCode:
+    "Field Audit" | "Report Drafting" | "Tax Computation" | "Client Meeting";
   billable: boolean;
   hours: {
     mon: number;
@@ -232,7 +272,7 @@ export interface StaffWorkloadCapacity {
     weekLabel: string; // e.g. "Week 1 (Sep 1-7)"
     allocatedHours: number;
     capacityHours: number;
-    status: 'Overallocated' | 'Optimal' | 'Available';
+    status: "Overallocated" | "Optimal" | "Available";
     engagements: string[];
   }[];
 }
@@ -246,7 +286,7 @@ export interface TimesheetEntry {
   taskDescription: string;
   hours: number;
   billable: boolean;
-  status: 'Approved' | 'Submitted' | 'Draft';
+  status: "Approved" | "Submitted" | "Draft";
 }
 
 export interface DocumentVaultItem {
@@ -255,9 +295,20 @@ export interface DocumentVaultItem {
   clientName: string;
   financialYear?: string; // e.g. "FY 2025-26", "FY 2024-25"
   engagementType?: string; // e.g. "Statutory Audit", "Tax Advisory", "VAT Compliance", "Corporate Advisory"
-  section?: 'Current Audit File' | 'Permanent Audit File' | 'Tax Filings' | 'Legal Records';
-  category: 'Engagement Letter' | 'Trial Balance' | 'Tax Return' | 'Board Minutes' | 'Legal Certificate' | 'Bank Confirmation' | 'Voucher Evidence';
-  confidentiality?: 'Public' | 'Internal' | 'Highly Confidential';
+  section?:
+    | "Current Audit File"
+    | "Permanent Audit File"
+    | "Tax Filings"
+    | "Legal Records";
+  category:
+    | "Engagement Letter"
+    | "Trial Balance"
+    | "Tax Return"
+    | "Board Minutes"
+    | "Legal Certificate"
+    | "Bank Confirmation"
+    | "Voucher Evidence";
+  confidentiality?: "Public" | "Internal" | "Highly Confidential";
   fileSize: string;
   uploadedBy: string;
   uploadedAt: string;
@@ -309,7 +360,8 @@ export interface WorkingPaper {
   preparedDate: string;
   reviewedBy?: string;
   reviewedDate?: string;
-  status: 'Draft' | 'Ready for Review' | 'Partner Signed-off' | 'Manager Approved';
+  status:
+    "Draft" | "Ready for Review" | "Partner Signed-off" | "Manager Approved";
   version: string; // e.g. "v1.0", "v1.1"
   fileHash: string;
   isLocked: boolean;
@@ -332,11 +384,11 @@ export interface ReviewNote {
   id: string;
   sectionRef: string; // e.g. "Section 1: Audit Scope", "Section 2: Substantive Sampling", "Evidence #2: Bank Certificate", "General Review"
   content: string;
-  severity: 'High' | 'Medium' | 'Low' | 'Advisory';
+  severity: "High" | "Medium" | "Low" | "Advisory";
   author: string;
   authorRole: string;
   timestamp: string;
-  status: 'Open' | 'Addressed' | 'Cleared';
+  status: "Open" | "Addressed" | "Cleared";
   replies?: ReviewNoteReply[];
 }
 
@@ -356,7 +408,7 @@ export interface DigitalSignatureSeal {
   signatureId: string; // e.g. "AVQ-SIG-7F89B-FCA-2026"
   hashProof: string;
   certificateRef: string;
-  status: 'Certified Signed-off' | 'Manager Approved';
+  status: "Certified Signed-off" | "Manager Approved";
 }
 
 export interface SignOffItem {
@@ -371,8 +423,8 @@ export interface SignOffItem {
   financialYear?: string;
   submittedBy: string;
   submittedDate: string;
-  roleRequired: 'Manager Sign-off' | 'Partner Sign-off' | 'EQCR Review';
-  status: 'Pending' | 'Signed' | 'Rejected' | 'Clarification Requested';
+  roleRequired: "Manager Sign-off" | "Partner Sign-off" | "EQCR Review";
+  status: "Pending" | "Signed" | "Rejected" | "Clarification Requested";
   notes?: string;
   checklist?: SignOffChecklist;
   managerSeal?: DigitalSignatureSeal;
@@ -409,12 +461,20 @@ export interface ClientRequestItem {
   targetContact?: PBCContactPerson;
   requestedDate: string;
   dueDate: string;
-  status: 'Requested' | 'Partially Received' | 'Under Verification' | 'Accepted' | 'Pending Client Upload' | 'Received & Verifying' | 'Resolved' | 'Overdue';
-  priority: 'High' | 'Medium' | 'Low';
+  status:
+    | "Requested"
+    | "Partially Received"
+    | "Under Verification"
+    | "Accepted"
+    | "Pending Client Upload"
+    | "Received & Verifying"
+    | "Resolved"
+    | "Overdue";
+  priority: "High" | "Medium" | "Low";
   assignedStaff: string;
   fileRequirements?: PBCFileRequirement[];
   automatedReminder?: boolean;
-  reminderFrequency?: 'Daily' | 'Every 3 Days' | 'Weekly';
+  reminderFrequency?: "Daily" | "Every 3 Days" | "Weekly";
   lastReminderSent?: string;
   remindersCount?: number;
 }
@@ -433,7 +493,11 @@ export interface InvoiceRecord {
   clientName: string;
   engagementRef?: string; // e.g. "AUD-2026-081 (Apex Footwear Statutory Audit)"
   service: string;
-  billingBasis?: 'Fixed Milestone' | 'Time & Materials (Timesheet)' | 'Monthly Retainer' | 'Special Assignment';
+  billingBasis?:
+    | "Fixed Milestone"
+    | "Time & Materials (Timesheet)"
+    | "Monthly Retainer"
+    | "Special Assignment";
   lineItems?: InvoiceLineItem[];
   amount: number; // Base subtotal before VAT
   vatRate?: number; // e.g. 15 or 0
@@ -441,7 +505,7 @@ export interface InvoiceRecord {
   totalAmount: number;
   issueDate: string;
   dueDate: string;
-  status: 'Draft' | 'Sent' | 'Pending' | 'Paid' | 'Overdue';
+  status: "Draft" | "Sent" | "Pending" | "Paid" | "Overdue";
   billableHoursCount?: number;
   ratePerHour?: number;
   notes?: string;
@@ -461,10 +525,16 @@ export interface CollectionRecord {
   clientName: string;
   paymentDate: string;
   amount: number;
-  paymentMethod: 'Bank BEFTN' | 'RTGS' | 'Cheque Deposit' | 'Direct Transfer' | 'Pay Order' | 'NPSB Electronic';
+  paymentMethod:
+    | "Bank BEFTN"
+    | "RTGS"
+    | "Cheque Deposit"
+    | "Direct Transfer"
+    | "Pay Order"
+    | "NPSB Electronic";
   bankRef: string; // e.g. "EBL-BEFTN-994821"
   depositedAccount: string; // e.g. "Eastern Bank Ltd - Principal Firm A/C #104102948"
-  status: 'Cleared & Credited' | 'Pending Clearing';
+  status: "Cleared & Credited" | "Pending Clearing";
   receivedBy: string;
   remarks?: string;
 }
@@ -480,11 +550,16 @@ export interface AgingBucketSummary {
 export interface ExpenseRecord {
   id: string;
   date: string;
-  category: 'Audit Travel & Conveyance' | 'Client Meeting' | 'Stationery & Printing' | 'Software Subscriptions' | 'Meal Allowance';
+  category:
+    | "Audit Travel & Conveyance"
+    | "Client Meeting"
+    | "Stationery & Printing"
+    | "Software Subscriptions"
+    | "Meal Allowance";
   amount: number;
   claimant: string;
   engagementRef?: string;
-  status: 'Approved' | 'Pending';
+  status: "Approved" | "Pending";
 }
 
 export interface FirmProfile {
@@ -513,25 +588,44 @@ export interface UserSessionRecord {
   location: string;
   lastActive: string;
   isCurrentSession: boolean;
-  status: 'Active' | 'Revoked';
+  status: "Active" | "Revoked";
 }
 
 export interface SecurityEventLog {
   id: string;
   timestamp: string;
-  eventType: 'AUTH_LOGIN' | 'MFA_VERIFY' | 'SIGNOFF_SEAL' | 'KEY_ROTATION' | 'SESSION_REVOKED' | 'EXPORT_LEDGER' | 'PERMISSION_CHANGE' | 'SECURITY_POLICY_UPDATE';
-  severity: 'Info' | 'Notice' | 'Warning' | 'Critical';
+  eventType:
+    | "AUTH_LOGIN"
+    | "MFA_VERIFY"
+    | "SIGNOFF_SEAL"
+    | "KEY_ROTATION"
+    | "SESSION_REVOKED"
+    | "EXPORT_LEDGER"
+    | "PERMISSION_CHANGE"
+    | "SECURITY_POLICY_UPDATE";
+  severity: "Info" | "Notice" | "Warning" | "Critical";
   actor: string;
   actorRole: string;
   ipAddress: string;
   actionSummary: string;
   resourceRef?: string;
-  status: 'Success' | 'Flagged' | 'Blocked' | 'Logged & Certified' | 'Terminated' | 'Verified & Active';
+  status:
+    | "Success"
+    | "Flagged"
+    | "Blocked"
+    | "Logged & Certified"
+    | "Terminated"
+    | "Verified & Active";
 }
 
 export interface AiActionCard {
   id: string;
-  type: 'draft_reminder' | 'pending_signoffs' | 'unbilled_hours' | 'working_paper' | 'tax_calculation';
+  type:
+    | "draft_reminder"
+    | "pending_signoffs"
+    | "unbilled_hours"
+    | "working_paper"
+    | "tax_calculation";
   title: string;
   summary: string;
   details?: string[];

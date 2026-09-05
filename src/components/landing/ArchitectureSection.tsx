@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   ShieldCheck,
   Lock,
@@ -11,14 +11,16 @@ import {
   Key,
   Layers,
   Sparkles,
-} from 'lucide-react';
-import { ARCHITECTURE_INVARIANTS } from '../../data/landingData';
+} from "lucide-react";
+import { ARCHITECTURE_INVARIANTS } from "../../data/landingData";
 
 export const ArchitectureSection: React.FC = () => {
   return (
-    <section id="architecture" className="py-20 sm:py-28 bg-[#FAF7F2] border-t border-[#EBE6DD] relative">
+    <section
+      id="architecture"
+      className="py-20 sm:py-28 bg-[#FAF7F2] border-t border-[#EBE6DD] relative"
+    >
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E1F3EE] border border-[#C8E9DE] text-[#1F5946] text-xs font-bold uppercase tracking-widest mb-4">
@@ -66,7 +68,9 @@ export const ArchitectureSection: React.FC = () => {
               {/* Standard Citation Footer */}
               <div className="pt-3 border-t border-[#F0EBE1] flex items-center justify-between text-xs font-mono text-stone-500">
                 <span>Compliance Benchmark</span>
-                <span className="font-bold text-[#113227]">{inv.standardCitation}</span>
+                <span className="font-bold text-[#113227]">
+                  {inv.standardCitation}
+                </span>
               </div>
             </div>
           ))}
@@ -98,19 +102,31 @@ export const ArchitectureSection: React.FC = () => {
               <ul className="space-y-3 text-xs text-[#6B2F27]">
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 font-bold">✕</span>
-                  <span>Unversioned Excel files shared over unencrypted email attachments.</span>
+                  <span>
+                    Unversioned Excel files shared over unencrypted email
+                    attachments.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 font-bold">✕</span>
-                  <span>Client PBC documents requested and received across messy WhatsApp threads.</span>
+                  <span>
+                    Client PBC documents requested and received across messy
+                    WhatsApp threads.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 font-bold">✕</span>
-                  <span>Timesheets tracked on paper with untracked overtime and delayed client billing.</span>
+                  <span>
+                    Timesheets tracked on paper with untracked overtime and
+                    delayed client billing.
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-500 font-bold">✕</span>
-                  <span>No immutable audit trail or proof of partner review prior to report release.</span>
+                  <span>
+                    No immutable audit trail or proof of partner review prior to
+                    report release.
+                  </span>
                 </li>
               </ul>
             </div>
@@ -119,7 +135,9 @@ export const ArchitectureSection: React.FC = () => {
             <div className="p-6 rounded-2xl bg-[#F0F8F5] border border-[#C8E9DE] space-y-4">
               <div className="flex items-center gap-2 text-[#1F5946] font-bold text-sm uppercase tracking-wide">
                 <ShieldCheck className="w-4 h-4" />
-                <span>The AVENQUIS Standard (Unified &amp; Cryptographically Sealed)</span>
+                <span>
+                  The AVENQUIS Standard (Unified &amp; Cryptographically Sealed)
+                </span>
               </div>
               <ul className="space-y-3 text-xs text-[#1F5946]">
                 <li className="flex items-start gap-2">
@@ -142,7 +160,6 @@ export const ArchitectureSection: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

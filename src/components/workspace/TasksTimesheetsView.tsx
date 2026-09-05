@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { MotionProgressBar } from '../motion/MotionPrimitives';
+import React, { useState, useEffect } from "react";
+import { motion } from "motion/react";
+import { MotionProgressBar } from "../motion/MotionPrimitives";
 import {
   CheckSquare,
   Clock,
@@ -36,7 +36,7 @@ import {
   AlertCircle,
   HelpCircle,
   Zap,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   TaskRecord,
   TaskSubtask,
@@ -45,10 +45,10 @@ import {
   StaffWorkloadCapacity,
   ClientRecord,
   EngagementRecord,
-} from '../../types';
+} from "../../types";
 
 interface TasksTimesheetsViewProps {
-  initialTab?: 'tasks' | 'timesheets' | 'resource_matrix';
+  initialTab?: "tasks" | "timesheets" | "resource_matrix";
   tasks: TaskRecord[];
   timesheets: TimesheetEntry[];
   weeklyTimesheets?: WeeklyTimesheetRow[];
@@ -57,13 +57,13 @@ interface TasksTimesheetsViewProps {
   engagements?: EngagementRecord[];
   onAddTask: (task: Partial<TaskRecord>) => void;
   onAddTimesheet: (entry: Partial<TimesheetEntry>) => void;
-  onUpdateTaskStatus: (taskId: string, status: TaskRecord['status']) => void;
+  onUpdateTaskStatus: (taskId: string, status: TaskRecord["status"]) => void;
   onToggleSubtask?: (taskId: string, subtaskId: string) => void;
   onSaveWeeklyTimesheet?: (rows: WeeklyTimesheetRow[]) => void;
 }
 
 export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
-  initialTab = 'tasks',
+  initialTab = "tasks",
   tasks,
   timesheets,
   weeklyTimesheets: initialWeeklyRows = [],
@@ -76,45 +76,79 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
   onToggleSubtask,
   onSaveWeeklyTimesheet,
 }) => {
-  const [activeTab, setActiveTab] = useState<'tasks' | 'timesheets' | 'resource_matrix'>(initialTab);
+  const [activeTab, setActiveTab] = useState<
+    "tasks" | "timesheets" | "resource_matrix"
+  >(initialTab);
 
   // 1. Task Management States
-  const [taskGroupBy, setTaskGroupBy] = useState<'engagement' | 'assignee' | 'dueDate'>('engagement');
-  const [taskSearch, setTaskSearch] = useState('');
-  const [taskPriorityFilter, setTaskPriorityFilter] = useState<'All' | 'Critical' | 'High' | 'Medium' | 'Low'>('All');
-  const [taskStatusFilter, setTaskStatusFilter] = useState<'All' | 'Todo' | 'In Progress' | 'Blocked' | 'Done'>('All');
+  const [taskGroupBy, setTaskGroupBy] = useState<
+    "engagement" | "assignee" | "dueDate"
+  >("engagement");
+  const [taskSearch, setTaskSearch] = useState("");
+  const [taskPriorityFilter, setTaskPriorityFilter] = useState<
+    "All" | "Critical" | "High" | "Medium" | "Low"
+  >("All");
+  const [taskStatusFilter, setTaskStatusFilter] = useState<
+    "All" | "Todo" | "In Progress" | "Blocked" | "Done"
+  >("All");
 
   // Task Creation Modal & Form State
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskClient, setNewTaskClient] = useState(clients[0]?.name || 'Apex Footwear & Polymer Ltd.');
-  const [newTaskEngagement, setNewTaskEngagement] = useState(engagements[0]?.engagementCode || 'AUD-2026-081');
-  const [newTaskAssignee, setNewTaskAssignee] = useState('Sabbir Ahmed (Art)');
-  const [newTaskPriority, setNewTaskPriority] = useState<TaskRecord['priority']>('High');
-  const [newTaskStatus, setNewTaskStatus] = useState<TaskRecord['status']>('Todo');
-  const [newTaskDueDate, setNewTaskDueDate] = useState('2026-09-10');
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskClient, setNewTaskClient] = useState(
+    clients[0]?.name || "Apex Footwear & Polymer Ltd.",
+  );
+  const [newTaskEngagement, setNewTaskEngagement] = useState(
+    engagements[0]?.engagementCode || "AUD-2026-081",
+  );
+  const [newTaskAssignee, setNewTaskAssignee] = useState("Sabbir Ahmed (Art)");
+  const [newTaskPriority, setNewTaskPriority] =
+    useState<TaskRecord["priority"]>("High");
+  const [newTaskStatus, setNewTaskStatus] =
+    useState<TaskRecord["status"]>("Todo");
+  const [newTaskDueDate, setNewTaskDueDate] = useState("2026-09-10");
   const [newTaskHours, setNewTaskHours] = useState(6);
-  const [newTaskCategory, setNewTaskCategory] = useState<TaskRecord['category']>('Field Audit');
-  const [newSubtaskInput, setNewSubtaskInput] = useState('');
-  const [newSubtaskList, setNewSubtaskList] = useState<Array<{ id: string; title: string; completed: boolean }>>([
-    { id: 'sub-1', title: 'Prepare documentation schedule and cross-index', completed: false },
+  const [newTaskCategory, setNewTaskCategory] =
+    useState<TaskRecord["category"]>("Field Audit");
+  const [newSubtaskInput, setNewSubtaskInput] = useState("");
+  const [newSubtaskList, setNewSubtaskList] = useState<
+    Array<{ id: string; title: string; completed: boolean }>
+  >([
+    {
+      id: "sub-1",
+      title: "Prepare documentation schedule and cross-index",
+      completed: false,
+    },
   ]);
 
   // 2. Timesheet & Weekly Grid States
-  const [weeklyRows, setWeeklyRows] = useState<WeeklyTimesheetRow[]>(initialWeeklyRows);
-  const [timesheetWeekLabel, setTimesheetWeekLabel] = useState('Current Week: 31 Aug 2026 - 06 Sep 2026');
-  const [selectedStaffUser, setSelectedStaffUser] = useState('Zahirul Islam, FCA');
+  const [weeklyRows, setWeeklyRows] =
+    useState<WeeklyTimesheetRow[]>(initialWeeklyRows);
+  const [timesheetWeekLabel, setTimesheetWeekLabel] = useState(
+    "Current Week: 31 Aug 2026 - 06 Sep 2026",
+  );
+  const [selectedStaffUser, setSelectedStaffUser] =
+    useState("Zahirul Islam, FCA");
   const [isTimerDrawerOpen, setIsTimerDrawerOpen] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(1450); // ~24 mins default
-  const [timerClient, setTimerClient] = useState('Apex Footwear & Polymer Ltd.');
-  const [timerEngagementCode, setTimerEngagementCode] = useState('AUD-2026-081');
-  const [timerWorkCode, setTimerWorkCode] = useState<'Field Audit' | 'Report Drafting' | 'Tax Computation' | 'Client Meeting'>('Field Audit');
-  const [timerDescription, setTimerDescription] = useState('Testing of revenue cut-off transactions and ISA 505 bank confirmations.');
+  const [timerClient, setTimerClient] = useState(
+    "Apex Footwear & Polymer Ltd.",
+  );
+  const [timerEngagementCode, setTimerEngagementCode] =
+    useState("AUD-2026-081");
+  const [timerWorkCode, setTimerWorkCode] = useState<
+    "Field Audit" | "Report Drafting" | "Tax Computation" | "Client Meeting"
+  >("Field Audit");
+  const [timerDescription, setTimerDescription] = useState(
+    "Testing of revenue cut-off transactions and ISA 505 bank confirmations.",
+  );
 
   // 3. Resource Allocation Matrix Filter
-  const [resourceDeptFilter, setResourceDeptFilter] = useState<string>('All');
-  const [resourceCapacityFilter, setResourceCapacityFilter] = useState<'All' | 'Overallocated' | 'Optimal' | 'Available'>('All');
+  const [resourceDeptFilter, setResourceDeptFilter] = useState<string>("All");
+  const [resourceCapacityFilter, setResourceCapacityFilter] = useState<
+    "All" | "Overallocated" | "Optimal" | "Available"
+  >("All");
 
   // Real-time Timer Tick
   useEffect(() => {
@@ -132,7 +166,7 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
     const hrs = Math.floor(totalSecs / 3600);
     const mins = Math.floor((totalSecs % 3600) / 60);
     const secs = totalSecs % 60;
-    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   // Add Subtask to modal list
@@ -140,9 +174,13 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
     if (!newSubtaskInput.trim()) return;
     setNewSubtaskList([
       ...newSubtaskList,
-      { id: `sub-${Date.now()}`, title: newSubtaskInput.trim(), completed: false },
+      {
+        id: `sub-${Date.now()}`,
+        title: newSubtaskInput.trim(),
+        completed: false,
+      },
     ]);
-    setNewSubtaskInput('');
+    setNewSubtaskInput("");
   };
 
   const handleRemoveSubtask = (id: string) => {
@@ -168,12 +206,22 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
     });
 
     setIsTaskModalOpen(false);
-    setNewTaskTitle('');
-    setNewSubtaskList([{ id: `sub-${Date.now()}`, title: 'Review audit findings with manager', completed: false }]);
+    setNewTaskTitle("");
+    setNewSubtaskList([
+      {
+        id: `sub-${Date.now()}`,
+        title: "Review audit findings with manager",
+        completed: false,
+      },
+    ]);
   };
 
   // Weekly Grid Inline Cell Edit
-  const handleWeeklyHourChange = (rowId: string, day: keyof WeeklyTimesheetRow['hours'], value: string) => {
+  const handleWeeklyHourChange = (
+    rowId: string,
+    day: keyof WeeklyTimesheetRow["hours"],
+    value: string,
+  ) => {
     const num = Math.max(0, Math.min(24, parseFloat(value) || 0));
     setWeeklyRows((prev) =>
       prev.map((row) => {
@@ -187,7 +235,7 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
           };
         }
         return row;
-      })
+      }),
     );
   };
 
@@ -195,9 +243,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
   const handleAddWeeklyRow = () => {
     const newRow: WeeklyTimesheetRow = {
       id: `ts-row-${Date.now()}`,
-      clientName: clients[0]?.name || 'Apex Footwear & Polymer Ltd.',
-      engagementCode: engagements[0]?.engagementCode || 'AUD-2026-081',
-      workCode: 'Field Audit',
+      clientName: clients[0]?.name || "Apex Footwear & Polymer Ltd.",
+      engagementCode: engagements[0]?.engagementCode || "AUD-2026-081",
+      workCode: "Field Audit",
       billable: true,
       hours: { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0, sat: 0, sun: 0 },
     };
@@ -212,42 +260,56 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
   // Stop Timer and Log into Weekly Grid
   const handleStopAndLogTimer = () => {
     setIsTimerRunning(false);
-    const loggedHours = Math.max(0.25, parseFloat((timerSeconds / 3600).toFixed(2)));
-    
+    const loggedHours = Math.max(
+      0.25,
+      parseFloat((timerSeconds / 3600).toFixed(2)),
+    );
+
     // Add timesheet entry record
     onAddTimesheet({
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
       staffName: selectedStaffUser,
       clientName: timerClient,
       engagementCode: timerEngagementCode,
       taskDescription: timerDescription,
       hours: loggedHours,
       billable: true,
-      status: 'Approved',
+      status: "Approved",
     });
 
     // Also inject hours into today's weekly grid column
     const todayIndex = new Date().getDay(); // 0 is Sun, 1 is Mon...
-    const dayKeyMap: Record<number, keyof WeeklyTimesheetRow['hours']> = {
-      1: 'mon',
-      2: 'tue',
-      3: 'wed',
-      4: 'thu',
-      5: 'fri',
-      6: 'sat',
-      0: 'sun',
+    const dayKeyMap: Record<number, keyof WeeklyTimesheetRow["hours"]> = {
+      1: "mon",
+      2: "tue",
+      3: "wed",
+      4: "thu",
+      5: "fri",
+      6: "sat",
+      0: "sun",
     };
-    const targetDay = dayKeyMap[todayIndex] || 'mon';
+    const targetDay = dayKeyMap[todayIndex] || "mon";
 
     setWeeklyRows((prev) => {
       const existing = prev.find(
-        (r) => r.clientName === timerClient && r.engagementCode === timerEngagementCode && r.workCode === timerWorkCode
+        (r) =>
+          r.clientName === timerClient &&
+          r.engagementCode === timerEngagementCode &&
+          r.workCode === timerWorkCode,
       );
       if (existing) {
         return prev.map((r) =>
           r.id === existing.id
-            ? { ...r, hours: { ...r.hours, [targetDay]: Number((r.hours[targetDay] + loggedHours).toFixed(1)) } }
-            : r
+            ? {
+                ...r,
+                hours: {
+                  ...r.hours,
+                  [targetDay]: Number(
+                    (r.hours[targetDay] + loggedHours).toFixed(1),
+                  ),
+                },
+              }
+            : r,
         );
       } else {
         return [
@@ -259,13 +321,13 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
             workCode: timerWorkCode,
             billable: true,
             hours: {
-              mon: targetDay === 'mon' ? loggedHours : 0,
-              tue: targetDay === 'tue' ? loggedHours : 0,
-              wed: targetDay === 'wed' ? loggedHours : 0,
-              thu: targetDay === 'thu' ? loggedHours : 0,
-              fri: targetDay === 'fri' ? loggedHours : 0,
-              sat: targetDay === 'sat' ? loggedHours : 0,
-              sun: targetDay === 'sun' ? loggedHours : 0,
+              mon: targetDay === "mon" ? loggedHours : 0,
+              tue: targetDay === "tue" ? loggedHours : 0,
+              wed: targetDay === "wed" ? loggedHours : 0,
+              thu: targetDay === "thu" ? loggedHours : 0,
+              fri: targetDay === "fri" ? loggedHours : 0,
+              sat: targetDay === "sat" ? loggedHours : 0,
+              sun: targetDay === "sun" ? loggedHours : 0,
             },
           },
         ];
@@ -287,12 +349,26 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
     sun: weeklyRows.reduce((acc, r) => acc + (r.hours.sun || 0), 0),
   };
 
-  const grandTotalHours = Object.values(dayTotals).reduce((a: number, b: number) => a + b, 0);
+  const grandTotalHours = Object.values(dayTotals).reduce(
+    (a: number, b: number) => a + b,
+    0,
+  );
   const billableHours = weeklyRows
     .filter((r) => r.billable)
-    .reduce((acc, r) => acc + (Object.values(r.hours) as number[]).reduce((a: number, b: number) => a + b, 0), 0);
+    .reduce(
+      (acc, r) =>
+        acc +
+        (Object.values(r.hours) as number[]).reduce(
+          (a: number, b: number) => a + b,
+          0,
+        ),
+      0,
+    );
   const nonBillableHours = grandTotalHours - billableHours;
-  const billableUtilizationPercent = grandTotalHours > 0 ? Math.round((billableHours / grandTotalHours) * 100) : 0;
+  const billableUtilizationPercent =
+    grandTotalHours > 0
+      ? Math.round((billableHours / grandTotalHours) * 100)
+      : 0;
 
   // Filtered Tasks
   const filteredTasks = tasks.filter((t) => {
@@ -300,32 +376,37 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
       t.title.toLowerCase().includes(taskSearch.toLowerCase()) ||
       t.clientName.toLowerCase().includes(taskSearch.toLowerCase()) ||
       t.assignedTo.toLowerCase().includes(taskSearch.toLowerCase()) ||
-      (t.engagementCode && t.engagementCode.toLowerCase().includes(taskSearch.toLowerCase()));
+      (t.engagementCode &&
+        t.engagementCode.toLowerCase().includes(taskSearch.toLowerCase()));
 
-    const matchesPriority = taskPriorityFilter === 'All' || t.priority === taskPriorityFilter;
-    const matchesStatus = taskStatusFilter === 'All' || t.status === taskStatusFilter;
+    const matchesPriority =
+      taskPriorityFilter === "All" || t.priority === taskPriorityFilter;
+    const matchesStatus =
+      taskStatusFilter === "All" || t.status === taskStatusFilter;
 
     return matchesSearch && matchesPriority && matchesStatus;
   });
 
   // Grouping logic for tasks
   const groupedTasks: Record<string, TaskRecord[]> = {};
-  if (taskGroupBy === 'engagement') {
+  if (taskGroupBy === "engagement") {
     filteredTasks.forEach((t) => {
-      const key = t.engagementCode ? `${t.engagementCode} - ${t.clientName}` : t.clientName;
+      const key = t.engagementCode
+        ? `${t.engagementCode} - ${t.clientName}`
+        : t.clientName;
       if (!groupedTasks[key]) groupedTasks[key] = [];
       groupedTasks[key].push(t);
     });
-  } else if (taskGroupBy === 'assignee') {
+  } else if (taskGroupBy === "assignee") {
     filteredTasks.forEach((t) => {
-      const key = t.assignedTo || 'Unassigned';
+      const key = t.assignedTo || "Unassigned";
       if (!groupedTasks[key]) groupedTasks[key] = [];
       groupedTasks[key].push(t);
     });
   } else {
     // By Due Date
     filteredTasks.forEach((t) => {
-      const key = t.dueDate ? `Due: ${t.dueDate}` : 'No Deadline';
+      const key = t.dueDate ? `Due: ${t.dueDate}` : "No Deadline";
       if (!groupedTasks[key]) groupedTasks[key] = [];
       groupedTasks[key].push(t);
     });
@@ -333,21 +414,24 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
   // Filtered Resource Capacities
   const filteredResources = resourceCapacities.filter((staff) => {
-    const matchesDept = resourceDeptFilter === 'All' || staff.department === resourceDeptFilter;
+    const matchesDept =
+      resourceDeptFilter === "All" || staff.department === resourceDeptFilter;
     const matchesCapacity =
-      resourceCapacityFilter === 'All' || staff.weeks.some((w) => w.status === resourceCapacityFilter);
+      resourceCapacityFilter === "All" ||
+      staff.weeks.some((w) => w.status === resourceCapacityFilter);
     return matchesDept && matchesCapacity;
   });
 
   return (
     <div className="space-y-6 animate-fadeIn text-left pb-16">
-      
       {/* 1. TOP HEADER & MAIN MODULE TAB SWITCHER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 sm:p-7 rounded-3xl bg-white border border-[#EBE6DD] shadow-2xs relative overflow-hidden">
         <div className="space-y-1.5 z-10">
           <div className="inline-flex items-center space-x-2 bg-[#FAF0DE] border border-[#EADBBF] px-3 py-1 rounded-full text-[10.5px] font-bold tracking-wider text-[#8A5A18]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#C58A3E]" />
-            <span className="uppercase">AVENQUIS PRACTICE VELOCITY &amp; PRODUCTIVITY SUITE</span>
+            <span className="uppercase">
+              AVENQUIS PRACTICE VELOCITY &amp; PRODUCTIVITY SUITE
+            </span>
             <span className="text-[#C58A3E] font-serif">✦</span>
             <span>ISA 220 RESOURCE ALLOCATION</span>
           </div>
@@ -356,7 +440,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
             Task Management, Timesheets &amp; Resource Planning
           </h1>
           <p className="text-xs sm:text-sm text-[#66706B] max-w-2xl leading-relaxed">
-            Manage granular audit deliverables, log weekly billable hours across engagement work codes, run real-time timers, and monitor multi-week staff capacity heatmaps.
+            Manage granular audit deliverables, log weekly billable hours across
+            engagement work codes, run real-time timers, and monitor multi-week
+            staff capacity heatmaps.
           </p>
         </div>
 
@@ -364,11 +450,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
         <div className="flex items-center space-x-1.5 bg-[#FAF7F2] p-1.5 rounded-2xl border border-[#E8E1D5] shrink-0 z-10">
           <button
             id="tab-tasks-deadlines"
-            onClick={() => setActiveTab('tasks')}
+            onClick={() => setActiveTab("tasks")}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeTab === 'tasks'
-                ? 'bg-[#113227] text-white shadow-2xs'
-                : 'text-[#66706B] hover:text-[#1C1F1E]'
+              activeTab === "tasks"
+                ? "bg-[#113227] text-white shadow-2xs"
+                : "text-[#66706B] hover:text-[#1C1F1E]"
             }`}
           >
             <ListTodo className="w-4 h-4" />
@@ -377,11 +463,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
           <button
             id="tab-timesheets-grid"
-            onClick={() => setActiveTab('timesheets')}
+            onClick={() => setActiveTab("timesheets")}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeTab === 'timesheets'
-                ? 'bg-[#113227] text-white shadow-2xs'
-                : 'text-[#66706B] hover:text-[#1C1F1E]'
+              activeTab === "timesheets"
+                ? "bg-[#113227] text-white shadow-2xs"
+                : "text-[#66706B] hover:text-[#1C1F1E]"
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -390,11 +476,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
           <button
             id="tab-resource-matrix"
-            onClick={() => setActiveTab('resource_matrix')}
+            onClick={() => setActiveTab("resource_matrix")}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5 ${
-              activeTab === 'resource_matrix'
-                ? 'bg-[#113227] text-white shadow-2xs'
-                : 'text-[#66706B] hover:text-[#1C1F1E]'
+              activeTab === "resource_matrix"
+                ? "bg-[#113227] text-white shadow-2xs"
+                : "text-[#66706B] hover:text-[#1C1F1E]"
             }`}
           >
             <Activity className="w-4 h-4" />
@@ -406,14 +492,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
       {/* ========================================================================= */}
       {/* 2. SECTION 1: TASKS & DEADLINES */}
       {/* ========================================================================= */}
-      {activeTab === 'tasks' && (
+      {activeTab === "tasks" && (
         <div className="space-y-6">
-          
           {/* Controls Bar: Search, Grouped Views, Priority Filter, Status Filter & "+ Create Task" */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-[#EBE6DD] shadow-2xs">
-            
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
-              
               {/* Search Bar */}
               <div className="relative flex-1 max-w-md">
                 <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A9691]" />
@@ -429,14 +512,16 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
               {/* Group By Selector (By Engagement, By Assignee, By Due Date) */}
               <div className="flex items-center space-x-1 bg-[#FAF7F2] p-1 rounded-xl border border-[#E8E1D5]">
-                <span className="text-[11px] font-bold text-[#8A9691] px-2">Group:</span>
+                <span className="text-[11px] font-bold text-[#8A9691] px-2">
+                  Group:
+                </span>
                 <button
                   id="group-by-engagement"
-                  onClick={() => setTaskGroupBy('engagement')}
+                  onClick={() => setTaskGroupBy("engagement")}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
-                    taskGroupBy === 'engagement'
-                      ? 'bg-[#113227] text-white shadow-2xs'
-                      : 'text-[#66706B] hover:text-[#1C1F1E]'
+                    taskGroupBy === "engagement"
+                      ? "bg-[#113227] text-white shadow-2xs"
+                      : "text-[#66706B] hover:text-[#1C1F1E]"
                   }`}
                 >
                   <Briefcase className="w-3 h-3" />
@@ -444,11 +529,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </button>
                 <button
                   id="group-by-assignee"
-                  onClick={() => setTaskGroupBy('assignee')}
+                  onClick={() => setTaskGroupBy("assignee")}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
-                    taskGroupBy === 'assignee'
-                      ? 'bg-[#113227] text-white shadow-2xs'
-                      : 'text-[#66706B] hover:text-[#1C1F1E]'
+                    taskGroupBy === "assignee"
+                      ? "bg-[#113227] text-white shadow-2xs"
+                      : "text-[#66706B] hover:text-[#1C1F1E]"
                   }`}
                 >
                   <Users className="w-3 h-3" />
@@ -456,11 +541,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </button>
                 <button
                   id="group-by-due-date"
-                  onClick={() => setTaskGroupBy('dueDate')}
+                  onClick={() => setTaskGroupBy("dueDate")}
                   className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1 ${
-                    taskGroupBy === 'dueDate'
-                      ? 'bg-[#113227] text-white shadow-2xs'
-                      : 'text-[#66706B] hover:text-[#1C1F1E]'
+                    taskGroupBy === "dueDate"
+                      ? "bg-[#113227] text-white shadow-2xs"
+                      : "text-[#66706B] hover:text-[#1C1F1E]"
                   }`}
                 >
                   <Calendar className="w-3 h-3" />
@@ -499,7 +584,6 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   <option value="Done">Done</option>
                 </select>
               </div>
-
             </div>
 
             {/* "+ Create Task" Modal Trigger */}
@@ -518,15 +602,24 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
             {Object.keys(groupedTasks).length === 0 ? (
               <div className="bg-white rounded-3xl border border-[#EBE6DD] p-12 text-center space-y-3 shadow-2xs">
                 <ListTodo className="w-10 h-10 text-[#8A9691] mx-auto stroke-1" />
-                <h3 className="font-serif font-bold text-base text-[#1C1F1E]">No Tasks Found</h3>
+                <h3 className="font-serif font-bold text-base text-[#1C1F1E]">
+                  No Tasks Found
+                </h3>
                 <p className="text-xs text-[#66706B] max-w-md mx-auto">
-                  There are no audit tasks matching your current search or filter query. Click "+ Create Task" to dispatch new deliverables.
+                  There are no audit tasks matching your current search or
+                  filter query. Click "+ Create Task" to dispatch new
+                  deliverables.
                 </p>
               </div>
             ) : (
               Object.entries(groupedTasks).map(([groupTitle, groupItems]) => (
-                <motion.div key={`${taskSearch}-${taskPriorityFilter}-${taskStatusFilter}-${taskGroupBy}-${groupTitle}`} className="bg-white rounded-3xl border border-[#EBE6DD] p-5 sm:p-6 shadow-2xs space-y-4" initial={{ opacity: 0.65 }} animate={{ opacity: 1 }} transition={{ duration: 0.18 }}>
-                  
+                <motion.div
+                  key={`${taskSearch}-${taskPriorityFilter}-${taskStatusFilter}-${taskGroupBy}-${groupTitle}`}
+                  className="bg-white rounded-3xl border border-[#EBE6DD] p-5 sm:p-6 shadow-2xs space-y-4"
+                  initial={{ opacity: 0.65 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.18 }}
+                >
                   {/* Group Header */}
                   <div className="flex items-center justify-between pb-3 border-b border-[#F0EBE1]">
                     <div className="flex items-center space-x-2.5">
@@ -536,7 +629,8 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                       </h2>
                     </div>
                     <span className="text-xs font-mono font-bold bg-[#FAF0DE] text-[#8A5A18] px-2.5 py-0.5 rounded-full border border-[#EADBBF]">
-                      {groupItems.length} {groupItems.length === 1 ? 'task' : 'tasks'}
+                      {groupItems.length}{" "}
+                      {groupItems.length === 1 ? "task" : "tasks"}
                     </span>
                   </div>
 
@@ -544,22 +638,23 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   <div className="divide-y divide-[#F0EBE1]">
                     {groupItems.map((task) => {
                       const priorityColor =
-                        task.priority === 'Critical'
-                          ? 'bg-[#FDE6E2] text-[#8E362C] border-[#F4CCC6]'
-                          : task.priority === 'High'
-                          ? 'bg-[#FAF0DE] text-[#8A5A18] border-[#ECD9B8]'
-                          : 'bg-[#E1F3EE] text-[#1F5946] border-[#C5E8DC]';
+                        task.priority === "Critical"
+                          ? "bg-[#FDE6E2] text-[#8E362C] border-[#F4CCC6]"
+                          : task.priority === "High"
+                            ? "bg-[#FAF0DE] text-[#8A5A18] border-[#ECD9B8]"
+                            : "bg-[#E1F3EE] text-[#1F5946] border-[#C5E8DC]";
 
                       const statusColor =
-                        task.status === 'Done'
-                          ? 'bg-[#E1F3EE] text-[#1F5946] border-[#C5E8DC]'
-                          : task.status === 'In Progress'
-                          ? 'bg-[#FAF0DE] text-[#8A5A18] border-[#ECD9B8]'
-                          : task.status === 'Blocked'
-                          ? 'bg-[#FDE6E2] text-[#8E362C] border-[#F4CCC6]'
-                          : 'bg-[#FAF7F2] text-[#66706B] border-[#E8E1D5]';
+                        task.status === "Done"
+                          ? "bg-[#E1F3EE] text-[#1F5946] border-[#C5E8DC]"
+                          : task.status === "In Progress"
+                            ? "bg-[#FAF0DE] text-[#8A5A18] border-[#ECD9B8]"
+                            : task.status === "Blocked"
+                              ? "bg-[#FDE6E2] text-[#8E362C] border-[#F4CCC6]"
+                              : "bg-[#FAF7F2] text-[#66706B] border-[#E8E1D5]";
 
-                      const completedSubtasks = task.subtasks?.filter((s) => s.completed).length || 0;
+                      const completedSubtasks =
+                        task.subtasks?.filter((s) => s.completed).length || 0;
                       const totalSubtasks = task.subtasks?.length || 0;
 
                       return (
@@ -567,7 +662,10 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                           key={task.id}
                           className="py-4 hover:bg-[#FAF8F5] transition-colors rounded-2xl px-3 -mx-3 flex flex-col md:flex-row md:items-center justify-between gap-4"
                           layout
-                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                          transition={{
+                            duration: 0.2,
+                            ease: [0.16, 1, 0.3, 1],
+                          }}
                         >
                           {/* Task Left: Title, Engagement, Category & Subtasks */}
                           <div className="space-y-1.5 flex-1 min-w-0">
@@ -604,7 +702,12 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                                   Subtasks ({completedSubtasks}/{totalSubtasks})
                                 </div>
                                 <div className="w-24 h-1.5 rounded-full bg-[#EBE5DA] overflow-hidden">
-                                  <MotionProgressBar value={(completedSubtasks / totalSubtasks) * 100} className="h-full bg-[#113227] rounded-full" />
+                                  <MotionProgressBar
+                                    value={
+                                      (completedSubtasks / totalSubtasks) * 100
+                                    }
+                                    className="h-full bg-[#113227] rounded-full"
+                                  />
                                 </div>
                               </div>
                             )}
@@ -612,10 +715,13 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
                           {/* Task Right: Priority Badge, Due Date, Est. Hours & Status Selector */}
                           <div className="flex flex-wrap items-center gap-3 shrink-0">
-                            
                             {/* Priority Badge (Critical, High, Medium, Low) */}
-                            <span className={`px-2.5 py-0.8 rounded-full text-[10.5px] font-bold border ${priorityColor}`}>
-                              {task.priority === 'Critical' && <Flame className="w-3 h-3 inline mr-1" />}
+                            <span
+                              className={`px-2.5 py-0.8 rounded-full text-[10.5px] font-bold border ${priorityColor}`}
+                            >
+                              {task.priority === "Critical" && (
+                                <Flame className="w-3 h-3 inline mr-1" />
+                              )}
                               {task.priority} Priority
                             </span>
 
@@ -634,7 +740,12 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                             <select
                               id={`task-status-select-${task.id}`}
                               value={task.status}
-                              onChange={(e) => onUpdateTaskStatus(task.id, e.target.value as any)}
+                              onChange={(e) =>
+                                onUpdateTaskStatus(
+                                  task.id,
+                                  e.target.value as any,
+                                )
+                              }
                               className={`px-3 py-1 text-xs font-bold rounded-xl border focus:outline-none cursor-pointer transition-colors ${statusColor}`}
                             >
                               <option value="Todo">Todo</option>
@@ -642,39 +753,39 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                               <option value="Blocked">Blocked</option>
                               <option value="Done">Done</option>
                             </select>
-
                           </div>
                         </motion.div>
                       );
                     })}
                   </div>
-
                 </motion.div>
               ))
             )}
           </div>
-
         </div>
       )}
 
       {/* ========================================================================= */}
       {/* 3. SECTION 2: TIMESHEET & DAILY WORK LOGGING */}
       {/* ========================================================================= */}
-      {activeTab === 'timesheets' && (
+      {activeTab === "timesheets" && (
         <div className="space-y-6">
-          
           {/* Top Summary Cards: Billable vs Non-Billable & Live Timer Launcher */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            
             {/* Total Week Hours */}
             <div className="bg-white p-5 rounded-3xl border border-[#EBE6DD] shadow-2xs space-y-1">
               <div className="text-[11px] font-bold text-[#8A9691] uppercase tracking-wider">
                 Total Week Hours
               </div>
               <div className="text-2xl font-serif font-bold text-[#1C1F1E]">
-                {grandTotalHours.toFixed(1)} <span className="text-xs font-normal font-sans text-[#7A8782]">hrs</span>
+                {grandTotalHours.toFixed(1)}{" "}
+                <span className="text-xs font-normal font-sans text-[#7A8782]">
+                  hrs
+                </span>
               </div>
-              <div className="text-[11px] text-[#7A8782]">{timesheetWeekLabel}</div>
+              <div className="text-[11px] text-[#7A8782]">
+                {timesheetWeekLabel}
+              </div>
             </div>
 
             {/* Billable Hours */}
@@ -684,7 +795,10 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 <span>Billable Hours</span>
               </div>
               <div className="text-2xl font-serif font-bold text-[#113227]">
-                {billableHours.toFixed(1)} <span className="text-xs font-normal font-sans text-[#7A8782]">hrs</span>
+                {billableHours.toFixed(1)}{" "}
+                <span className="text-xs font-normal font-sans text-[#7A8782]">
+                  hrs
+                </span>
               </div>
               <div className="text-[11px] text-[#1F5946] font-semibold">
                 {billableUtilizationPercent}% Billable Utilization
@@ -698,9 +812,14 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 <span>Non-Billable / Admin</span>
               </div>
               <div className="text-2xl font-serif font-bold text-[#8A5A18]">
-                {nonBillableHours.toFixed(1)} <span className="text-xs font-normal font-sans text-[#7A8782]">hrs</span>
+                {nonBillableHours.toFixed(1)}{" "}
+                <span className="text-xs font-normal font-sans text-[#7A8782]">
+                  hrs
+                </span>
               </div>
-              <div className="text-[11px] text-[#7A8782]">Practice Admin &amp; ICAB Training</div>
+              <div className="text-[11px] text-[#7A8782]">
+                Practice Admin &amp; ICAB Training
+              </div>
             </div>
 
             {/* Daily Timer Quick Widget */}
@@ -709,7 +828,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 <span className="text-[10px] font-mono uppercase tracking-wider text-[#E1F3EE] bg-white/10 px-2 py-0.5 rounded">
                   Live Audit Stopwatch
                 </span>
-                <span className={`w-2 h-2 rounded-full ${isTimerRunning ? 'bg-emerald-400 motion-timer-indicator' : 'bg-[#E1F3EE]/40'}`} />
+                <span
+                  className={`w-2 h-2 rounded-full ${isTimerRunning ? "bg-emerald-400 motion-timer-indicator" : "bg-[#E1F3EE]/40"}`}
+                />
               </div>
 
               <div className="flex items-center justify-between">
@@ -722,20 +843,18 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   className="px-3 py-1.5 rounded-xl bg-[#C58A3E] text-[#1C1F1E] font-bold text-xs hover:bg-[#D49A4E] transition-all cursor-pointer flex items-center space-x-1"
                 >
                   <Timer className="w-3.5 h-3.5" />
-                  <span>{isTimerRunning ? 'Active' : 'Open Timer'}</span>
+                  <span>{isTimerRunning ? "Active" : "Open Timer"}</span>
                 </button>
               </div>
-              
+
               <div className="text-[10.5px] text-[#E1F3EE]/80 truncate">
-                {timerClient.split(' ')[0]} • {timerWorkCode}
+                {timerClient.split(" ")[0]} • {timerWorkCode}
               </div>
             </div>
-
           </div>
 
           {/* Interactive Weekly Timesheet Grid (Mon-Sun) */}
           <div className="bg-white rounded-3xl border border-[#EBE6DD] p-5 sm:p-6 shadow-2xs space-y-4">
-            
             {/* Grid Header & Action Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#F0EBE1]">
               <div className="space-y-0.5">
@@ -746,7 +865,8 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   </h3>
                 </div>
                 <p className="text-xs text-[#7A8782]">
-                  Log actual time in hours against specific Clients, Engagements, and Work Codes.
+                  Log actual time in hours against specific Clients,
+                  Engagements, and Work Codes.
                 </p>
               </div>
 
@@ -762,7 +882,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
                 <button
                   id="btn-save-weekly-timesheet"
-                  onClick={() => onSaveWeeklyTimesheet && onSaveWeeklyTimesheet(weeklyRows)}
+                  onClick={() =>
+                    onSaveWeeklyTimesheet && onSaveWeeklyTimesheet(weeklyRows)
+                  }
                   className="btn-forest px-4 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-2xs cursor-pointer"
                 >
                   <Check className="w-3.5 h-3.5 text-[#C58A3E]" />
@@ -776,7 +898,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               <table className="w-full text-left border-collapse min-w-[920px]">
                 <thead>
                   <tr className="border-b border-[#EBE5DA] text-[11px] font-bold text-[#8A9691] uppercase tracking-wider">
-                    <th className="pb-3 pl-1 min-w-[200px]">Client / Account</th>
+                    <th className="pb-3 pl-1 min-w-[200px]">
+                      Client / Account
+                    </th>
                     <th className="pb-3 px-2 min-w-[130px]">Engagement</th>
                     <th className="pb-3 px-2 min-w-[150px]">Work Code</th>
                     <th className="pb-3 px-1 text-center w-14">Mon</th>
@@ -792,18 +916,28 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </thead>
                 <tbody className="divide-y divide-[#F0EBE1] text-xs">
                   {weeklyRows.map((row) => {
-                    const rowTotal = (Object.values(row.hours) as number[]).reduce((a: number, b: number) => a + b, 0);
+                    const rowTotal = (
+                      Object.values(row.hours) as number[]
+                    ).reduce((a: number, b: number) => a + b, 0);
 
                     return (
-                      <tr key={row.id} className="hover:bg-[#FAF8F5] transition-colors">
-                        
+                      <tr
+                        key={row.id}
+                        className="hover:bg-[#FAF8F5] transition-colors"
+                      >
                         {/* Client Selector */}
                         <td className="py-2.5 pl-1">
                           <select
                             value={row.clientName}
                             onChange={(e) => {
                               const val = e.target.value;
-                              setWeeklyRows(weeklyRows.map((r) => (r.id === row.id ? { ...r, clientName: val } : r)));
+                              setWeeklyRows(
+                                weeklyRows.map((r) =>
+                                  r.id === row.id
+                                    ? { ...r, clientName: val }
+                                    : r,
+                                ),
+                              );
                             }}
                             className="w-full px-2 py-1.5 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227] font-medium truncate"
                           >
@@ -812,7 +946,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                                 {c.name}
                               </option>
                             ))}
-                            <option value="Internal Practice / ICAB">Internal Practice / ICAB</option>
+                            <option value="Internal Practice / ICAB">
+                              Internal Practice / ICAB
+                            </option>
                           </select>
                         </td>
 
@@ -822,7 +958,13 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                             value={row.engagementCode}
                             onChange={(e) => {
                               const val = e.target.value;
-                              setWeeklyRows(weeklyRows.map((r) => (r.id === row.id ? { ...r, engagementCode: val } : r)));
+                              setWeeklyRows(
+                                weeklyRows.map((r) =>
+                                  r.id === row.id
+                                    ? { ...r, engagementCode: val }
+                                    : r,
+                                ),
+                              );
                             }}
                             className="w-full px-2 py-1.5 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227] font-mono text-[11px]"
                           >
@@ -831,7 +973,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                                 {eng.engagementCode}
                               </option>
                             ))}
-                            <option value="INT-FIRM-ADMIN">INT-FIRM-ADMIN</option>
+                            <option value="INT-FIRM-ADMIN">
+                              INT-FIRM-ADMIN
+                            </option>
                           </select>
                         </td>
 
@@ -841,28 +985,54 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                             value={row.workCode}
                             onChange={(e) => {
                               const val = e.target.value as any;
-                              setWeeklyRows(weeklyRows.map((r) => (r.id === row.id ? { ...r, workCode: val } : r)));
+                              setWeeklyRows(
+                                weeklyRows.map((r) =>
+                                  r.id === row.id ? { ...r, workCode: val } : r,
+                                ),
+                              );
                             }}
                             className="w-full px-2 py-1.5 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#113227] font-semibold focus:outline-none focus:ring-1 focus:ring-[#113227]"
                           >
                             <option value="Field Audit">Field Audit</option>
-                            <option value="Report Drafting">Report Drafting</option>
-                            <option value="Tax Computation">Tax Computation</option>
-                            <option value="Client Meeting">Client Meeting</option>
+                            <option value="Report Drafting">
+                              Report Drafting
+                            </option>
+                            <option value="Tax Computation">
+                              Tax Computation
+                            </option>
+                            <option value="Client Meeting">
+                              Client Meeting
+                            </option>
                           </select>
                         </td>
 
                         {/* Mon-Sun Inputs */}
-                        {(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const).map((day) => (
+                        {(
+                          [
+                            "mon",
+                            "tue",
+                            "wed",
+                            "thu",
+                            "fri",
+                            "sat",
+                            "sun",
+                          ] as const
+                        ).map((day) => (
                           <td key={day} className="py-2.5 px-1 text-center">
                             <input
                               type="number"
                               min="0"
                               max="24"
                               step="0.5"
-                              value={row.hours[day] === 0 ? '' : row.hours[day]}
+                              value={row.hours[day] === 0 ? "" : row.hours[day]}
                               placeholder="0"
-                              onChange={(e) => handleWeeklyHourChange(row.id, day, e.target.value)}
+                              onChange={(e) =>
+                                handleWeeklyHourChange(
+                                  row.id,
+                                  day,
+                                  e.target.value,
+                                )
+                              }
                               className="w-12 py-1 text-center font-mono text-xs bg-white border border-[#D8CFC0] rounded-lg text-[#1C1F1E] focus:ring-1 focus:ring-[#113227] focus:bg-[#FAF7F2]"
                             />
                           </td>
@@ -883,7 +1053,6 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </td>
-
                       </tr>
                     );
                   })}
@@ -895,14 +1064,30 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                     <td className="py-3 pl-3" colSpan={3}>
                       <span>DAILY TOTAL SUMMARY</span>
                     </td>
-                    <td className="py-3 text-center text-[#113227]">{dayTotals.mon.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#113227]">{dayTotals.tue.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#113227]">{dayTotals.wed.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#113227]">{dayTotals.thu.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#113227]">{dayTotals.fri.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#8A9691]">{dayTotals.sat.toFixed(1)}h</td>
-                    <td className="py-3 text-center text-[#8A9691]">{dayTotals.sun.toFixed(1)}h</td>
-                    <td className="py-3 text-right pr-2 text-sm text-[#113227]">{grandTotalHours.toFixed(1)}h</td>
+                    <td className="py-3 text-center text-[#113227]">
+                      {dayTotals.mon.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#113227]">
+                      {dayTotals.tue.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#113227]">
+                      {dayTotals.wed.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#113227]">
+                      {dayTotals.thu.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#113227]">
+                      {dayTotals.fri.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#8A9691]">
+                      {dayTotals.sat.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-center text-[#8A9691]">
+                      {dayTotals.sun.toFixed(1)}h
+                    </td>
+                    <td className="py-3 text-right pr-2 text-sm text-[#113227]">
+                      {grandTotalHours.toFixed(1)}h
+                    </td>
                     <td></td>
                   </tr>
                 </tfoot>
@@ -916,7 +1101,10 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               </div>
               <div className="divide-y divide-[#F0EBE1]">
                 {timesheets.slice(0, 3).map((item) => (
-                  <div key={item.id} className="py-2.5 flex items-center justify-between text-xs">
+                  <div
+                    key={item.id}
+                    className="py-2.5 flex items-center justify-between text-xs"
+                  >
                     <div className="space-y-0.5">
                       <div className="font-semibold text-[#1C1F1E]">
                         {item.taskDescription}
@@ -924,13 +1112,17 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                       <div className="text-[11px] text-[#7A8782] flex items-center space-x-2">
                         <span>{item.staffName}</span>
                         <span>•</span>
-                        <span className="font-mono text-[#C58A3E]">{item.engagementCode}</span>
+                        <span className="font-mono text-[#C58A3E]">
+                          {item.engagementCode}
+                        </span>
                         <span>•</span>
                         <span>{item.clientName}</span>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <span className="font-mono font-bold text-xs text-[#113227]">{item.hours} hrs</span>
+                      <span className="font-mono font-bold text-xs text-[#113227]">
+                        {item.hours} hrs
+                      </span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E1F3EE] text-[#1F5946] border border-[#C5E8DC]">
                         {item.status}
                       </span>
@@ -939,18 +1131,15 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 ))}
               </div>
             </div>
-
           </div>
-
         </div>
       )}
 
       {/* ========================================================================= */}
       {/* 4. SECTION 3: RESOURCE ALLOCATION MATRIX */}
       {/* ========================================================================= */}
-      {activeTab === 'resource_matrix' && (
+      {activeTab === "resource_matrix" && (
         <div className="space-y-6">
-          
           {/* Header & Filter Controls */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-[#EBE6DD] shadow-2xs">
             <div className="space-y-1">
@@ -958,24 +1147,30 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 4-Week Resource Capacity &amp; Workload Matrix
               </h3>
               <p className="text-xs text-[#7A8782]">
-                Monitor partner, manager, and articled trainee allocations to prevent overallocation and ensure ISA 220 compliance.
+                Monitor partner, manager, and articled trainee allocations to
+                prevent overallocation and ensure ISA 220 compliance.
               </p>
             </div>
 
             {/* Filter controls */}
             <div className="flex items-center space-x-2.5">
-              
               {/* Capacity Status Filter */}
               <div className="flex items-center space-x-1.5">
-                <span className="text-[11px] font-bold text-[#8A9691]">Status:</span>
+                <span className="text-[11px] font-bold text-[#8A9691]">
+                  Status:
+                </span>
                 <select
                   id="resource-capacity-filter"
                   value={resourceCapacityFilter}
-                  onChange={(e) => setResourceCapacityFilter(e.target.value as any)}
+                  onChange={(e) =>
+                    setResourceCapacityFilter(e.target.value as any)
+                  }
                   className="px-2.5 py-1.5 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                 >
                   <option value="All">All Capacities</option>
-                  <option value="Overallocated">Overallocated (&gt;100%)</option>
+                  <option value="Overallocated">
+                    Overallocated (&gt;100%)
+                  </option>
                   <option value="Optimal">Optimal (75-100%)</option>
                   <option value="Available">Available (&lt;75%)</option>
                 </select>
@@ -983,7 +1178,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
               {/* Department Filter */}
               <div className="flex items-center space-x-1.5">
-                <span className="text-[11px] font-bold text-[#8A9691]">Dept:</span>
+                <span className="text-[11px] font-bold text-[#8A9691]">
+                  Dept:
+                </span>
                 <select
                   id="resource-dept-filter"
                   value={resourceDeptFilter}
@@ -991,11 +1188,14 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   className="px-2.5 py-1.5 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] focus:outline-none focus:ring-1 focus:ring-[#113227]"
                 >
                   <option value="All">All Practice Areas</option>
-                  <option value="Audit & Assurance">Audit &amp; Assurance</option>
-                  <option value="Taxation & Regulatory">Taxation &amp; Regulatory</option>
+                  <option value="Audit & Assurance">
+                    Audit &amp; Assurance
+                  </option>
+                  <option value="Taxation & Regulatory">
+                    Taxation &amp; Regulatory
+                  </option>
                 </select>
               </div>
-
             </div>
           </div>
 
@@ -1005,17 +1205,29 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               <table className="w-full text-left border-collapse min-w-[940px]">
                 <thead>
                   <tr className="border-b border-[#EBE5DA] text-[11px] font-bold text-[#8A9691] uppercase tracking-wider">
-                    <th className="pb-3 pl-1 min-w-[220px]">Staff Member &amp; Role</th>
-                    <th className="pb-3 px-3 text-center min-w-[160px]">Week 1 (Sep 1-7)</th>
-                    <th className="pb-3 px-3 text-center min-w-[160px]">Week 2 (Sep 8-14)</th>
-                    <th className="pb-3 px-3 text-center min-w-[160px]">Week 3 (Sep 15-21)</th>
-                    <th className="pb-3 px-3 text-center min-w-[160px]">Week 4 (Sep 22-28)</th>
+                    <th className="pb-3 pl-1 min-w-[220px]">
+                      Staff Member &amp; Role
+                    </th>
+                    <th className="pb-3 px-3 text-center min-w-[160px]">
+                      Week 1 (Sep 1-7)
+                    </th>
+                    <th className="pb-3 px-3 text-center min-w-[160px]">
+                      Week 2 (Sep 8-14)
+                    </th>
+                    <th className="pb-3 px-3 text-center min-w-[160px]">
+                      Week 3 (Sep 15-21)
+                    </th>
+                    <th className="pb-3 px-3 text-center min-w-[160px]">
+                      Week 4 (Sep 22-28)
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#F0EBE1] text-xs">
                   {filteredResources.map((staff) => (
-                    <tr key={staff.staffId} className="hover:bg-[#FAF8F5] transition-colors">
-                      
+                    <tr
+                      key={staff.staffId}
+                      className="hover:bg-[#FAF8F5] transition-colors"
+                    >
                       {/* Staff Profile & Designation */}
                       <td className="py-3.5 pl-1">
                         <div className="flex items-center space-x-3">
@@ -1035,46 +1247,63 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
                       {/* 4 Weekly Columns */}
                       {staff.weeks.map((week, wIdx) => {
-                        const loadRatio = Math.round((week.allocatedHours / week.capacityHours) * 100);
-                        const isOver = week.status === 'Overallocated';
-                        const isOpt = week.status === 'Optimal';
+                        const loadRatio = Math.round(
+                          (week.allocatedHours / week.capacityHours) * 100,
+                        );
+                        const isOver = week.status === "Overallocated";
+                        const isOpt = week.status === "Optimal";
 
                         const heatBg = isOver
-                          ? 'bg-[#FDE6E2] border-[#F4CCC6] text-[#8E362C]'
+                          ? "bg-[#FDE6E2] border-[#F4CCC6] text-[#8E362C]"
                           : isOpt
-                          ? 'bg-[#E1F3EE] border-[#C5E8DC] text-[#1F5946]'
-                          : 'bg-[#FAF7F2] border-[#E8E1D5] text-[#66706B]';
+                            ? "bg-[#E1F3EE] border-[#C5E8DC] text-[#1F5946]"
+                            : "bg-[#FAF7F2] border-[#E8E1D5] text-[#66706B]";
 
                         return (
                           <td key={wIdx} className="py-3 px-2">
-                            <div className={`p-2.5 rounded-2xl border ${heatBg} space-y-1.5 transition-all`}>
-                              
+                            <div
+                              className={`p-2.5 rounded-2xl border ${heatBg} space-y-1.5 transition-all`}
+                            >
                               <div className="flex items-center justify-between text-[11px] font-mono">
-                                <span className="font-bold">{week.allocatedHours}h / {week.capacityHours}h</span>
+                                <span className="font-bold">
+                                  {week.allocatedHours}h / {week.capacityHours}h
+                                </span>
                                 <span className="font-bold">{loadRatio}%</span>
                               </div>
 
                               <div className="w-full h-1.5 rounded-full bg-black/10 overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
-                                    isOver ? 'bg-rose-600' : isOpt ? 'bg-[#113227]' : 'bg-[#C58A3E]'
+                                    isOver
+                                      ? "bg-rose-600"
+                                      : isOpt
+                                        ? "bg-[#113227]"
+                                        : "bg-[#C58A3E]"
                                   }`}
-                                  style={{ width: `${Math.min(100, loadRatio)}%` }}
+                                  style={{
+                                    width: `${Math.min(100, loadRatio)}%`,
+                                  }}
                                 />
                               </div>
 
                               <div className="flex items-center justify-between text-[9.5px]">
-                                <span className="font-semibold uppercase tracking-wider">{week.status}</span>
-                                <span className="truncate max-w-[80px] text-right font-mono opacity-80" title={week.engagements.join(', ')}>
-                                  {week.engagements.length} {week.engagements.length === 1 ? 'eng' : 'engs'}
+                                <span className="font-semibold uppercase tracking-wider">
+                                  {week.status}
+                                </span>
+                                <span
+                                  className="truncate max-w-[80px] text-right font-mono opacity-80"
+                                  title={week.engagements.join(", ")}
+                                >
+                                  {week.engagements.length}{" "}
+                                  {week.engagements.length === 1
+                                    ? "eng"
+                                    : "engs"}
                                 </span>
                               </div>
-
                             </div>
                           </td>
                         );
                       })}
-
                     </tr>
                   ))}
                 </tbody>
@@ -1099,11 +1328,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               </div>
 
               <div className="text-[11px] font-mono">
-                Standard Capacity: 40h/week (Staff) • 45h/week (CA Articled Trainees)
+                Standard Capacity: 40h/week (Staff) • 45h/week (CA Articled
+                Trainees)
               </div>
             </div>
           </div>
-
         </div>
       )}
 
@@ -1113,7 +1342,6 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
       {isTaskModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
           <div className="bg-white rounded-3xl border border-[#E8E1D5] max-w-xl w-full p-6 sm:p-7 space-y-5 shadow-2xl relative max-h-[92vh] overflow-y-auto custom-scrollbar">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E1D5]">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold font-mono text-[#8A5A18] uppercase bg-[#FAF0DE] px-2 py-0.5 rounded border border-[#EADBBF]">
@@ -1133,10 +1361,11 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
             </div>
 
             <form onSubmit={handleTaskSubmit} className="space-y-4">
-              
               {/* Task Title */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-[#1C1F1E]">Task Title / Objective *</label>
+                <label className="text-xs font-bold text-[#1C1F1E]">
+                  Task Title / Objective *
+                </label>
                 <input
                   id="input-task-title"
                   type="text"
@@ -1151,7 +1380,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               {/* Client Linkage & Engagement Code */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#1C1F1E]">Associated Client *</label>
+                  <label className="text-xs font-bold text-[#1C1F1E]">
+                    Associated Client *
+                  </label>
                   <select
                     id="input-task-client"
                     value={newTaskClient}
@@ -1167,7 +1398,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#1C1F1E]">Engagement Code *</label>
+                  <label className="text-xs font-bold text-[#1C1F1E]">
+                    Engagement Code *
+                  </label>
                   <select
                     id="input-task-engagement"
                     value={newTaskEngagement}
@@ -1186,24 +1419,40 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               {/* Assignee & Work Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#1C1F1E]">Assignee *</label>
+                  <label className="text-xs font-bold text-[#1C1F1E]">
+                    Assignee *
+                  </label>
                   <select
                     id="input-task-assignee"
                     value={newTaskAssignee}
                     onChange={(e) => setNewTaskAssignee(e.target.value)}
                     className="w-full px-3 py-2 text-xs bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] focus:ring-1 focus:ring-[#113227]"
                   >
-                    <option value="Sabbir Ahmed (Art)">Sabbir Ahmed (Articled Student)</option>
-                    <option value="Farhan Kabir (Art)">Farhan Kabir (Articled Student)</option>
-                    <option value="Mehvish Sultana (Art)">Mehvish Sultana (Articled Student)</option>
-                    <option value="Nadia Sharmin, ACCA">Nadia Sharmin, ACCA (Senior)</option>
-                    <option value="Zahirul Islam, FCA">Zahirul Islam, FCA (Manager)</option>
-                    <option value="Mahmudur Rahman, ACA">Mahmudur Rahman, ACA (Manager)</option>
+                    <option value="Sabbir Ahmed (Art)">
+                      Sabbir Ahmed (Articled Student)
+                    </option>
+                    <option value="Farhan Kabir (Art)">
+                      Farhan Kabir (Articled Student)
+                    </option>
+                    <option value="Mehvish Sultana (Art)">
+                      Mehvish Sultana (Articled Student)
+                    </option>
+                    <option value="Nadia Sharmin, ACCA">
+                      Nadia Sharmin, ACCA (Senior)
+                    </option>
+                    <option value="Zahirul Islam, FCA">
+                      Zahirul Islam, FCA (Manager)
+                    </option>
+                    <option value="Mahmudur Rahman, ACA">
+                      Mahmudur Rahman, ACA (Manager)
+                    </option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-[#1C1F1E]">Category *</label>
+                  <label className="text-xs font-bold text-[#1C1F1E]">
+                    Category *
+                  </label>
                   <select
                     id="input-task-category"
                     value={newTaskCategory}
@@ -1224,7 +1473,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               {/* Priority, Status, Due Date & Estimated Hours */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-[#1C1F1E]">Priority</label>
+                  <label className="text-[11px] font-bold text-[#1C1F1E]">
+                    Priority
+                  </label>
                   <select
                     id="input-task-priority"
                     value={newTaskPriority}
@@ -1239,7 +1490,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-[#1C1F1E]">Status</label>
+                  <label className="text-[11px] font-bold text-[#1C1F1E]">
+                    Status
+                  </label>
                   <select
                     id="input-task-status"
                     value={newTaskStatus}
@@ -1254,7 +1507,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-[#1C1F1E]">Deadline</label>
+                  <label className="text-[11px] font-bold text-[#1C1F1E]">
+                    Deadline
+                  </label>
                   <input
                     id="input-task-due-date"
                     type="date"
@@ -1265,7 +1520,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-[#1C1F1E]">Est. Hours</label>
+                  <label className="text-[11px] font-bold text-[#1C1F1E]">
+                    Est. Hours
+                  </label>
                   <input
                     id="input-task-hours"
                     type="number"
@@ -1281,8 +1538,12 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               {/* Subtasks & Checklist Builder */}
               <div className="space-y-2 pt-2 border-t border-[#F0EBE1]">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#1C1F1E]">Granular Subtasks &amp; Step Checklist</label>
-                  <span className="text-[10px] font-mono text-[#8A9691]">{newSubtaskList.length} items</span>
+                  <label className="text-xs font-bold text-[#1C1F1E]">
+                    Granular Subtasks &amp; Step Checklist
+                  </label>
+                  <span className="text-[10px] font-mono text-[#8A9691]">
+                    {newSubtaskList.length} items
+                  </span>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -1292,7 +1553,7 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                     value={newSubtaskInput}
                     onChange={(e) => setNewSubtaskInput(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === "Enter") {
                         e.preventDefault();
                         handleAddSubtask();
                       }
@@ -1310,8 +1571,13 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
                 <div className="space-y-1.5 max-h-32 overflow-y-auto custom-scrollbar pt-1">
                   {newSubtaskList.map((sub) => (
-                    <div key={sub.id} className="flex items-center justify-between bg-[#FAF8F5] p-2 rounded-xl border border-[#EBE5DA] text-xs">
-                      <span className="text-[#1C1F1E] truncate max-w-[360px]">• {sub.title}</span>
+                    <div
+                      key={sub.id}
+                      className="flex items-center justify-between bg-[#FAF8F5] p-2 rounded-xl border border-[#EBE5DA] text-xs"
+                    >
+                      <span className="text-[#1C1F1E] truncate max-w-[360px]">
+                        • {sub.title}
+                      </span>
                       <button
                         type="button"
                         onClick={() => handleRemoveSubtask(sub.id)}
@@ -1341,9 +1607,7 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   Create &amp; Dispatch Task
                 </button>
               </div>
-
             </form>
-
           </div>
         </div>
       )}
@@ -1354,7 +1618,6 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
       {isTimerDrawerOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
           <div className="motion-dialog bg-white rounded-3xl border border-[#E8E1D5] max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl relative">
-            
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E1D5]">
               <div className="flex items-center space-x-2">
                 <Timer className="w-5 h-5 text-[#C58A3E]" />
@@ -1374,7 +1637,7 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
             {/* Timer Large Display */}
             <div className="bg-[#113227] text-white p-6 rounded-2xl text-center space-y-3 shadow-inner">
               <div className="text-[11px] font-mono uppercase tracking-widest text-[#E1F3EE]/80">
-                {isTimerRunning ? '● RECORDING LIVE TIME' : 'TIMER PAUSED'}
+                {isTimerRunning ? "● RECORDING LIVE TIME" : "TIMER PAUSED"}
               </div>
               <div className="text-4xl sm:text-5xl font-mono font-bold tracking-tight text-[#FAF0DE]">
                 {formatTimer(timerSeconds)}
@@ -1385,12 +1648,16 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   onClick={() => setIsTimerRunning(!isTimerRunning)}
                   className={`px-5 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 cursor-pointer transition-all ${
                     isTimerRunning
-                      ? 'bg-amber-500 hover:bg-amber-600 text-black'
-                      : 'bg-[#C58A3E] hover:bg-[#D49A4E] text-[#1C1F1E]'
+                      ? "bg-amber-500 hover:bg-amber-600 text-black"
+                      : "bg-[#C58A3E] hover:bg-[#D49A4E] text-[#1C1F1E]"
                   }`}
                 >
-                  {isTimerRunning ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                  <span>{isTimerRunning ? 'Pause Timer' : 'Start Timer'}</span>
+                  {isTimerRunning ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4" />
+                  )}
+                  <span>{isTimerRunning ? "Pause Timer" : "Start Timer"}</span>
                 </button>
                 <button
                   id="btn-timer-reset"
@@ -1408,9 +1675,10 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
 
             {/* Work Target Linkages */}
             <div className="space-y-3 text-xs">
-              
               <div className="space-y-1">
-                <label className="font-bold text-[#1C1F1E]">Target Client Account</label>
+                <label className="font-bold text-[#1C1F1E]">
+                  Target Client Account
+                </label>
                 <select
                   value={timerClient}
                   onChange={(e) => setTimerClient(e.target.value)}
@@ -1456,7 +1724,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
               </div>
 
               <div className="space-y-1">
-                <label className="font-bold text-[#1C1F1E]">Activity Notes</label>
+                <label className="font-bold text-[#1C1F1E]">
+                  Activity Notes
+                </label>
                 <textarea
                   rows={2}
                   value={timerDescription}
@@ -1465,7 +1735,6 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                   className="w-full px-3 py-2 bg-[#FAF7F2] border border-[#E0D7C8] rounded-xl text-[#1C1F1E] text-xs resize-none"
                 />
               </div>
-
             </div>
 
             {/* Action Buttons */}
@@ -1487,11 +1756,9 @@ export const TasksTimesheetsView: React.FC<TasksTimesheetsViewProps> = ({
                 <span>Save to Timesheet</span>
               </button>
             </div>
-
           </div>
         </div>
       )}
-
     </div>
   );
 };

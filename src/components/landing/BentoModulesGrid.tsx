@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Users,
   Briefcase,
@@ -14,8 +14,8 @@ import {
   FileCheck2,
   ChevronRight,
   X,
-} from 'lucide-react';
-import { CORE_MODULES, ModulePillar } from '../../data/landingData';
+} from "lucide-react";
+import { CORE_MODULES, ModulePillar } from "../../data/landingData";
 
 interface BentoModulesGridProps {
   onLaunchWorkspaceModule: (moduleId: string) => void;
@@ -24,21 +24,23 @@ interface BentoModulesGridProps {
 export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
   onLaunchWorkspaceModule,
 }) => {
-  const [selectedModule, setSelectedModule] = useState<ModulePillar | null>(null);
+  const [selectedModule, setSelectedModule] = useState<ModulePillar | null>(
+    null,
+  );
 
   const getModuleIcon = (id: string) => {
     switch (id) {
-      case 'firm-people':
+      case "firm-people":
         return <Users className="w-5 h-5 text-[#1F5946]" />;
-      case 'client-crm':
+      case "client-crm":
         return <Briefcase className="w-5 h-5 text-[#8A5A18]" />;
-      case 'tasks-timesheets':
+      case "tasks-timesheets":
         return <Clock className="w-5 h-5 text-[#1D526D]" />;
-      case 'audit-papers':
+      case "audit-papers":
         return <FileSpreadsheet className="w-5 h-5 text-[#94631D]" />;
-      case 'finance-billing':
+      case "finance-billing":
         return <Receipt className="w-5 h-5 text-[#8E362C]" />;
-      case 'ai-copilot':
+      case "ai-copilot":
         return <Bot className="w-5 h-5 text-[#5B21B6]" />;
       default:
         return <Layers className="w-5 h-5 text-[#113227]" />;
@@ -48,7 +50,6 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
   return (
     <section id="modules" className="py-20 sm:py-28 relative">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF0DE] border border-[#E8D7B8] text-[#8A5A18] text-xs font-bold uppercase tracking-widest mb-4">
@@ -59,7 +60,9 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
             Six Integrated Pillars Built for Firm Operations
           </h2>
           <p className="text-base sm:text-lg text-[#55615B] mt-4 leading-relaxed">
-            Every module connects natively with PostgreSQL Row-Level Security, eliminating data silos between audit teams, tax practitioners, and managing partners.
+            Every module connects natively with PostgreSQL Row-Level Security,
+            eliminating data silos between audit teams, tax practitioners, and
+            managing partners.
           </p>
         </div>
 
@@ -148,7 +151,6 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
               aria-hidden="true"
             />
             <div className="relative w-full max-w-2xl bg-white rounded-3xl border border-[#EBE6DD] shadow-2xl p-6 sm:p-8 z-10 max-h-[90vh] overflow-y-auto text-left">
-              
               {/* Close Button */}
               <button
                 type="button"
@@ -201,7 +203,10 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
 
               <div className="flex items-center justify-between pt-2 border-t border-[#EBE6DD]">
                 <div className="text-xs text-stone-500 font-mono">
-                  Standard: <span className="font-bold text-[#113227]">{selectedModule.metrics}</span>
+                  Standard:{" "}
+                  <span className="font-bold text-[#113227]">
+                    {selectedModule.metrics}
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
                   <button
@@ -224,11 +229,9 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         )}
-
       </div>
     </section>
   );

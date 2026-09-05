@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   X,
   Building,
@@ -18,8 +18,8 @@ import {
   ShieldCheck,
   Tag,
   Hash,
-} from 'lucide-react';
-import { ClientRequestItem, PBCFileRequirement } from '../../types';
+} from "lucide-react";
+import { ClientRequestItem, PBCFileRequirement } from "../../types";
 
 interface ClientRequestDetailModalProps {
   isOpen: boolean;
@@ -27,18 +27,20 @@ interface ClientRequestDetailModalProps {
   request: ClientRequestItem | null;
   onUpdateStatus: (
     requestId: string,
-    status: ClientRequestItem['status']
+    status: ClientRequestItem["status"],
   ) => void;
   onToggleFileReceived: (
     requestId: string,
     fileId: string,
-    received: boolean
+    received: boolean,
   ) => void;
   onSendInstantReminder: (requestId: string) => void;
-  onToast?: (message: string, type: 'success' | 'info' | 'error') => void;
+  onToast?: (message: string, type: "success" | "info" | "error") => void;
 }
 
-export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> = ({
+export const ClientRequestDetailModal: React.FC<
+  ClientRequestDetailModalProps
+> = ({
   isOpen,
   onClose,
   request,
@@ -51,12 +53,15 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
 
   const files = request.fileRequirements || [];
   const receivedFilesCount = files.filter((f) => f.received).length;
-  const progressPercent = files.length > 0 ? Math.round((receivedFilesCount / files.length) * 100) : 0;
+  const progressPercent =
+    files.length > 0
+      ? Math.round((receivedFilesCount / files.length) * 100)
+      : 0;
 
-  const handleStatusChange = (newStatus: ClientRequestItem['status']) => {
+  const handleStatusChange = (newStatus: ClientRequestItem["status"]) => {
     onUpdateStatus(request.id, newStatus);
     if (onToast) {
-      onToast(`Request status updated to "${newStatus}".`, 'success');
+      onToast(`Request status updated to "${newStatus}".`, "success");
     }
   };
 
@@ -67,7 +72,6 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
   return (
     <div className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn text-left">
       <div className="bg-white rounded-3xl border border-[#EBE6DD] max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
-        
         {/* Modal Header */}
         <div className="p-6 bg-[#FAF7F2] border-b border-[#EBE6DD] flex items-start justify-between">
           <div className="space-y-1">
@@ -77,24 +81,25 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
               </span>
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  request.priority === 'High'
-                    ? 'bg-rose-100 text-rose-800'
-                    : request.priority === 'Medium'
-                    ? 'bg-amber-100 text-amber-800'
-                    : 'bg-stone-100 text-stone-700'
+                  request.priority === "High"
+                    ? "bg-rose-100 text-rose-800"
+                    : request.priority === "Medium"
+                      ? "bg-amber-100 text-amber-800"
+                      : "bg-stone-100 text-stone-700"
                 }`}
               >
                 {request.priority} Priority
               </span>
               <span
                 className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                  request.status === 'Accepted' || request.status === 'Resolved'
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : request.status === 'Overdue'
-                    ? 'bg-rose-100 text-rose-800'
-                    : request.status === 'Under Verification' || request.status === 'Received & Verifying'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'bg-amber-50 text-amber-800 border border-amber-200'
+                  request.status === "Accepted" || request.status === "Resolved"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : request.status === "Overdue"
+                      ? "bg-rose-100 text-rose-800"
+                      : request.status === "Under Verification" ||
+                          request.status === "Received & Verifying"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-amber-50 text-amber-800 border border-amber-200"
                 }`}
               >
                 {request.status}
@@ -106,7 +111,9 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
             </h2>
 
             <div className="text-xs text-stone-500 font-medium">
-              Client: <strong className="text-stone-800">{request.clientName}</strong> • {request.engagementCode || 'Audit Requisition'}
+              Client:{" "}
+              <strong className="text-stone-800">{request.clientName}</strong> •{" "}
+              {request.engagementCode || "Audit Requisition"}
             </div>
           </div>
 
@@ -120,16 +127,18 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
 
         {/* Modal Body */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-[#FAF8F5]">
-          
           {/* Progress Bar & Status Pipeline */}
           <div className="bg-white p-5 rounded-2xl border border-[#EBE6DD] shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold font-serif uppercase tracking-wider text-[#1C1F1E]">
-                Deliverables Received: {receivedFilesCount} of {files.length} ({progressPercent}%)
+                Deliverables Received: {receivedFilesCount} of {files.length} (
+                {progressPercent}%)
               </span>
-              
+
               <div className="flex items-center space-x-2">
-                <span className="text-xs text-stone-500 font-medium">Pipeline Stage:</span>
+                <span className="text-xs text-stone-500 font-medium">
+                  Pipeline Stage:
+                </span>
                 <select
                   value={request.status}
                   onChange={(e) => handleStatusChange(e.target.value as any)}
@@ -184,16 +193,26 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-[#FAF8F5] p-3.5 rounded-xl border border-[#ECE5D9]">
               <div className="space-y-1">
-                <div className="text-stone-500 text-[10px] font-bold uppercase">Recipient</div>
-                <div className="font-bold text-stone-900">{request.targetContact?.name || 'Client Management'}</div>
-                <div className="text-[11px] text-stone-500">{request.targetContact?.designation || 'Finance Department'}</div>
+                <div className="text-stone-500 text-[10px] font-bold uppercase">
+                  Recipient
+                </div>
+                <div className="font-bold text-stone-900">
+                  {request.targetContact?.name || "Client Management"}
+                </div>
+                <div className="text-[11px] text-stone-500">
+                  {request.targetContact?.designation || "Finance Department"}
+                </div>
               </div>
 
               <div className="space-y-1">
-                <div className="text-stone-500 text-[10px] font-bold uppercase">Contact Channels</div>
+                <div className="text-stone-500 text-[10px] font-bold uppercase">
+                  Contact Channels
+                </div>
                 <div className="flex items-center space-x-1 text-stone-700">
                   <Mail className="w-3.5 h-3.5 text-[#113227]" />
-                  <span>{request.targetContact?.email || 'finance@client.com'}</span>
+                  <span>
+                    {request.targetContact?.email || "finance@client.com"}
+                  </span>
                 </div>
                 {request.targetContact?.phone && (
                   <div className="flex items-center space-x-1 text-stone-700">
@@ -204,8 +223,19 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
               </div>
 
               <div className="space-y-1 sm:col-span-2 pt-2 border-t border-[#E5DDD0] flex items-center justify-between text-[11px] text-stone-500">
-                <span>Requested: <strong>{request.requestedDate}</strong> • Due: <strong className="text-[#8A5A18]">{request.dueDate}</strong></span>
-                <span>Reminders Sent: <strong className="text-stone-800">{request.remindersCount || 0}</strong> {request.lastReminderSent ? `(Last: ${request.lastReminderSent})` : ''}</span>
+                <span>
+                  Requested: <strong>{request.requestedDate}</strong> • Due:{" "}
+                  <strong className="text-[#8A5A18]">{request.dueDate}</strong>
+                </span>
+                <span>
+                  Reminders Sent:{" "}
+                  <strong className="text-stone-800">
+                    {request.remindersCount || 0}
+                  </strong>{" "}
+                  {request.lastReminderSent
+                    ? `(Last: ${request.lastReminderSent})`
+                    : ""}
+                </span>
               </div>
             </div>
           </div>
@@ -217,11 +247,15 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
                 <FileText className="w-4 h-4 text-[#113227]" />
                 <span>Required Deliverable Files ({files.length})</span>
               </h4>
-              <span className="text-[10px] text-stone-400">Click check to toggle verification</span>
+              <span className="text-[10px] text-stone-400">
+                Click check to toggle verification
+              </span>
             </div>
 
             {files.length === 0 ? (
-              <p className="text-xs text-stone-400 italic">No specific sub-files attached to this request.</p>
+              <p className="text-xs text-stone-400 italic">
+                No specific sub-files attached to this request.
+              </p>
             ) : (
               <div className="space-y-2.5">
                 {files.map((file) => (
@@ -229,13 +263,19 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
                     key={file.id}
                     className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
                       file.received
-                        ? 'bg-[#E1F3EE]/50 border-[#BCE1D5]'
-                        : 'bg-[#FAF8F5] border-[#ECE5D9]'
+                        ? "bg-[#E1F3EE]/50 border-[#BCE1D5]"
+                        : "bg-[#FAF8F5] border-[#ECE5D9]"
                     }`}
                   >
                     <div className="flex items-start space-x-3">
                       <button
-                        onClick={() => onToggleFileReceived(request.id, file.id, !file.received)}
+                        onClick={() =>
+                          onToggleFileReceived(
+                            request.id,
+                            file.id,
+                            !file.received,
+                          )
+                        }
                         className="mt-0.5 cursor-pointer text-[#113227]"
                       >
                         {file.received ? (
@@ -255,7 +295,8 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
                           )}
                         </div>
                         <div className="text-[10px] text-stone-500 font-mono">
-                          Format: {file.format} {file.fileSize ? `• ${file.fileSize}` : ''}
+                          Format: {file.format}{" "}
+                          {file.fileSize ? `• ${file.fileSize}` : ""}
                         </div>
                         {file.received && file.fileHash && (
                           <div className="text-[9px] font-mono text-emerald-800 flex items-center gap-1 mt-0.5">
@@ -270,11 +311,15 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
                       {file.received ? (
                         <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
-                          <span>Received ({file.receivedDate || 'Verified'})</span>
+                          <span>
+                            Received ({file.receivedDate || "Verified"})
+                          </span>
                         </span>
                       ) : (
                         <button
-                          onClick={() => onToggleFileReceived(request.id, file.id, true)}
+                          onClick={() =>
+                            onToggleFileReceived(request.id, file.id, true)
+                          }
                           className="px-2.5 py-1 bg-white border border-[#E5DDD0] text-[11px] font-semibold text-stone-700 rounded-lg hover:bg-stone-50 cursor-pointer"
                         >
                           Mark as Received
@@ -286,20 +331,20 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
               </div>
             )}
           </div>
-
         </div>
 
         {/* Modal Footer */}
         <div className="p-4 bg-[#FAF7F2] border-t border-[#EBE6DD] flex items-center justify-between text-xs text-stone-500">
           <div className="text-[11px]">
-            Staff In-Charge: <strong className="text-stone-800">{request.assignedStaff}</strong>
+            Staff In-Charge:{" "}
+            <strong className="text-stone-800">{request.assignedStaff}</strong>
           </div>
 
           <div className="flex items-center space-x-2">
-            {request.status !== 'Accepted' && (
+            {request.status !== "Accepted" && (
               <button
                 onClick={() => {
-                  handleStatusChange('Accepted');
+                  handleStatusChange("Accepted");
                   onClose();
                 }}
                 className="btn-forest px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-xs cursor-pointer"
@@ -316,7 +361,6 @@ export const ClientRequestDetailModal: React.FC<ClientRequestDetailModalProps> =
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );
