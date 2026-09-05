@@ -45,7 +45,6 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
 
 export const authApi = {
   login: (email: string, password: string) => apiRequest<{ user: BackendUser; requireMfa: boolean }>('/api/v1/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
-  register: (email: string, password: string, fullName: string) => apiRequest<{ user: BackendUser }>('/api/v1/auth/register', { method: 'POST', body: JSON.stringify({ email, password, fullName }) }),
   me: () => apiRequest<{ user: BackendUser; aal: 'aal1' | 'aal2' }>('/api/v1/auth/me'),
   refresh: () => refreshSession(),
   logout: () => apiRequest<{ message: string }>('/api/v1/auth/logout', { method: 'POST' }),
