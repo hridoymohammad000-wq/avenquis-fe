@@ -69,10 +69,11 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
         {/* 6 Bento Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {CORE_MODULES.map((module) => (
-            <div
+            <button
               key={module.id}
+              type="button"
               onClick={() => setSelectedModule(module)}
-              className="motion-card bg-white rounded-3xl p-6 sm:p-7 border border-[#EBE6DD] hover:border-[#113227]/40 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer text-left relative overflow-hidden"
+              className="motion-card bg-white rounded-3xl p-6 sm:p-7 border border-[#EBE6DD] hover:border-[#113227]/40 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group cursor-pointer text-left relative overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-[#113227]"
             >
               {/* Subtle top indicator */}
               <div className="flex items-center justify-between mb-4">
@@ -128,7 +129,6 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
                 ))}
               </div>
 
-              {/* Card Footer: Live Tag & Interactive CTA */}
               <div className="pt-2 flex items-center justify-between text-xs">
                 <span className="text-[11px] font-semibold text-stone-500 font-mono">
                   {module.metrics}
@@ -138,7 +138,7 @@ export const BentoModulesGrid: React.FC<BentoModulesGridProps> = ({
                   <ChevronRight className="w-3.5 h-3.5 text-[#C58A3E]" />
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
 

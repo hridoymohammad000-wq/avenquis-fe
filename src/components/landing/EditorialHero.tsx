@@ -71,7 +71,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
 
         {/* Subheadline */}
         <motion.p
-          className="text-base sm:text-xl text-[#55615B] leading-relaxed max-w-3xl mx-auto mb-10 font-normal"
+          className="text-lg sm:text-xl text-[#66706B] leading-relaxed max-w-3xl mx-auto mb-10 font-medium"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.36, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
@@ -92,7 +92,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
             type="button"
             id="hero-primary-cta-btn"
             onClick={onStartTesting}
-            className="w-full sm:w-auto bg-[#113227] hover:bg-[#1A4537] text-white px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-emerald-950/15 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer group"
+            className="w-full sm:w-auto bg-[#113227] hover:bg-[#1A4537] text-white px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-emerald-950/15 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#113227]"
           >
             <span>Request a Demo</span>
             <ArrowRight className="w-4 h-4 text-[#C58A3E] group-hover:translate-x-1 transition-transform" />
@@ -102,7 +102,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
             type="button"
             id="hero-secondary-cta-btn"
             onClick={onExploreArchitecture}
-            className="w-full sm:w-auto bg-white/90 hover:bg-white text-[#1C1F1E] border border-[#DCD5C7] px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-2xs hover:border-[#113227]/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto bg-white hover:bg-[#FAF7F2] text-[#113227] border border-[#DCD5C7] px-8 py-4 rounded-full font-bold text-sm sm:text-base shadow-sm hover:border-[#113227] transition-all flex items-center justify-center gap-2 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#113227]"
           >
             <span>Explore Demo</span>
             <ExternalLink className="w-4 h-4 text-[#8A5A18]" />
@@ -111,7 +111,7 @@ export const EditorialHero: React.FC<EditorialHeroProps> = ({
 
         {/* Perspective Preview Mockup Container */}
         <motion.div
-          className="relative max-w-6xl mx-auto"
+          className="relative max-w-6xl mx-auto motion-card"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.46, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}

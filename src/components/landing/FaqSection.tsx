@@ -50,7 +50,7 @@ export const FaqSection: React.FC = () => {
                 setActiveCategory(cat);
                 setOpenIndex(null);
               }}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#113227] focus-visible:ring-offset-2 ${
                 activeCategory === cat
                   ? "bg-[#113227] text-white shadow-xs"
                   : "bg-[#FAF7F2] text-[#55615B] hover:bg-[#EAE3D7] border border-[#E0D8CA]"
@@ -77,7 +77,7 @@ export const FaqSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left focus:outline-none cursor-pointer"
+                  className="w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#113227] focus-visible:ring-offset-2 rounded-2xl cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono font-bold text-[#8A5A18] px-2 py-0.5 rounded bg-[#FAF0DE] border border-[#E8D7B8] shrink-0">
