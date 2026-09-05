@@ -59,22 +59,27 @@ import {
   INITIAL_FIRM_PROFILE,
   INITIAL_USER_SESSIONS,
   INITIAL_SECURITY_LOGS,
-} from "../../data/workspaceData";
+} from '../../data/workspaceData';
+import { tenantApi } from '../../lib/api';
 
 interface WorkspaceLayoutProps {
   initialTab?: WorkspaceTab;
+  initialUser?: UserSession;
+  initialTenants?: { id: string; name: string; location: string; activeEngagements: number }[];
   onSignOut: () => void;
   showToast: (message: string, type?: "success" | "info") => void;
 }
 
 export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
-  initialTab = "dashboard",
+  initialTab = 'dashboard',
+  initialUser,
+  initialTenants,
   onSignOut,
   showToast,
 }) => {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>(initialTab);
-  const [currentUser, setCurrentUser] = useState<UserSession>(CURRENT_USER);
-  const [availableTenants, setAvailableTenants] = useState(AVAILABLE_TENANTS);
+  const [currentUser, setCurrentUser] = useState<UserSession>(initialUser || CURRENT_USER);
+  const [availableTenants, setAvailableTenants] = useState(initialTenants || AVAILABLE_TENANTS);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isAiOpen, setIsAiOpen] = useState(false);
@@ -119,9 +124,13 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
 
   // Handlers
   const handleSwitchTenant = (tenantName: string) => {
-    setCurrentUser((prev) => ({ ...prev, tenant: tenantName }));
-    setFirmProfile((prev) => ({ ...prev, firmName: tenantName }));
-    showToast(`Switched active practice to "${tenantName}"`, "info");
+    const selected = availableTenants.find((tenant) => tenant.name === tenantName);
+    if (!selected || !currentUser.id) return;
+    tenantApi.switch(selected.id).then(() => tenantApi.current(selected.id)).then((context) => {
+      setCurrentUser((prev) => ({ ...prev, tenant: context.tenant.name, tenantId: selected.id, membershipId: context.membership.id, permissions: context.permissions }));
+      setFirmProfile((prev) => ({ ...prev, firmName: context.tenant.name }));
+      showToast(`Switched active practice to "${context.tenant.name}"`, 'info');
+    }).catch((error: Error) => showToast(error.message || 'Unable to switch practice.', 'info'));
   };
 
   const handleAddNewTenant = (newTenant: {

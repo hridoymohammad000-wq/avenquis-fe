@@ -31,9 +31,7 @@ export const ArchitectureSection: React.FC = () => {
             Built with Strict Security Invariants
           </h2>
           <p className="text-base sm:text-lg text-[#55615B] mt-4 leading-relaxed">
-            Accounting, audit, and tax practices handle sensitive financial
-            statements and trade secrets. AVENQUIS is engineered from the
-            database layer upwards to guarantee isolation and non-repudiation.
+            Accounting, audit, and tax practices handle sensitive financial statements and trade secrets. AVENQUIS uses tenant policy architecture and evidence-integrity controls designed to support governed workflows.
           </p>
         </div>
 
@@ -90,7 +88,7 @@ export const ArchitectureSection: React.FC = () => {
               </h3>
             </div>
             <span className="text-xs font-mono px-3 py-1.5 rounded-full bg-[#E1F3EE] text-[#1F5946] font-bold border border-[#C8E9DE]">
-              Zero-Trust Architecture
+              Tenant Policy Architecture
             </span>
           </div>
 
@@ -144,31 +142,19 @@ export const ArchitectureSection: React.FC = () => {
               <ul className="space-y-3 text-xs text-[#1F5946]">
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-700 font-bold">✓</span>
-                  <span>
-                    PostgreSQL Row-Level Security ensures 100% tenant isolation
-                    per firm.
-                  </span>
+                  <span>PostgreSQL Row-Level Security provides tenant-scoped policy controls designed to support isolated workflows.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-700 font-bold">✓</span>
-                  <span>
-                    Encrypted client portal with status-tagged document requests
-                    and automated reminders.
-                  </span>
+                  <span>Client portal workflows with status-tagged document requests and controlled reminders.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-700 font-bold">✓</span>
-                  <span>
-                    Integrated timesheets convert directly into statutory 15%
-                    VAT fee tax invoices.
-                  </span>
+                  <span>Integrated timesheets can support statutory VAT billing workflows where configured.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-emerald-700 font-bold">✓</span>
-                  <span>
-                    Cryptographic SHA-256 digital seals with immutable review
-                    logs for ISA 220 compliance.
-                  </span>
+                  <span>SHA-256 evidence integrity controls designed to support audit documentation workflows.</span>
                 </li>
               </ul>
             </div>

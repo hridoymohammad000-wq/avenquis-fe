@@ -19,17 +19,6 @@ export interface NavLinkItem {
   id: string;
 }
 
-export type AuthMode = "signin" | "signup" | "forgot";
-
-export interface AuthFormData {
-  name?: string;
-  email: string;
-  password: string;
-  confirmPassword?: string;
-  rememberMe: boolean;
-  role?: string;
-}
-
 export interface ToastMessage {
   id: string;
   type: "success" | "info" | "error";
@@ -38,12 +27,17 @@ export interface ToastMessage {
 }
 
 export interface UserSession {
+  id?: string;
   name: string;
   email: string;
   role: string;
   tenant: string;
   initials: string;
   avatarColor: string;
+  tenantId?: string;
+  membershipId?: string;
+  permissions?: string[];
+  mfaEnabled?: boolean;
 }
 
 export type WorkspaceTab =
