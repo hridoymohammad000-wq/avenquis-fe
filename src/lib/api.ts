@@ -30,6 +30,12 @@ export interface AdminInvoice { id: string; tenantId: string; subscriptionId: st
 export interface AdminSupportCase { id: string; tenantId: string | null; subject: string; description: string; priority: string; status: string; assignedToUserId: string | null; resolutionMetadata: Record<string, unknown> | null; createdAt: string; updatedAt: string; }
 export interface AdminSetting { id: string; key: string; value: unknown; description: string | null; updatedAt: string; }
 export interface AdminAuditLog { id: string; actorUserId: string | null; platformRole: string; action: string; targetType: string; targetId: string | null; beforeMetadata: Record<string, unknown> | null; afterMetadata: Record<string, unknown> | null; requestId: string | null; createdAt: string; }
+export interface AdminAiAgent { id: string; code: string; name: string; purpose: string; allowedTools: string[]; autonomyLevel: string; riskLevel: string; provider: string | null; model: string | null; enabled: boolean; }
+export interface AdminAiRun { id: string; agentId: string; status: string; requestedByUserId: string; requestSummary: string; rationale: string | null; errorCode: string | null; createdAt: string; }
+export interface AdminAiApproval { id: string; runId: string; agentId: string; requestedAction: string; riskLevel: string; requestedByUserId: string; rationale: string; status: string; createdAt: string; }
+export interface AdminAiUsage { id: string; runId: string; agentId: string; provider: string; model: string; inputTokens: number | null; outputTokens: number | null; estimatedCost: string | null; latencyMs: number | null; createdAt: string; }
+export interface AdminAiPolicy { id: string; policyKey: string; value: unknown; updatedAt: string; }
+export interface AdminAiSummary { agents: Array<Pick<AdminAiAgent, 'id' | 'code' | 'enabled' | 'autonomyLevel' | 'provider' | 'model'>>; runCount: number; pendingApprovalCount: number; usageRecordCount: number; providerConfigured: boolean; }
 
 export const adminApi = {
   overview: () => apiRequest<AdminOverview>('/api/v1/admin/overview'),
@@ -48,4 +54,16 @@ export const adminApi = {
   support: () => apiRequest<AdminSupportCase[]>('/api/v1/admin/support'),
   settings: () => apiRequest<AdminSetting[]>('/api/v1/admin/settings'),
   auditLogs: () => apiRequest<AdminAuditLog[]>('/api/v1/admin/audit-logs'),
+};
+export const adminAiApi = {
+  summary: () => apiRequest<AdminAiSummary>('/api/v1/admin/ai/summary'),
+  agents: () => apiRequest<AdminAiAgent[]>('/api/v1/admin/ai/agents'),
+  updateAgent: (id: string, payload: { enabled?: boolean; autonomyLevel?: string }) => apiRequest<AdminAiAgent>(`/api/v1/admin/ai/agents/${id}`, { method: 'PATCH', body: JSON.stringify(payload) }),
+  runs: () => apiRequest<AdminAiRun[]>('/api/v1/admin/ai/runs'),
+  approvals: () => apiRequest<AdminAiApproval[]>('/api/v1/admin/ai/approvals'),
+  approve: (id: string) => apiRequest<AdminAiApproval>(`/api/v1/admin/ai/approvals/${id}/approve`, { method: 'POST', body: '{}' }),
+  reject: (id: string) => apiRequest<AdminAiApproval>(`/api/v1/admin/ai/approvals/${id}/reject`, { method: 'POST', body: '{}' }),
+  automations: () => apiRequest<unknown[]>('/api/v1/admin/ai/automations'),
+  policies: () => apiRequest<AdminAiPolicy[]>('/api/v1/admin/ai/policies'),
+  usage: () => apiRequest<AdminAiUsage[]>('/api/v1/admin/ai/usage'),
 };

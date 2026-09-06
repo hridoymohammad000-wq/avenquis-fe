@@ -24,8 +24,9 @@ import {
 } from 'lucide-react';
 import { adminApi, AdminAccessRequest, AdminAuditLog, AdminDemoRequest, AdminFirm, AdminInvoice, AdminLead, AdminOverview, AdminPlan, AdminSetting, AdminSubscription, AdminSupportCase } from '../../lib/api';
 import { UserSession } from '../../types';
+import { AdminAiConsole, isAdminAiPath } from './AdminAiConsole';
 
-type AdminPath = '/admin' | '/admin/overview' | '/admin/firms' | '/admin/leads' | '/admin/billing' | '/admin/collections' | '/admin/growth' | '/admin/support' | '/admin/settings';
+type AdminPath = '/admin' | '/admin/overview' | '/admin/firms' | '/admin/leads' | '/admin/billing' | '/admin/collections' | '/admin/growth' | '/admin/support' | '/admin/settings' | '/admin/ai';
 type Loader<T> = () => Promise<T>;
 
 const navItems: Array<{ href: AdminPath; label: string; icon: typeof LayoutDashboard }> = [
@@ -37,6 +38,7 @@ const navItems: Array<{ href: AdminPath; label: string; icon: typeof LayoutDashb
   { href: '/admin/growth', label: 'Growth', icon: BarChart3 },
   { href: '/admin/support', label: 'Support', icon: Headphones },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
+  { href: '/admin/ai', label: 'AI Control Center', icon: Gauge },
 ];
 
 function useAdminResource<T>(loader: Loader<T>, key: string) {
@@ -56,7 +58,7 @@ export function confirmPrivilegedAction(message: string): boolean { return typeo
 export function AdminConsole({ path, session, navigate, onSignOut }: { path: string; session: UserSession; navigate: (href: string) => void; onSignOut: () => Promise<void> }) {
   const activePath = (path === '/admin' ? '/admin/overview' : path) as AdminPath;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeItem = navItems.find((item) => item.href === activePath) ?? navItems[0];
+  const activeItem = isAdminAiPath(path) ? navItems.find((item) => item.href === '/admin/ai')! : navItems.find((item) => item.href === activePath) ?? navItems[0];
   return <div className="min-h-screen bg-[#F5F7F6] text-[#19221E] flex">
     <aside className={`${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-72 bg-[#102E25] text-white flex flex-col transition-transform duration-200`} aria-label="Admin console navigation">
       <div className="px-6 py-7 border-b border-white/10 flex items-center justify-between"><button type="button" onClick={() => navigate('/admin/overview')} className="text-left"><p className="font-serif text-xl font-bold tracking-[0.14em]">AVEN<span className="text-[#D7A45D]">—</span>QUIS</p><p className="mt-1 text-[10px] tracking-[0.22em] uppercase text-[#A8C6BB]">Platform admin</p></button><button type="button" className="lg:hidden p-2 rounded-lg hover:bg-white/10" onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X className="w-5 h-5" /></button></div>
@@ -64,7 +66,7 @@ export function AdminConsole({ path, session, navigate, onSignOut }: { path: str
       <div className="p-4 border-t border-white/10"><div className="rounded-2xl bg-white/8 p-4"><div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-[#D7A45D] text-[#102E25] flex items-center justify-center font-bold">{session.initials}</div><div className="min-w-0"><p className="text-sm font-semibold truncate">{session.name}</p><p className="text-[11px] text-[#B8CBC3] truncate">{session.email}</p></div></div><div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[#D7A45D]/35 bg-[#D7A45D]/10 px-2.5 py-1 text-[10px] font-bold text-[#F3D39D]"><ShieldCheck className="w-3 h-3" />{session.role || 'Platform staff'}</div><button type="button" onClick={() => void onSignOut()} className="mt-4 flex items-center gap-2 text-xs text-[#B8CBC3] hover:text-white"><LogOut className="w-3.5 h-3.5" />Sign out</button></div></div>
     </aside>
     {mobileOpen && <button type="button" className="fixed inset-0 z-30 bg-[#102E25]/45 lg:hidden" onClick={() => setMobileOpen(false)} aria-label="Close navigation overlay" />}
-    <div className="min-w-0 flex-1 flex flex-col"><header className="h-20 bg-white border-b border-[#DFE6E2] flex items-center justify-between px-5 sm:px-8"><div className="flex items-center gap-3"><button type="button" className="lg:hidden p-2 rounded-xl hover:bg-[#F0F4F1]" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu className="w-5 h-5" /></button><div><p className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#7B8B84]">Internal platform</p><h1 className="text-xl sm:text-2xl font-serif font-bold text-[#102E25]">{activeItem.label}</h1></div></div><div className="hidden sm:flex items-center gap-3"><div className="text-right"><p className="text-xs font-semibold text-[#27352F]">{session.name}</p><p className="text-[11px] text-[#7B8B84]">Platform access verified</p></div><div className="w-9 h-9 rounded-xl bg-[#E5F1EC] text-[#1F5946] flex items-center justify-center font-bold text-xs">{session.initials}</div></div></header><main className="flex-1 px-5 py-7 sm:px-8 lg:px-10 max-w-[1600px] w-full mx-auto">{activePath === '/admin/overview' && <OverviewPage navigate={navigate} />}{activePath === '/admin/firms' && <FirmsPage session={session} />}{activePath === '/admin/leads' && <LeadsPage />}{activePath === '/admin/billing' && <BillingPage />}{activePath === '/admin/collections' && <CollectionsPage />}{activePath === '/admin/growth' && <GrowthPage />}{activePath === '/admin/support' && <SupportPage />}{activePath === '/admin/settings' && <SettingsPage />}</main></div>
+    <div className="min-w-0 flex-1 flex flex-col"><header className="h-20 bg-white border-b border-[#DFE6E2] flex items-center justify-between px-5 sm:px-8"><div className="flex items-center gap-3"><button type="button" className="lg:hidden p-2 rounded-xl hover:bg-[#F0F4F1]" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu className="w-5 h-5" /></button><div><p className="text-[11px] uppercase tracking-[0.2em] font-bold text-[#7B8B84]">Internal platform</p><h1 className="text-xl sm:text-2xl font-serif font-bold text-[#102E25]">{activeItem.label}</h1></div></div><div className="hidden sm:flex items-center gap-3"><div className="text-right"><p className="text-xs font-semibold text-[#27352F]">{session.name}</p><p className="text-[11px] text-[#7B8B84]">Platform access verified</p></div><div className="w-9 h-9 rounded-xl bg-[#E5F1EC] text-[#1F5946] flex items-center justify-center font-bold text-xs">{session.initials}</div></div></header><main className="flex-1 px-5 py-7 sm:px-8 lg:px-10 max-w-[1600px] w-full mx-auto">{isAdminAiPath(path) && <AdminAiConsole path={path} />}{activePath === '/admin/overview' && <OverviewPage navigate={navigate} />}{activePath === '/admin/firms' && <FirmsPage session={session} />}{activePath === '/admin/leads' && <LeadsPage />}{activePath === '/admin/billing' && <BillingPage />}{activePath === '/admin/collections' && <CollectionsPage />}{activePath === '/admin/growth' && <GrowthPage />}{activePath === '/admin/support' && <SupportPage />}{activePath === '/admin/settings' && <SettingsPage />}</main></div>
   </div>;
 }
 
