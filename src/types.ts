@@ -38,6 +38,7 @@ export interface UserSession {
   membershipId?: string;
   permissions?: string[];
   mfaEnabled?: boolean;
+  platformRoles?: string[];
 }
 
 export type WorkspaceTab =
