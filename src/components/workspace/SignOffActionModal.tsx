@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Award,
   ShieldCheck,
@@ -15,14 +15,14 @@ import {
   Clock,
   UserCheck,
   Hash,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   SignOffItem,
   SignOffChecklist,
   DigitalSignatureSeal,
   ReviewNote,
-} from '../../types';
-import { SignOffSealBadge } from './SignOffSealBadge';
+} from "../../types";
+import { SignOffSealBadge } from "./SignOffSealBadge";
 
 interface SignOffActionModalProps {
   isOpen: boolean;
@@ -31,17 +31,17 @@ interface SignOffActionModalProps {
   onApproveAndSignOff: (
     signoffId: string,
     checklist: SignOffChecklist,
-    roleLevel: 'Manager' | 'Partner' | 'EQCR',
-    signerComment: string
+    roleLevel: "Manager" | "Partner" | "EQCR",
+    signerComment: string,
   ) => void;
   onRejectWithReviewNote: (
     signoffId: string,
     reason: string,
-    targetSection: string
+    targetSection: string,
   ) => void;
   onRequestClarification: (signoffId: string, message: string) => void;
   onOpenReviewNotes?: (signoff: SignOffItem) => void;
-  onToast?: (message: string, type: 'success' | 'info' | 'error') => void;
+  onToast?: (message: string, type: "success" | "info" | "error") => void;
 }
 
 export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
@@ -55,18 +55,24 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
   onToast,
 }) => {
   // Modal Action Tab: 'signoff' | 'reject' | 'clarify'
-  const [activeAction, setActiveAction] = useState<'signoff' | 'reject' | 'clarify'>('signoff');
+  const [activeAction, setActiveAction] = useState<
+    "signoff" | "reject" | "clarify"
+  >("signoff");
 
   // Role Level Selection for Signer
-  const [signerRole, setSignerRole] = useState<'Manager' | 'Partner' | 'EQCR'>('Manager');
-  const [signerComment, setSignerComment] = useState('');
+  const [signerRole, setSignerRole] = useState<"Manager" | "Partner" | "EQCR">(
+    "Manager",
+  );
+  const [signerComment, setSignerComment] = useState("");
 
   // Rejection Form State
-  const [rejectReason, setRejectReason] = useState('');
-  const [rejectSection, setRejectSection] = useState('Section 2: Substantive Sampling & Testing');
+  const [rejectReason, setRejectReason] = useState("");
+  const [rejectSection, setRejectSection] = useState(
+    "Section 2: Substantive Sampling & Testing",
+  );
 
   // Clarification Form State
-  const [clarifyMessage, setClarifyMessage] = useState('');
+  const [clarifyMessage, setClarifyMessage] = useState("");
 
   // Interactive Checklist State
   const [checklist, setChecklist] = useState<SignOffChecklist>({
@@ -92,16 +98,16 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
         });
       }
       setSignerRole(
-        signoff.roleRequired === 'Partner Sign-off'
-          ? 'Partner'
-          : signoff.roleRequired === 'EQCR Review'
-          ? 'EQCR'
-          : 'Manager'
+        signoff.roleRequired === "Partner Sign-off"
+          ? "Partner"
+          : signoff.roleRequired === "EQCR Review"
+            ? "EQCR"
+            : "Manager",
       );
-      setSignerComment('');
-      setRejectReason('');
-      setClarifyMessage('');
-      setActiveAction('signoff');
+      setSignerComment("");
+      setRejectReason("");
+      setClarifyMessage("");
+      setActiveAction("signoff");
     }
   }, [signoff]);
 
@@ -140,12 +146,13 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
     onClose();
   };
 
-  const openReviewNotes = (signoff.reviewNotes || []).filter((n) => n.status === 'Open');
+  const openReviewNotes = (signoff.reviewNotes || []).filter(
+    (n) => n.status === "Open",
+  );
 
   return (
     <div className="fixed inset-0 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fadeIn text-left">
       <div className="bg-white rounded-3xl border border-[#EBE6DD] max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden shadow-2xl">
-        
         {/* Modal Header */}
         <div className="p-6 bg-[#FAF7F2] border-b border-[#EBE6DD] flex items-start justify-between">
           <div className="space-y-1">
@@ -161,13 +168,13 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
               </span>
               <span
                 className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  signoff.status === 'Signed'
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : signoff.status === 'Rejected'
-                    ? 'bg-rose-100 text-rose-800'
-                    : signoff.status === 'Clarification Requested'
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'bg-amber-100 text-amber-800'
+                  signoff.status === "Signed"
+                    ? "bg-emerald-100 text-emerald-800"
+                    : signoff.status === "Rejected"
+                      ? "bg-rose-100 text-rose-800"
+                      : signoff.status === "Clarification Requested"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-amber-100 text-amber-800"
                 }`}
               >
                 {signoff.status}
@@ -179,7 +186,13 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             </h2>
 
             <div className="text-xs text-stone-500 font-medium">
-              Client: <strong className="text-stone-800">{signoff.clientName}</strong> • Engagement: <strong className="text-stone-800">{signoff.engagementCode}</strong> ({signoff.financialYear || 'FY 2025-26'})
+              Client:{" "}
+              <strong className="text-stone-800">{signoff.clientName}</strong> •
+              Engagement:{" "}
+              <strong className="text-stone-800">
+                {signoff.engagementCode}
+              </strong>{" "}
+              ({signoff.financialYear || "FY 2025-26"})
             </div>
           </div>
 
@@ -193,7 +206,6 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
 
         {/* Modal Scrollable Body */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 bg-[#FAF8F5]">
-          
           {/* Working Paper Hash & Metadata Bar */}
           <div className="p-4 rounded-2xl bg-white border border-[#EBE6DD] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center space-x-3">
@@ -211,7 +223,8 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             </div>
 
             <div className="text-right text-[11px] text-stone-500 shrink-0">
-              Submitted by <strong>{signoff.submittedBy}</strong> on {signoff.submittedDate}
+              Submitted by <strong>{signoff.submittedBy}</strong> on{" "}
+              {signoff.submittedDate}
             </div>
           </div>
 
@@ -239,8 +252,9 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
               <div className="flex items-center space-x-2">
                 <AlertCircle className="w-4 h-4 text-amber-700 shrink-0" />
                 <div>
-                  <strong>{openReviewNotes.length} Open Review Note(s)</strong> attached to this working paper.
-                  Must be addressed or cleared before partner authorization.
+                  <strong>{openReviewNotes.length} Open Review Note(s)</strong>{" "}
+                  attached to this working paper. Must be addressed or cleared
+                  before partner authorization.
                 </div>
               </div>
               {onOpenReviewNotes && (
@@ -270,11 +284,11 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
 
             <div className="space-y-2 text-xs">
               <div
-                onClick={() => toggleChecklistItem('standardsCompliance')}
+                onClick={() => toggleChecklistItem("standardsCompliance")}
                 className={`p-3 rounded-xl border flex items-start space-x-3 transition-all cursor-pointer ${
                   checklist.standardsCompliance
-                    ? 'bg-[#E1F3EE]/60 border-[#BCE1D5]'
-                    : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]'
+                    ? "bg-[#E1F3EE]/60 border-[#BCE1D5]"
+                    : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]"
                 }`}
               >
                 <div className="mt-0.5 shrink-0">
@@ -289,17 +303,18 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     1. Compliance with ICAB, ISA &amp; IFRS Standards
                   </div>
                   <div className="text-[11px] text-stone-500 mt-0.5">
-                    Procedures performed align with applicable International Standards on Auditing and financial reporting framework.
+                    Procedures performed align with applicable International
+                    Standards on Auditing and financial reporting framework.
                   </div>
                 </div>
               </div>
 
               <div
-                onClick={() => toggleChecklistItem('sufficientEvidence')}
+                onClick={() => toggleChecklistItem("sufficientEvidence")}
                 className={`p-3 rounded-xl border flex items-start space-x-3 transition-all cursor-pointer ${
                   checklist.sufficientEvidence
-                    ? 'bg-[#E1F3EE]/60 border-[#BCE1D5]'
-                    : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]'
+                    ? "bg-[#E1F3EE]/60 border-[#BCE1D5]"
+                    : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]"
                 }`}
               >
                 <div className="mt-0.5 shrink-0">
@@ -314,17 +329,18 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     2. Sufficient and Appropriate Audit Evidence (ISA 500)
                   </div>
                   <div className="text-[11px] text-stone-500 mt-0.5">
-                    External confirmations, sub-ledger schedules, and source vouchers are attached and verified with checksum proofs.
+                    External confirmations, sub-ledger schedules, and source
+                    vouchers are attached and verified with checksum proofs.
                   </div>
                 </div>
               </div>
 
               <div
-                onClick={() => toggleChecklistItem('analyticalReviewCompleted')}
+                onClick={() => toggleChecklistItem("analyticalReviewCompleted")}
                 className={`p-3 rounded-xl border flex items-start space-x-3 transition-all cursor-pointer ${
                   checklist.analyticalReviewCompleted
-                    ? 'bg-[#E1F3EE]/60 border-[#BCE1D5]'
-                    : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]'
+                    ? "bg-[#E1F3EE]/60 border-[#BCE1D5]"
+                    : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]"
                 }`}
               >
                 <div className="mt-0.5 shrink-0">
@@ -339,17 +355,18 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     3. Analytical Review &amp; Variance Explanations (ISA 520)
                   </div>
                   <div className="text-[11px] text-stone-500 mt-0.5">
-                    Month-on-month trend comparisons, margin variance analysis, and key ratio tests properly documented.
+                    Month-on-month trend comparisons, margin variance analysis,
+                    and key ratio tests properly documented.
                   </div>
                 </div>
               </div>
 
               <div
-                onClick={() => toggleChecklistItem('samplingReconciled')}
+                onClick={() => toggleChecklistItem("samplingReconciled")}
                 className={`p-3 rounded-xl border flex items-start space-x-3 transition-all cursor-pointer ${
                   checklist.samplingReconciled
-                    ? 'bg-[#E1F3EE]/60 border-[#BCE1D5]'
-                    : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]'
+                    ? "bg-[#E1F3EE]/60 border-[#BCE1D5]"
+                    : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]"
                 }`}
               >
                 <div className="mt-0.5 shrink-0">
@@ -364,17 +381,18 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     4. Sub-ledger to General Ledger Reconciliation (ISA 530)
                   </div>
                   <div className="text-[11px] text-stone-500 mt-0.5">
-                    Sample items cover tolerable error thresholds and mathematical accuracy is verified.
+                    Sample items cover tolerable error thresholds and
+                    mathematical accuracy is verified.
                   </div>
                 </div>
               </div>
 
               <div
-                onClick={() => toggleChecklistItem('subsequentEventsEvaluated')}
+                onClick={() => toggleChecklistItem("subsequentEventsEvaluated")}
                 className={`p-3 rounded-xl border flex items-start space-x-3 transition-all cursor-pointer ${
                   checklist.subsequentEventsEvaluated
-                    ? 'bg-[#E1F3EE]/60 border-[#BCE1D5]'
-                    : 'bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]'
+                    ? "bg-[#E1F3EE]/60 border-[#BCE1D5]"
+                    : "bg-[#FAF8F5] border-[#ECE5D9] hover:bg-[#F2ECE1]"
                 }`}
               >
                 <div className="mt-0.5 shrink-0">
@@ -386,10 +404,12 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                 </div>
                 <div>
                   <div className="font-semibold text-stone-900">
-                    5. Subsequent Events &amp; Going Concern Assessment (ISA 560 / 570)
+                    5. Subsequent Events &amp; Going Concern Assessment (ISA 560
+                    / 570)
                   </div>
                   <div className="text-[11px] text-stone-500 mt-0.5">
-                    Post-balance sheet realizations, claims, and contingency liabilities evaluated.
+                    Post-balance sheet realizations, claims, and contingency
+                    liabilities evaluated.
                   </div>
                 </div>
               </div>
@@ -404,31 +424,31 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
               </span>
               <div className="flex items-center space-x-1.5 bg-[#FAF7F2] p-1 rounded-xl border border-[#E8E1D5]">
                 <button
-                  onClick={() => setActiveAction('signoff')}
+                  onClick={() => setActiveAction("signoff")}
                   className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all ${
-                    activeAction === 'signoff'
-                      ? 'bg-[#113227] text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900'
+                    activeAction === "signoff"
+                      ? "bg-[#113227] text-white shadow-xs"
+                      : "text-stone-600 hover:text-stone-900"
                   }`}
                 >
                   Approve &amp; Sign-off
                 </button>
                 <button
-                  onClick={() => setActiveAction('reject')}
+                  onClick={() => setActiveAction("reject")}
                   className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all ${
-                    activeAction === 'reject'
-                      ? 'bg-rose-800 text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900'
+                    activeAction === "reject"
+                      ? "bg-rose-800 text-white shadow-xs"
+                      : "text-stone-600 hover:text-stone-900"
                   }`}
                 >
                   Raise Note / Reject
                 </button>
                 <button
-                  onClick={() => setActiveAction('clarify')}
+                  onClick={() => setActiveAction("clarify")}
                   className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-all ${
-                    activeAction === 'clarify'
-                      ? 'bg-blue-800 text-white shadow-xs'
-                      : 'text-stone-600 hover:text-stone-900'
+                    activeAction === "clarify"
+                      ? "bg-blue-800 text-white shadow-xs"
+                      : "text-stone-600 hover:text-stone-900"
                   }`}
                 >
                   Request Clarification
@@ -437,14 +457,16 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             </div>
 
             {/* Sub-form 1: Approve & Sign-off */}
-            {activeAction === 'signoff' && (
+            {activeAction === "signoff" && (
               <form
                 onSubmit={handleApproveSubmit}
                 className="bg-white p-5 rounded-2xl border border-[#BCE1D5] bg-gradient-to-b from-[#FAFDFB] to-white space-y-4 animate-fadeIn"
               >
                 <div className="flex items-center space-x-2 text-xs font-bold text-[#113227]">
                   <Award className="w-4 h-4 text-[#C58A3E]" />
-                  <span>Execute Digital Signature &amp; Immutable Lock (ISA 220)</span>
+                  <span>
+                    Execute Digital Signature &amp; Immutable Lock (ISA 220)
+                  </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -457,9 +479,15 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                       onChange={(e) => setSignerRole(e.target.value as any)}
                       className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#E5DDD0] rounded-xl text-xs focus:outline-none font-semibold text-[#113227]"
                     >
-                      <option value="Manager">Manager Review Level (Zahirul Islam, FCA)</option>
-                      <option value="Partner">Partner Level Sign-off (Fouzia Haque, FCA)</option>
-                      <option value="EQCR">EQCR Independent Review Level</option>
+                      <option value="Manager">
+                        Manager Review Level (Zahirul Islam, FCA)
+                      </option>
+                      <option value="Partner">
+                        Partner Level Sign-off (Fouzia Haque, FCA)
+                      </option>
+                      <option value="EQCR">
+                        EQCR Independent Review Level
+                      </option>
                     </select>
                   </div>
 
@@ -470,7 +498,7 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     <input
                       type="text"
                       readOnly
-                      value={`ICAB-CERT-2026-AVQ-${signoff.roleRequired === 'Partner Sign-off' ? 'PTR-0099' : 'MGR-0012'}`}
+                      value={`ICAB-CERT-2026-AVQ-${signoff.roleRequired === "Partner Sign-off" ? "PTR-0099" : "MGR-0012"}`}
                       className="w-full px-3 py-2 bg-stone-100 border border-[#E5DDD0] rounded-xl text-xs font-mono text-stone-600 focus:outline-none"
                     />
                   </div>
@@ -492,7 +520,9 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                 <div className="p-3 bg-[#FAF0DE] rounded-xl border border-[#EADBBF] text-xs text-[#8A5A18] flex items-start space-x-2">
                   <Lock className="w-4 h-4 text-[#8A5A18] shrink-0 mt-0.5" />
                   <p className="leading-snug">
-                    Authorizing this sign-off will generate an immutable ICAB digital stamp ID, seal the working paper against changes, and advance the engagement audit milestone.
+                    Authorizing this sign-off will generate an immutable ICAB
+                    digital stamp ID, seal the working paper against changes,
+                    and advance the engagement audit milestone.
                   </p>
                 </div>
 
@@ -516,14 +546,16 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             )}
 
             {/* Sub-form 2: Raise Review Note / Reject */}
-            {activeAction === 'reject' && (
+            {activeAction === "reject" && (
               <form
                 onSubmit={handleRejectSubmit}
                 className="bg-white p-5 rounded-2xl border border-rose-200 bg-gradient-to-b from-rose-50/40 to-white space-y-4 animate-fadeIn"
               >
                 <div className="flex items-center space-x-2 text-xs font-bold text-rose-800">
                   <AlertCircle className="w-4 h-4" />
-                  <span>Raise Mandatory Audit Query &amp; Return to Preparer</span>
+                  <span>
+                    Raise Mandatory Audit Query &amp; Return to Preparer
+                  </span>
                 </div>
 
                 <div>
@@ -535,11 +567,21 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                     onChange={(e) => setRejectSection(e.target.value)}
                     className="w-full px-3 py-2 bg-[#FAF8F5] border border-[#E5DDD0] rounded-xl text-xs focus:outline-none"
                   >
-                    <option value="Section 1: Audit Scope & Cut-off">Section 1: Audit Scope &amp; Cut-off</option>
-                    <option value="Section 2: Substantive Sampling & Testing">Section 2: Substantive Sampling &amp; Testing</option>
-                    <option value="Section 3: Attached Evidence & Confirmations">Section 3: Attached Evidence &amp; Confirmations</option>
-                    <option value="Section 4: Analytical Variance & Ratio Explanations">Section 4: Analytical Variance &amp; Ratio Explanations</option>
-                    <option value="Section 5: Disclosure & Presentation (IAS/IFRS)">Section 5: Disclosure &amp; Presentation (IAS/IFRS)</option>
+                    <option value="Section 1: Audit Scope & Cut-off">
+                      Section 1: Audit Scope &amp; Cut-off
+                    </option>
+                    <option value="Section 2: Substantive Sampling & Testing">
+                      Section 2: Substantive Sampling &amp; Testing
+                    </option>
+                    <option value="Section 3: Attached Evidence & Confirmations">
+                      Section 3: Attached Evidence &amp; Confirmations
+                    </option>
+                    <option value="Section 4: Analytical Variance & Ratio Explanations">
+                      Section 4: Analytical Variance &amp; Ratio Explanations
+                    </option>
+                    <option value="Section 5: Disclosure & Presentation (IAS/IFRS)">
+                      Section 5: Disclosure &amp; Presentation (IAS/IFRS)
+                    </option>
                   </select>
                 </div>
 
@@ -576,7 +618,7 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             )}
 
             {/* Sub-form 3: Request Clarification */}
-            {activeAction === 'clarify' && (
+            {activeAction === "clarify" && (
               <form
                 onSubmit={handleClarifySubmit}
                 className="bg-white p-5 rounded-2xl border border-blue-200 bg-gradient-to-b from-blue-50/40 to-white space-y-4 animate-fadeIn"
@@ -617,16 +659,16 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
                 </div>
               </form>
             )}
-
           </div>
-
         </div>
 
         {/* Modal Footer */}
         <div className="p-4 bg-[#FAF7F2] border-t border-[#EBE6DD] flex items-center justify-between text-xs text-stone-500">
           <div className="flex items-center space-x-2">
             <CheckCircle2 className="w-4 h-4 text-[#113227]" />
-            <span>ICAB Code of Ethics &amp; ISA 220 Quality Management Standard</span>
+            <span>
+              ICAB Code of Ethics &amp; ISA 220 Quality Management Standard
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -635,7 +677,6 @@ export const SignOffActionModal: React.FC<SignOffActionModalProps> = ({
             Close
           </button>
         </div>
-
       </div>
     </div>
   );

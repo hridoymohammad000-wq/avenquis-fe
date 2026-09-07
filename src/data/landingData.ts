@@ -23,7 +23,7 @@ export interface ModulePillar {
   keyFeatures: string[];
   metrics: string;
   previewSnippet: {
-    type: 'audit' | 'crm' | 'timesheet' | 'finance' | 'people' | 'ai';
+    type: "audit" | "crm" | "timesheet" | "finance" | "people" | "ai";
     label: string;
     status: string;
   };
@@ -41,15 +41,23 @@ export interface ArchitectureInvariant {
 export interface FaqItem {
   question: string;
   answer: string;
-  category: 'Compliance & Security' | 'Operations & Billing' | 'AI & Privacy' | 'Onboarding';
+  category:
+    | "Compliance & Security"
+    | "Operations & Billing"
+    | "AI & Privacy"
+    | "Onboarding";
 }
 
 export const LANDING_NAV_LINKS = [
-  { id: 'features', label: 'Features', href: '#features' },
-  { id: 'modules', label: 'Core Modules', href: '#modules' },
-  { id: 'architecture', label: 'Architecture & Security', href: '#architecture' },
-  { id: 'pricing', label: 'Roadmap & Pricing', href: '#pricing' },
-  { id: 'faq', label: 'FAQ', href: '#faq' },
+  { id: "features", label: "Features", href: "#features" },
+  { id: "modules", label: "Core Modules", href: "#modules" },
+  {
+    id: "architecture",
+    label: "Architecture & Security",
+    href: "#architecture",
+  },
+  { id: "pricing", label: "Roadmap & Pricing", href: "#pricing" },
+  { id: "faq", label: "FAQ", href: "#faq" },
 ];
 
 export const TRUST_METRICS: MetricItem[] = [
@@ -70,12 +78,13 @@ export const TRUST_METRICS: MetricItem[] = [
     description: 'Working paper revisions, partner reviews, and sign-offs can use SHA-256 evidence integrity controls designed to support audit documentation workflows.',
   },
   {
-    id: 'controlled-ai',
-    title: 'Controlled AI Assistant',
-    subtitle: 'Human-in-the-Loop Protocol',
-    tag: 'Zero Training on Client Data',
-    highlight: 'Read-Only Context',
-    description: 'AI assists with PBC checklists and working paper summaries within isolated tenant boundaries. Only authorized humans sign off.',
+    id: "controlled-ai",
+    title: "Controlled AI Assistant",
+    subtitle: "Human-in-the-Loop Protocol",
+    tag: "Zero Training on Client Data",
+    highlight: "Read-Only Context",
+    description:
+      "AI assists with PBC checklists and working paper summaries within isolated tenant boundaries. Only authorized humans sign off.",
   },
   {
     id: 'bd-first',
@@ -89,80 +98,83 @@ export const TRUST_METRICS: MetricItem[] = [
 
 export const CORE_MODULES: ModulePillar[] = [
   {
-    id: 'firm-people',
-    number: '01',
-    title: 'Firm OS & People',
-    category: 'Practice Governance',
-    headline: 'Chartered practice hierarchy, student articleship tracking, and capacity allocations.',
+    id: "firm-people",
+    number: "01",
+    title: "Firm OS & People",
+    category: "Practice Governance",
+    headline:
+      "Chartered practice hierarchy, student articleship tracking, and capacity allocations.",
     description:
-      'Manage partner equity allocations, manager portfolios, senior auditors, and CA article student registration periods. Monitor statutory leaves, ICAB training records, and active utilization.',
+      "Manage partner equity allocations, manager portfolios, senior auditors, and CA article student registration periods. Monitor statutory leaves, ICAB training records, and active utilization.",
     badge: {
-      label: 'Staff & Roles',
-      bg: '#E1F3EE',
-      text: '#1F5946',
-      border: '#C8E9DE',
+      label: "Staff & Roles",
+      bg: "#E1F3EE",
+      text: "#1F5946",
+      border: "#C8E9DE",
     },
     keyFeatures: [
-      'Role-based security tiers (Managing Partner to Article Student)',
-      'CA Articleship term tracking with ICAB registration numbers',
-      'Leave authorization pipeline with partner multi-level sign-offs',
-      'Live team availability and weekly capacity heatmaps',
+      "Role-based security tiers (Managing Partner to Article Student)",
+      "CA Articleship term tracking with ICAB registration numbers",
+      "Leave authorization pipeline with partner multi-level sign-offs",
+      "Live team availability and weekly capacity heatmaps",
     ],
-    metrics: '99.4% Resource Utilization',
+    metrics: "99.4% Resource Utilization",
     previewSnippet: {
-      type: 'people',
-      label: 'Partner & Senior Staff Directory',
-      status: 'Active Hierarchy',
+      type: "people",
+      label: "Partner & Senior Staff Directory",
+      status: "Active Hierarchy",
     },
   },
   {
-    id: 'client-crm',
-    number: '02',
-    title: 'Client CRM & Engagements',
-    category: 'Engagement Lifecycle',
-    headline: 'Statutory audit, tax filing, and advisory pipelines with strict stage gates.',
+    id: "client-crm",
+    number: "02",
+    title: "Client CRM & Engagements",
+    category: "Engagement Lifecycle",
+    headline:
+      "Statutory audit, tax filing, and advisory pipelines with strict stage gates.",
     description:
-      'Track client KYC, beneficial ownership registers, and engagement life cycles across six standardized audit phases from Engagement Acceptance to Final Opinion & Seal.',
+      "Track client KYC, beneficial ownership registers, and engagement life cycles across six standardized audit phases from Engagement Acceptance to Final Opinion & Seal.",
     badge: {
-      label: 'Audit & Tax CRM',
-      bg: '#FCEFD9',
-      text: '#8A5A18',
-      border: '#F8DCB4',
+      label: "Audit & Tax CRM",
+      bg: "#FCEFD9",
+      text: "#8A5A18",
+      border: "#F8DCB4",
     },
     keyFeatures: [
-      'Stage-gate milestone tracking (Planning, Fieldwork, Review, Sign-off)',
-      'Client document portal with encrypted PBC requests',
-      'Risk classification matrix (High, Medium, Normal) & materiality thresholds',
-      'Multi-entity corporate group hierarchies and TIN/BIN registries',
+      "Stage-gate milestone tracking (Planning, Fieldwork, Review, Sign-off)",
+      "Client document portal with encrypted PBC requests",
+      "Risk classification matrix (High, Medium, Normal) & materiality thresholds",
+      "Multi-entity corporate group hierarchies and TIN/BIN registries",
     ],
-    metrics: '6-Phase Standardized Gate',
+    metrics: "6-Phase Standardized Gate",
     previewSnippet: {
-      type: 'crm',
-      label: 'Beximco Pharma Statutory Audit FY25',
-      status: 'Fieldwork (65%)',
+      type: "crm",
+      label: "Beximco Pharma Statutory Audit FY25",
+      status: "Fieldwork (65%)",
     },
   },
   {
-    id: 'tasks-timesheets',
-    number: '03',
-    title: 'Tasks & Timesheets',
-    category: 'Productivity & WIP',
-    headline: 'Time tracking linked directly to billable engagement codes and real-time WIP.',
+    id: "tasks-timesheets",
+    number: "03",
+    title: "Tasks & Timesheets",
+    category: "Productivity & WIP",
+    headline:
+      "Time tracking linked directly to billable engagement codes and real-time WIP.",
     description:
-      'Eliminate untracked hours. Staff log daily activities directly against engagement milestones, providing instant work-in-progress (WIP) valuation and partner timesheet approvals.',
+      "Eliminate untracked hours. Staff log daily activities directly against engagement milestones, providing instant work-in-progress (WIP) valuation and partner timesheet approvals.",
     badge: {
-      label: 'Billable Tracking',
-      bg: '#E2F1F8',
-      text: '#1D526D',
-      border: '#C7E4F2',
+      label: "Billable Tracking",
+      bg: "#E2F1F8",
+      text: "#1D526D",
+      border: "#C7E4F2",
     },
     keyFeatures: [
-      'Weekly interactive timesheet grid with rapid bulk log entries',
-      'Direct conversion from approved hours into client tax invoices',
-      'Overtime calculations and non-billable training categorization',
-      'Engagement budget variance alerts before cost overruns occur',
+      "Weekly interactive timesheet grid with rapid bulk log entries",
+      "Direct conversion from approved hours into client tax invoices",
+      "Overtime calculations and non-billable training categorization",
+      "Engagement budget variance alerts before cost overruns occur",
     ],
-    metrics: '100% Billable Capture',
+    metrics: "100% Billable Capture",
     previewSnippet: {
       type: 'timesheet',
       label: 'Weekly Timesheet • 42.5 Billable Hrs',
@@ -170,26 +182,27 @@ export const CORE_MODULES: ModulePillar[] = [
     },
   },
   {
-    id: 'audit-papers',
-    number: '04',
-    title: 'Audit Working Papers',
-    category: 'ISA & ICAB Compliance',
-    headline: 'Permanent & current audit files, immutable versioning, and SHA-256 seals.',
+    id: "audit-papers",
+    number: "04",
+    title: "Audit Working Papers",
+    category: "ISA & ICAB Compliance",
+    headline:
+      "Permanent & current audit files, immutable versioning, and SHA-256 seals.",
     description:
-      'The core audit execution engine. Standardized ISA working paper templates, automated sample size calculators, tickmark registries, review note resolution, and two-partner cryptographic sign-offs.',
+      "The core audit execution engine. Standardized ISA working paper templates, automated sample size calculators, tickmark registries, review note resolution, and two-partner cryptographic sign-offs.",
     badge: {
-      label: 'ISA 220 & 230',
-      bg: '#FAF0DE',
-      text: '#94631D',
-      border: '#E8D5B5',
+      label: "ISA 220 & 230",
+      bg: "#FAF0DE",
+      text: "#94631D",
+      border: "#E8D5B5",
     },
     keyFeatures: [
-      'Permanent vs. Current audit file structuring (ISA 230)',
-      'Materiality benchmarks & monetary unit sampling calculators',
-      'Tickmark legend & cross-referencing between lead schedules',
-      'Cryptographic SHA-256 digital signature seals with QR verification',
+      "Permanent vs. Current audit file structuring (ISA 230)",
+      "Materiality benchmarks & monetary unit sampling calculators",
+      "Tickmark legend & cross-referencing between lead schedules",
+      "Cryptographic SHA-256 digital signature seals with QR verification",
     ],
-    metrics: 'SHA-256 Sealed Files',
+    metrics: "SHA-256 Sealed Files",
     previewSnippet: {
       type: 'audit',
       label: 'WP-REV-01 • Revenue Substantive Testing',
@@ -197,26 +210,27 @@ export const CORE_MODULES: ModulePillar[] = [
     },
   },
   {
-    id: 'finance-billing',
-    number: '05',
-    title: 'Office Finance & Invoicing',
-    category: 'Firm Cash Flow',
-    headline: 'Statutory VAT invoicing, bank money receipts, and automated fee collections.',
+    id: "finance-billing",
+    number: "05",
+    title: "Office Finance & Invoicing",
+    category: "Firm Cash Flow",
+    headline:
+      "Statutory VAT invoicing, bank money receipts, and automated fee collections.",
     description:
-      'Designed for professional firm billing dynamics. Generate milestone or hourly fee tax invoices with 15% statutory VAT calculations, record BEFTN/RTGS collections, and track aged receivables.',
+      "Designed for professional firm billing dynamics. Generate milestone or hourly fee tax invoices with 15% statutory VAT calculations, record BEFTN/RTGS collections, and track aged receivables.",
     badge: {
-      label: 'Ledger & VAT',
-      bg: '#FDE6E2',
-      text: '#8E362C',
-      border: '#F9CCC4',
+      label: "Ledger & VAT",
+      bg: "#FDE6E2",
+      text: "#8E362C",
+      border: "#F9CCC4",
     },
     keyFeatures: [
-      '15% VAT & statutory tax invoice generation with official crest',
-      'One-click invoice generation from unbilled staff timesheet hours',
-      'Operating money receipts ledger with BEFTN & cheque reconciliation',
-      'Aged debtor analysis (0-30, 31-60, 61-90, 90+ days overdue)',
+      "15% VAT & statutory tax invoice generation with official crest",
+      "One-click invoice generation from unbilled staff timesheet hours",
+      "Operating money receipts ledger with BEFTN & cheque reconciliation",
+      "Aged debtor analysis (0-30, 31-60, 61-90, 90+ days overdue)",
     ],
-    metrics: '15% VAT Ready & Reconciled',
+    metrics: "15% VAT Ready & Reconciled",
     previewSnippet: {
       type: 'finance',
       label: 'Invoice #INV-2026-081 • BDT 1,150,000',
@@ -224,18 +238,19 @@ export const CORE_MODULES: ModulePillar[] = [
     },
   },
   {
-    id: 'ai-copilot',
-    number: '06',
-    title: 'Permission-Safe AI Copilot',
-    category: 'Intelligent Assistance',
-    headline: 'Context-protected assistant for instant review summaries and PBC drafting.',
+    id: "ai-copilot",
+    number: "06",
+    title: "Permission-Safe AI Copilot",
+    category: "Intelligent Assistance",
+    headline:
+      "Context-protected assistant for instant review summaries and PBC drafting.",
     description:
-      'An intelligent in-app companion operating strictly in read-only tenant boundaries. Drafts ISA 500-compliant client reminder notices, flags overdue audit checklist items, and calculates WIP balances.',
+      "An intelligent in-app companion operating strictly in read-only tenant boundaries. Drafts ISA 500-compliant client reminder notices, flags overdue audit checklist items, and calculates WIP balances.",
     badge: {
-      label: 'Safe Intelligence',
-      bg: '#EDE9FE',
-      text: '#5B21B6',
-      border: '#DDD6FE',
+      label: "Safe Intelligence",
+      bg: "#EDE9FE",
+      text: "#5B21B6",
+      border: "#DDD6FE",
     },
     keyFeatures: [
       'Human-review controls for AI-assisted workflows',
@@ -243,90 +258,95 @@ export const CORE_MODULES: ModulePillar[] = [
       'Automated PBC reminder email drafting with specific missing documents',
       'One-click navigation directly to affected working papers and ledgers',
     ],
-    metrics: 'Strict Read-Only Scope',
+    metrics: "Strict Read-Only Scope",
     previewSnippet: {
-      type: 'ai',
-      label: 'AI Audit Review Summary',
-      status: '3 Sign-offs Pending',
+      type: "ai",
+      label: "AI Audit Review Summary",
+      status: "3 Sign-offs Pending",
     },
   },
 ];
 
 export const ARCHITECTURE_INVARIANTS: ArchitectureInvariant[] = [
   {
-    id: 'rls-isolation',
-    code: 'SEC-INV-01',
-    title: 'PostgreSQL Row Level Security (RLS)',
+    id: "rls-isolation",
+    code: "SEC-INV-01",
+    title: "PostgreSQL Row Level Security (RLS)",
     description:
       'Tenant-scoped policy controls are designed to support isolated workflow boundaries without making an absolute isolation guarantee.',
     standardCitation: 'Tenant policy architecture benchmark',
     securityImpact: 'Designed for Tenant-Scoped Workflows',
   },
   {
-    id: 'immutable-audit-trail',
-    code: 'SEC-INV-02',
-    title: 'Cryptographic Hash-Chained Audit Logs',
+    id: "immutable-audit-trail",
+    code: "SEC-INV-02",
+    title: "Cryptographic Hash-Chained Audit Logs",
     description:
-      'Every working paper review, document upload, status transition, and financial transaction creates an append-only log record signed with SHA-256 hashes, preventing retro-active alteration.',
-    standardCitation: 'ISA 230 (Audit Documentation) & ISA 220',
-    securityImpact: 'Tamper-Proof Working Papers',
+      "Every working paper review, document upload, status transition, and financial transaction creates an append-only log record signed with SHA-256 hashes, preventing retro-active alteration.",
+    standardCitation: "ISA 230 (Audit Documentation) & ISA 220",
+    securityImpact: "Tamper-Proof Working Papers",
   },
   {
-    id: 'human-in-loop-ai',
-    code: 'SEC-INV-03',
+    id: "human-in-loop-ai",
+    code: "SEC-INV-03",
     title: 'Controlled AI "Human-in-the-Loop" Gate',
     description:
-      'The AI copilot operates under strict read-only context boundaries. AI can analyze, summarize, and draft recommendations, but cannot finalize working papers or issue invoices without partner approval.',
-    standardCitation: 'IAASB Guidance on Emerging Technologies',
-    securityImpact: 'Professional Skepticism Preserved',
+      "The AI copilot operates under strict read-only context boundaries. AI can analyze, summarize, and draft recommendations, but cannot finalize working papers or issue invoices without partner approval.",
+    standardCitation: "IAASB Guidance on Emerging Technologies",
+    securityImpact: "Professional Skepticism Preserved",
   },
   {
-    id: 'zero-trust-auth',
-    code: 'SEC-INV-04',
-    title: 'Zero-Trust Session Isolation & TOTP MFA',
+    id: "zero-trust-auth",
+    code: "SEC-INV-04",
+    title: "Zero-Trust Session Isolation & TOTP MFA",
     description:
-      'Multi-factor authentication enforced for senior review personnel. Real-time active session monitoring allows instantaneous device revocation across the practice network.',
-    standardCitation: 'NIST SP 800-63B Authenticator Assurance',
-    securityImpact: 'Enterprise Access Hardening',
+      "Multi-factor authentication enforced for senior review personnel. Real-time active session monitoring allows instantaneous device revocation across the practice network.",
+    standardCitation: "NIST SP 800-63B Authenticator Assurance",
+    securityImpact: "Enterprise Access Hardening",
   },
 ];
 
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    category: 'Compliance & Security',
-    question: 'How does AVENQUIS comply with ICAB and International Standards on Auditing (ISA)?',
+    category: "Compliance & Security",
+    question:
+      "How does AVENQUIS comply with ICAB and International Standards on Auditing (ISA)?",
     answer:
-      'AVENQUIS is engineered from the ground up to support ISA 220 (Quality Management for an Audit of Financial Statements) and ISA 230 (Audit Documentation). Working papers feature immutable version logs, mandatory partner review sign-offs, tickmark documentation, and cryptographic SHA-256 seals.',
+      "AVENQUIS is engineered from the ground up to support ISA 220 (Quality Management for an Audit of Financial Statements) and ISA 230 (Audit Documentation). Working papers feature immutable version logs, mandatory partner review sign-offs, tickmark documentation, and cryptographic SHA-256 seals.",
   },
   {
-    category: 'Compliance & Security',
-    question: 'Where is firm and client financial data stored?',
+    category: "Compliance & Security",
+    question: "Where is firm and client financial data stored?",
     answer:
       'The backend uses PostgreSQL Row-Level Security (RLS) policy controls designed to support tenant-scoped workflows. Deployment-specific hosting, encryption, and certification details should be confirmed for the relevant environment.',
   },
   {
-    category: 'AI & Privacy',
-    question: 'Does the AI Copilot use our confidential audit working papers to train public models?',
+    category: "AI & Privacy",
+    question:
+      "Does the AI Copilot use our confidential audit working papers to train public models?",
     answer:
       'The product direction includes human-review controls and scoped AI-assisted workflows. Data retention and model-training treatment depend on the deployed provider configuration and applicable contract, so they should be confirmed before use with confidential material.',
   },
   {
-    category: 'Operations & Billing',
-    question: 'Can we convert unbilled staff timesheet hours into client fee invoices automatically?',
+    category: "Operations & Billing",
+    question:
+      "Can we convert unbilled staff timesheet hours into client fee invoices automatically?",
     answer:
       'The Office Finance & Invoicing workflow is designed to aggregate approved billable hours, apply configured VAT rules, and support invoice preparation. Any statutory or ICAB-specific treatment should be verified for the deployment.',
   },
   {
-    category: 'Onboarding',
-    question: 'How do we migrate our existing Excel audit working papers and client rosters into AVENQUIS?',
+    category: "Onboarding",
+    question:
+      "How do we migrate our existing Excel audit working papers and client rosters into AVENQUIS?",
     answer:
-      'AVENQUIS provides built-in CSV/Excel data import utilities for client records, active engagements, and staff lists. During the Private Testing phase, our technical team provides complimentary white-glove migration assistance.',
+      "AVENQUIS provides built-in CSV/Excel data import utilities for client records, active engagements, and staff lists. During the Private Testing phase, our technical team provides complimentary white-glove migration assistance.",
   },
   {
-    category: 'Operations & Billing',
-    question: 'How does CA student articleship tracking work within the system?',
+    category: "Operations & Billing",
+    question:
+      "How does CA student articleship tracking work within the system?",
     answer:
-      'The Firm OS & People module maintains records of student registration numbers, principal partner assignments, required articleship duration (e.g. 3 or 4 years), leave allowances, and mandatory training milestones under ICAB guidelines.',
+      "The Firm OS & People module maintains records of student registration numbers, principal partner assignments, required articleship duration (e.g. 3 or 4 years), leave allowances, and mandatory training milestones under ICAB guidelines.",
   },
 ];

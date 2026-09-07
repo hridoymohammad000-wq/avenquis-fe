@@ -1,14 +1,13 @@
-import React from 'react';
+import React from "react";
 
 interface FooterProps {
-  onOpenLegal: (type: 'privacy' | 'terms' | 'support') => void;
+  onOpenLegal: (type: "privacy" | "terms" | "support") => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
   return (
     <footer className="relative z-10 w-full border-t border-[#EBE6DD]/60 bg-[#FAF7F2]/80 backdrop-blur-xs py-8 transition-colors">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-medium text-stone-400 tracking-wide">
-        
         {/* Left: Copyright */}
         <div>
           <span>© 2026 AVENQUIS. All rights reserved.</span>
@@ -19,7 +18,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
           <button
             id="footer-privacy-btn"
             type="button"
-            onClick={() => onOpenLegal('privacy')}
+            onClick={() => onOpenLegal("privacy")}
             className="hover:text-stone-700 transition-colors focus:outline-none cursor-pointer"
           >
             Privacy Policy
@@ -27,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
           <button
             id="footer-terms-btn"
             type="button"
-            onClick={() => onOpenLegal('terms')}
+            onClick={() => onOpenLegal("terms")}
             className="hover:text-stone-700 transition-colors focus:outline-none cursor-pointer"
           >
             Terms of Service
@@ -35,13 +34,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenLegal }) => {
           <button
             id="footer-support-btn"
             type="button"
-            onClick={() => onOpenLegal('support')}
+            onClick={() => onOpenLegal("support")}
             className="hover:text-stone-700 transition-colors focus:outline-none cursor-pointer"
           >
             Support
           </button>
         </div>
-
       </div>
     </footer>
   );
