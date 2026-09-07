@@ -10,6 +10,7 @@ import { AuditReviewDocsView } from "./AuditReviewDocsView";
 import { FinanceBillingView } from "./FinanceBillingView";
 import { SettingsView } from "./SettingsView";
 import { AiAssistantDrawer } from "./AiAssistantDrawer";
+import { AiPet, PetState } from "../ai-pet";
 import { CommandPaletteModal } from "./CommandPaletteModal";
 
 import {
@@ -83,6 +84,7 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isAiOpen, setIsAiOpen] = useState(false);
+  const [petState, setPetState] = useState<PetState>("IDLE");
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
   // Core Data States
@@ -1089,9 +1091,9 @@ export const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({
         isOpen={isAiOpen}
         onClose={() => setIsAiOpen(false)}
         currentUser={currentUser}
-        onNavigateTab={(tab) => setActiveTab(tab)}
-        onTriggerAction={handleTriggerAiAction}
+        onStateChange={setPetState}
       />
+      <AiPet state={petState} onOpen={() => setIsAiOpen(true)} />
 
       {/* Cmd + K Command Palette */}
       <CommandPaletteModal
