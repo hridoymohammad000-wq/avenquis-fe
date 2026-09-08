@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { authApi } from '../../lib/api';
 import { ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 
-export function SignInPage({ navigate, onSignIn }: { navigate: (href: string) => void; onSignIn: (email: string, name?: string, role?: string) => Promise<void> }) {
+type AuthenticatedProfile = Awaited<ReturnType<typeof authApi.me>>;
+
+export function SignInPage({ navigate, onSignIn }: { navigate: (href: string) => void; onSignIn: (profile: AuthenticatedProfile) => Promise<void> }) {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState(''); 
   const [mfaCode, setMfaCode] = useState(''); 
@@ -20,7 +22,7 @@ export function SignInPage({ navigate, onSignIn }: { navigate: (href: string) =>
         setMfaPending(true); 
         return; 
       } 
-      await onSignIn(result.user.email, result.user.fullName); 
+      await onSignIn(await authApi.me());
     } catch (e) { 
       setError(e instanceof Error ? e.message : 'Unable to authenticate.'); 
     } finally { 
@@ -34,7 +36,7 @@ export function SignInPage({ navigate, onSignIn }: { navigate: (href: string) =>
     setLoading(true); 
     try { 
       await authApi.challengeMfa(mfaCode); 
-      await onSignIn(email); 
+      await onSignIn(await authApi.me());
     } catch (e) { 
       setError(e instanceof Error ? e.message : 'MFA challenge failed.'); 
     } finally { 
